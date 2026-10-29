@@ -95,6 +95,15 @@ button:disabled{opacity:.6}
 
   <div id="bagian-pengaturan" class="sembunyi">
     <div class="kartu">
+      <strong>Nomor WhatsApp Toko</strong>
+      <p class="muted">Pesanan dari pelanggan akan dikirim ke nomor ini.</p>
+      <label for="wa-toko">Nomor WhatsApp</label>
+      <input id="wa-toko" type="tel" placeholder="Contoh: 085722994977">
+      <button onclick="simpanWA()">Simpan nomor WA</button>
+      <div id="notif-wa"></div>
+    </div>
+
+    <div class="kartu">
       <strong>Metode Pembayaran</strong>
       <p class="muted">Perubahan di sini langsung tampil di website toko.</p>
       <div id="notif-pengaturan"></div>
@@ -177,7 +186,7 @@ function showTab(nama) {
     document.getElementById("tab-" + k).classList.toggle("aktif", k === nama);
   });
   if (nama === "produk") muatProdukAdmin();
-  if (nama === "pengaturan") muatMetodeAdmin();
+  if (nama === "pengaturan") { muatWA(); muatMetodeAdmin(); }
 }
 
 /* ---------- PESANAN ---------- */
@@ -382,7 +391,35 @@ async function tambahVarian(pid) {
   muatProdukAdmin();
 }
 
-/* ---------- PENGATURAN METODE ---------- */
+/* ---------- PENGATURAN ---------- */
+
+async function muatWA() {
+  const { data, error } = await supabase
+    .from("store_settings")
+    .select("value")
+    .eq("key", "wa_admin")
+    .maybeSingle();
+
+  if (error) { notif("notif-wa", "gagal", "Gagal memuat nomor: " + error.message); return; }
+  document.getElementById("wa-toko").value = data ? data.value : "";
+}
+
+async function simpanWA() {
+  const nomor = document.getElementById("wa-toko").value.replace(/[^0-9]/g, "");
+
+  if (!/^(0|62)[0-9]{8,13}$/.test(nomor)) {
+    notif("notif-wa", "gagal", "Nomor tidak valid. Contoh: 085722994977");
+    return;
+  }
+
+  const { error } = await supabase
+    .from("store_settings")
+    .upsert({ key: "wa_admin", value: nomor }, { onConflict: "key" });
+
+  if (error) { notif("notif-wa", "gagal", "Gagal menyimpan: " + error.message); return; }
+  notif("notif-wa", "sukses", "Nomor WhatsApp toko tersimpan.");
+  muatWA();
+}
 
 async function muatMetodeAdmin() {
   const wadah = document.getElementById("daftar-metode-admin");
