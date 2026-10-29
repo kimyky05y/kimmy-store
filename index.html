@@ -58,10 +58,20 @@
     .kontrol .hapus { background: var(--terracotta); margin-left: auto; font-size: 0.8rem; }
     .subtotal { text-align: right; font-weight: bold; margin-top: 4px; }
     .total { border-top: 2px solid var(--navy); margin-top: 10px; padding-top: 10px; text-align: right; font-size: 1.05rem; }
-    .tombol-lanjut {
-      width: 100%; margin-top: 12px; background: var(--mustard); color: var(--navy);
-      border: none; border-radius: 999px; padding: 10px; font-weight: bold; opacity: 0.6;
+    .formulir { margin-top: 16px; border-top: 2px dashed var(--dusty); padding-top: 14px; }
+    .formulir label { display: block; font-size: 0.85rem; margin-top: 10px; font-weight: bold; }
+    .formulir input {
+      width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--dusty);
+      border-radius: 10px; font-size: 1rem;
     }
+    .tombol-checkout {
+      width: 100%; margin-top: 16px; background: var(--mustard); color: var(--navy);
+      border: none; border-radius: 999px; padding: 12px; font-weight: bold; font-size: 1rem; cursor: pointer;
+    }
+    .tombol-checkout:disabled { opacity: 0.6; cursor: not-allowed; }
+    .notif { margin-top: 12px; padding: 10px; border-radius: 10px; font-size: 0.9rem; }
+    .notif.sukses { background: #DFF3E4; color: #1E6B35; }
+    .notif.gagal { background: #F6D5D0; color: #8A2A1A; }
     .pesan { color: var(--cream); text-align: center; margin-top: 24px; font-size: 0.85rem; }
   </style>
 </head>
@@ -92,12 +102,16 @@
   const SUPABASE_URL = "https://yftnynobgxvulhmgirdx.supabase.co";
   const SUPABASE_KEY = "sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E";
 
-  const MAKS_QTY = 10;                  // batas jumlah per item (nanti diganti stok asli)
+  // NOMOR WHATSAPP ADMIN: ganti di sini (kode negara, tanpa + dan tanpa spasi)
+  const WA_ADMIN = "6281234567890";
+
+  const MAKS_QTY = 10;
   const KUNCI_KERANJANG = "kimmy_keranjang";
 
   const wadah = document.getElementById("daftar-produk");
-  const daftarVarian = {};              // data varian, dipakai saat tombol tambah ditekan
+  const daftarVarian = {};
   let keranjang = [];
+  let supabase = null;
 
   try {
     keranjang = JSON.parse(localStorage.getItem(KUNCI_KERANJANG)) || [];
@@ -145,13 +159,18 @@
     renderKeranjang();
   }
 
-  function renderKeranjang() {
+  function renderKeranjang(notifikasi) {
     const wadahK = document.getElementById("isi-keranjang");
     const jumlah = keranjang.reduce((s, i) => s + i.qty, 0);
     document.getElementById("jumlah-keranjang").textContent = jumlah;
 
+    let notifHTML = "";
+    if (notifikasi) {
+      notifHTML = '<div class="notif ' + notifikasi.jenis + '">' + notifikasi.teks + '</div>';
+    }
+
     if (keranjang.length === 0) {
-      wadahK.innerHTML = '<p>Keranjang masih kosong. Pilih produk di atas.</p>';
+      wadahK.innerHTML = notifHTML + '<p>Keranjang masih kosong. Pilih produk di atas.</p>';
       return;
     }
 
@@ -172,9 +191,75 @@
         </div>`;
     }).join("");
 
-    wadahK.innerHTML = baris +
+    wadahK.innerHTML = notifHTML + baris +
       `<div class="total">Total: <strong>${rupiah(total)}</strong></div>
-       <button class="tombol-lanjut" disabled>Checkout (segera hadir)</button>`;
+       <div class="formulir">
+         <label for="nama">Nama lengkap</label>
+         <input id="nama" type="text" placeholder="Contoh: Budi Santoso">
+         <label for="wa">Nomor WhatsApp</label>
+         <input id="wa" type="tel" placeholder="Contoh: 081234567890">
+         <button class="tombol-checkout" id="tombol-checkout" onclick="checkout()">Checkout</button>
+       </div>`;
+  }
+
+  async function checkout() {
+    const nama = document.getElementById("nama").value.trim();
+    let wa = document.getElementById("wa").value.replace(/[^0-9]/g, "");
+    if (wa.startsWith("0")) wa = "62" + wa.slice(1);
+
+    if (nama.length < 2) {
+      renderKeranjang({ jenis: "gagal", teks: "Nama wajib diisi." });
+      return;
+    }
+    if (!/^[0-9]{9,15}$/.test(wa)) {
+      renderKeranjang({ jenis: "gagal", teks: "Nomor WhatsApp tidak valid." });
+      return;
+    }
+    if (keranjang.length === 0) {
+      renderKeranjang({ jenis: "gagal", teks: "Keranjang masih kosong." });
+      return;
+    }
+
+    const tombol = document.getElementById("tombol-checkout");
+    tombol.disabled = true;
+    tombol.textContent = "Menyimpan pesanan...";
+
+    const items = keranjang.map(i => ({ variant_id: i.id, qty: i.qty }));
+    const ringkasan = keranjang.map(i => "- " + i.produk + " (" + i.varian + ") x" + i.qty + " = " + rupiah(i.harga * i.qty)).join("\n");
+    const total = keranjang.reduce((s, i) => s + i.harga * i.qty, 0);
+
+    const { data: kodePesanan, error } = await supabase.rpc("buat_pesanan", {
+      p_nama: nama,
+      p_whatsapp: wa,
+      p_items: items
+    });
+
+    if (error) {
+      tombol.disabled = false;
+      tombol.textContent = "Checkout";
+      renderKeranjang({ jenis: "gagal", teks: "Gagal menyimpan pesanan: " + error.message });
+      console.error(error);
+      return;
+    }
+
+    // Pesanan sudah tersimpan di database, sekarang keranjang dikosongkan
+    keranjang = [];
+    simpanKeranjang();
+
+    const teksWA =
+      "Halo KIMMY STORE, saya mau pesan.\n" +
+      "No. pesanan: " + kodePesanan + "\n" +
+      "Nama: " + nama + "\n\n" +
+      ringkasan + "\n\n" +
+      "Total: " + rupiah(total) + "\n\n" +
+      "Mohon info cara pembayarannya. Terima kasih.";
+
+    renderKeranjang({
+      jenis: "sukses",
+      teks: "Pesanan " + kodePesanan + " tersimpan. Status: menunggu pembayaran."
+    });
+
+    window.open("https://wa.me/" + WA_ADMIN + "?text=" + encodeURIComponent(teksWA), "_blank");
   }
 
   async function muatProduk() {
@@ -183,7 +268,7 @@
       return;
     }
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const { data, error } = await supabase
       .from("products")
