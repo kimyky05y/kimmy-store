@@ -129,9 +129,6 @@
   const SUPABASE_URL = "https://yftnynobgxvulhmgirdx.supabase.co";
   const SUPABASE_KEY = "sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E";
 
-  // NOMOR WHATSAPP ADMIN: ganti di sini (kode negara, tanpa + dan tanpa spasi)
-  const WA_ADMIN = "6281234567890";
-
   const MAKS_QTY = 10;
   const KUNCI_KERANJANG = "kimmy_keranjang";
 
@@ -140,6 +137,7 @@
   let metodeList = [];
   let keranjang = [];
   let supabase = null;
+  let waAdmin = "";
 
   try {
     keranjang = JSON.parse(localStorage.getItem(KUNCI_KERANJANG)) || [];
@@ -155,6 +153,13 @@
     return String(t ?? "").replace(/[&<>"']/g, c => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
     }[c]));
+  }
+
+  // Ubah 0857-2299-4977 atau 081234567890 menjadi 6285722994977 / 6281234567890
+  function normalisasiWA(nomor) {
+    let n = String(nomor || "").replace(/[^0-9]/g, "");
+    if (n.startsWith("0")) n = "62" + n.slice(1);
+    return n;
   }
 
   function hitungTotal() {
@@ -275,8 +280,7 @@
 
   async function checkout() {
     const nama = document.getElementById("nama").value.trim();
-    let wa = document.getElementById("wa").value.replace(/[^0-9]/g, "");
-    if (wa.startsWith("0")) wa = "62" + wa.slice(1);
+    const wa = normalisasiWA(document.getElementById("wa").value);
     const catatan = document.getElementById("catatan").value.trim();
     const pilihan = document.querySelector('input[name="metode"]:checked');
 
@@ -294,6 +298,10 @@
     }
     if (keranjang.length === 0) {
       tampilkanNotif("gagal", "Keranjang masih kosong.");
+      return;
+    }
+    if (!waAdmin) {
+      tampilkanNotif("gagal", "Nomor WhatsApp toko belum diatur. Coba lagi nanti.");
       return;
     }
 
@@ -342,7 +350,21 @@
     renderKeranjang();
     tampilkanNotif("sukses", "Pesanan " + kodePesanan + " tersimpan. Silakan bayar lalu kirim bukti transfer ke WhatsApp kami.");
 
-    window.open("https://wa.me/" + WA_ADMIN + "?text=" + encodeURIComponent(teksWA), "_blank");
+    window.open("https://wa.me/" + waAdmin + "?text=" + encodeURIComponent(teksWA), "_blank");
+  }
+
+  async function muatPengaturan() {
+    const { data, error } = await supabase
+      .from("store_settings")
+      .select("value")
+      .eq("key", "wa_admin")
+      .maybeSingle();
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+    waAdmin = normalisasiWA(data ? data.value : "");
   }
 
   async function muatMetode() {
@@ -416,6 +438,10 @@
   renderKeranjang();
   muatProduk();
   muatMetode();
+  if (window.supabase) {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    muatPengaturan();
+  }
 </script>
 
 </body>
