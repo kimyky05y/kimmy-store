@@ -16,12 +16,11 @@ input,select,textarea{width:100%;padding:9px;margin-top:4px;border:1px solid var
 button{background:var(--navy);color:var(--cream);border:none;border-radius:999px;padding:9px 16px;font-size:.9rem;cursor:pointer;margin-top:10px}
 button.kecil{padding:6px 12px;font-size:.8rem;margin-top:0}
 button.keluar{background:var(--terracotta)}
-button.oranye{background:var(--mustard);color:var(--navy)}
 button:disabled{opacity:.6}
-.tabs{display:flex;gap:8px;max-width:700px;margin:0 auto 14px}
-.tabs button{flex:1;margin-top:0;background:var(--dusty)}
+.tabs{display:flex;gap:8px;max-width:700px;margin:0 auto 14px;flex-wrap:wrap}
+.tabs button{flex:1;margin-top:0;background:var(--dusty);min-width:90px}
 .tabs button.aktif{background:var(--cream);color:var(--navy)}
-.pesanan,.kartu-produk{border-top:1px dashed var(--dusty);padding-top:12px;margin-top:12px}
+.pesanan,.kartu-produk,.metode-admin{border-top:1px dashed var(--dusty);padding-top:12px;margin-top:12px}
 .baris{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}
 .kode{font-weight:bold}
 .status{display:inline-block;font-size:.75rem;padding:3px 10px;border-radius:999px;background:#E8EEF3}
@@ -54,6 +53,7 @@ button:disabled{opacity:.6}
   <div class="tabs">
     <button id="tab-pesanan" class="aktif" onclick="showTab('pesanan')">Pesanan</button>
     <button id="tab-produk" onclick="showTab('produk')">Produk</button>
+    <button id="tab-pengaturan" onclick="showTab('pengaturan')">Pengaturan</button>
     <button class="keluar" onclick="logout()">Keluar</button>
   </div>
 
@@ -91,6 +91,28 @@ button:disabled{opacity:.6}
       <div id="notif-produk"></div>
     </div>
     <div class="kartu" id="daftar-produk-admin"></div>
+  </div>
+
+  <div id="bagian-pengaturan" class="sembunyi">
+    <div class="kartu">
+      <strong>Metode Pembayaran</strong>
+      <p class="muted">Perubahan di sini langsung tampil di website toko.</p>
+      <div id="notif-pengaturan"></div>
+      <div id="daftar-metode-admin"></div>
+    </div>
+    <div class="kartu">
+      <strong>Tambah Metode Baru</strong>
+      <label for="m-kode">Kode (huruf kecil, tanpa spasi)</label>
+      <input id="m-kode" type="text" placeholder="Contoh: ovo">
+      <label for="m-label">Nama yang tampil</label>
+      <input id="m-label" type="text" placeholder="Contoh: OVO">
+      <label for="m-an">Atas nama</label>
+      <input id="m-an" type="text" placeholder="Nama pemilik rekening">
+      <label for="m-nomor">Nomor rekening / HP</label>
+      <input id="m-nomor" type="text" placeholder="Nomor tujuan transfer">
+      <button onclick="tambahMetode()">Tambah metode</button>
+      <div id="notif-tambah-metode"></div>
+    </div>
   </div>
 </section>
 
@@ -149,12 +171,13 @@ async function logout() {
 }
 
 function showTab(nama) {
-  const pesanan = nama === "pesanan";
-  document.getElementById("bagian-pesanan").classList.toggle("sembunyi", !pesanan);
-  document.getElementById("bagian-produk").classList.toggle("sembunyi", pesanan);
-  document.getElementById("tab-pesanan").classList.toggle("aktif", pesanan);
-  document.getElementById("tab-produk").classList.toggle("aktif", !pesanan);
-  if (!pesanan) muatProdukAdmin();
+  const bagian = { pesanan: "bagian-pesanan", produk: "bagian-produk", pengaturan: "bagian-pengaturan" };
+  Object.keys(bagian).forEach(k => {
+    document.getElementById(bagian[k]).classList.toggle("sembunyi", k !== nama);
+    document.getElementById("tab-" + k).classList.toggle("aktif", k === nama);
+  });
+  if (nama === "produk") muatProdukAdmin();
+  if (nama === "pengaturan") muatMetodeAdmin();
 }
 
 /* ---------- PESANAN ---------- */
@@ -357,6 +380,77 @@ async function tambahVarian(pid) {
   if (error) { notif("notif-produk", "gagal", "Gagal menambah varian: " + error.message); return; }
   notif("notif-produk", "sukses", "Varian baru ditambahkan.");
   muatProdukAdmin();
+}
+
+/* ---------- PENGATURAN METODE ---------- */
+
+async function muatMetodeAdmin() {
+  const wadah = document.getElementById("daftar-metode-admin");
+  wadah.innerHTML = '<p class="muted">Memuat metode...</p>';
+
+  const { data, error } = await supabase
+    .from("payment_methods")
+    .select("id, code, label, account_name, account_number, is_active, sort_order")
+    .order("sort_order", { ascending: true });
+
+  if (error) { wadah.innerHTML = ""; notif("notif-pengaturan", "gagal", "Gagal memuat metode: " + error.message); return; }
+  if (!data || data.length === 0) { wadah.innerHTML = '<p class="muted">Belum ada metode.</p>'; return; }
+
+  wadah.innerHTML = data.map(m => `
+    <div class="metode-admin">
+      <div class="baris">
+        <strong>${escapeHTML(m.label)}</strong>
+        <span class="status">${m.is_active ? "Tampil" : "Disembunyikan"}</span>
+      </div>
+      <div class="muted">Kode: ${escapeHTML(m.code)}</div>
+      <label>Nama yang tampil</label>
+      <input id="mt-label-${m.id}" value="${escapeHTML(m.label)}">
+      <label>Atas nama</label>
+      <input id="mt-an-${m.id}" value="${escapeHTML(m.account_name || "")}">
+      <label>Nomor rekening / HP</label>
+      <input id="mt-nomor-${m.id}" value="${escapeHTML(m.account_number || "")}">
+      <div class="baris" style="margin-top:8px">
+        <label class="cb"><input type="checkbox" id="mt-aktif-${m.id}"${m.is_active ? " checked" : ""}> Tampilkan di toko</label>
+        <button class="kecil" onclick="simpanMetode(${m.id})">Simpan</button>
+      </div>
+    </div>`).join("");
+}
+
+async function simpanMetode(id) {
+  const label = document.getElementById("mt-label-" + id).value.trim();
+  const an = document.getElementById("mt-an-" + id).value.trim();
+  const nomor = document.getElementById("mt-nomor-" + id).value.trim();
+  const aktif = document.getElementById("mt-aktif-" + id).checked;
+
+  if (label.length < 2) { notif("notif-pengaturan", "gagal", "Nama yang tampil wajib diisi."); return; }
+
+  const { error } = await supabase.from("payment_methods")
+    .update({ label: label, account_name: an || null, account_number: nomor || null, is_active: aktif })
+    .eq("id", id);
+
+  if (error) { notif("notif-pengaturan", "gagal", "Gagal menyimpan: " + error.message); return; }
+  notif("notif-pengaturan", "sukses", "Metode \"" + label + "\" tersimpan.");
+  muatMetodeAdmin();
+}
+
+async function tambahMetode() {
+  const kode = document.getElementById("m-kode").value.trim().toLowerCase();
+  const label = document.getElementById("m-label").value.trim();
+  const an = document.getElementById("m-an").value.trim();
+  const nomor = document.getElementById("m-nomor").value.trim();
+
+  if (!/^[a-z0-9_]{2,20}$/.test(kode)) { notif("notif-tambah-metode", "gagal", "Kode hanya huruf kecil, angka, atau garis bawah (2–20 karakter)."); return; }
+  if (label.length < 2) { notif("notif-tambah-metode", "gagal", "Nama yang tampil wajib diisi."); return; }
+
+  const { error } = await supabase.from("payment_methods").insert({
+    code: kode, label: label, account_name: an || null, account_number: nomor || null, is_active: true, sort_order: 99
+  });
+
+  if (error) { notif("notif-tambah-metode", "gagal", "Gagal menambah metode: " + error.message); return; }
+
+  ["m-kode", "m-label", "m-an", "m-nomor"].forEach(id => document.getElementById(id).value = "");
+  notif("notif-tambah-metode", "sukses", "Metode baru ditambahkan.");
+  muatMetodeAdmin();
 }
 
 async function cekSesi() {
