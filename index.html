@@ -23,17 +23,45 @@
     header { background: var(--navy); color: var(--cream); padding: 20px 16px; text-align: center; }
     header h1 { font-size: 1.6rem; letter-spacing: 1px; }
     header p { font-size: 0.9rem; opacity: 0.85; margin-top: 4px; }
+    .tombol-keranjang-atas {
+      display: inline-block; margin-top: 10px; background: var(--mustard); color: var(--navy);
+      padding: 6px 14px; border-radius: 999px; text-decoration: none; font-weight: bold; font-size: 0.85rem;
+    }
     main { padding: 16px; max-width: 900px; margin: 0 auto; }
     h2 { color: var(--cream); margin: 20px 0 12px; font-size: 1.2rem; }
     .info { color: var(--cream); line-height: 1.5; word-break: break-word; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
     .card { background: var(--putih); border-radius: 14px; padding: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
-    .card h3 { font-size: 1rem; margin-bottom: 6px; }
-    .card .kategori { font-size: 0.75rem; color: var(--dusty); margin-bottom: 8px; }
-    .card .harga { font-weight: bold; color: var(--navy); margin-top: 6px; }
+    .card h3 { font-size: 1.05rem; margin-bottom: 4px; }
+    .card .kategori { font-size: 0.75rem; color: var(--dusty); }
+    .varian { border-top: 1px dashed var(--dusty); padding: 10px 0; }
+    .varian .nama { font-weight: bold; }
+    .varian .harga { color: var(--navy); margin-top: 2px; }
     .badge { display: inline-block; font-size: 0.7rem; padding: 3px 8px; border-radius: 999px; margin-top: 6px; }
     .tersedia { background: #DFF3E4; color: #1E6B35; }
     .habis { background: #F6D5D0; color: #8A2A1A; }
+    .tombol {
+      display: inline-block; margin-top: 8px; background: var(--navy); color: var(--cream);
+      padding: 7px 16px; border: none; border-radius: 999px; font-size: 0.85rem; cursor: pointer;
+    }
+    .kotak-keranjang {
+      background: var(--putih); color: var(--navy); border-radius: 14px;
+      padding: 14px; margin-top: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .kotak-keranjang h2 { color: var(--navy); margin-top: 0; }
+    .item-keranjang { border-top: 1px dashed var(--dusty); padding: 10px 0; }
+    .kontrol { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .kontrol button {
+      background: var(--dusty); color: var(--putih); border: none; border-radius: 8px;
+      padding: 4px 10px; font-size: 0.95rem; cursor: pointer;
+    }
+    .kontrol .hapus { background: var(--terracotta); margin-left: auto; font-size: 0.8rem; }
+    .subtotal { text-align: right; font-weight: bold; margin-top: 4px; }
+    .total { border-top: 2px solid var(--navy); margin-top: 10px; padding-top: 10px; text-align: right; font-size: 1.05rem; }
+    .tombol-lanjut {
+      width: 100%; margin-top: 12px; background: var(--mustard); color: var(--navy);
+      border: none; border-radius: 999px; padding: 10px; font-weight: bold; opacity: 0.6;
+    }
     .pesan { color: var(--cream); text-align: center; margin-top: 24px; font-size: 0.85rem; }
   </style>
 </head>
@@ -42,6 +70,7 @@
 <header>
   <h1>KIMMY STORE</h1>
   <p>Digital products & app services</p>
+  <a class="tombol-keranjang-atas" href="#keranjang">Keranjang (<span id="jumlah-keranjang">0</span>)</a>
 </header>
 
 <main>
@@ -49,6 +78,12 @@
   <div class="grid" id="daftar-produk">
     <p class="info">Memuat produk...</p>
   </div>
+
+  <section class="kotak-keranjang" id="keranjang">
+    <h2>Keranjang Saya</h2>
+    <div id="isi-keranjang"></div>
+  </section>
+
   <p class="pesan">Trusted & cute since 2022</p>
 </main>
 
@@ -57,15 +92,94 @@
   const SUPABASE_URL = "https://yftnynobgxvulhmgirdx.supabase.co";
   const SUPABASE_KEY = "sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E";
 
-  const wadah = document.getElementById("daftar-produk");
+  const MAKS_QTY = 10;                  // batas jumlah per item (nanti diganti stok asli)
+  const KUNCI_KERANJANG = "kimmy_keranjang";
 
-  function tampilkanError(teks) {
-    wadah.innerHTML = '<p class="info">Gagal: ' + teks + '</p>';
+  const wadah = document.getElementById("daftar-produk");
+  const daftarVarian = {};              // data varian, dipakai saat tombol tambah ditekan
+  let keranjang = [];
+
+  try {
+    keranjang = JSON.parse(localStorage.getItem(KUNCI_KERANJANG)) || [];
+  } catch (e) {
+    keranjang = [];
+  }
+
+  function rupiah(angka) {
+    return "Rp " + Number(angka).toLocaleString("id-ID");
+  }
+
+  function simpanKeranjang() {
+    localStorage.setItem(KUNCI_KERANJANG, JSON.stringify(keranjang));
+  }
+
+  function tambahKeranjang(id) {
+    const v = daftarVarian[id];
+    if (!v) return;
+    const item = keranjang.find(i => i.id === id);
+    if (item) {
+      if (item.qty < MAKS_QTY) item.qty++;
+    } else {
+      keranjang.push({ id: id, produk: v.produk, varian: v.varian, harga: v.harga, qty: 1 });
+    }
+    simpanKeranjang();
+    renderKeranjang();
+  }
+
+  function ubahQty(id, selisih) {
+    const item = keranjang.find(i => i.id === id);
+    if (!item) return;
+    item.qty += selisih;
+    if (item.qty < 1) {
+      keranjang = keranjang.filter(i => i.id !== id);
+    } else if (item.qty > MAKS_QTY) {
+      item.qty = MAKS_QTY;
+    }
+    simpanKeranjang();
+    renderKeranjang();
+  }
+
+  function hapusItem(id) {
+    keranjang = keranjang.filter(i => i.id !== id);
+    simpanKeranjang();
+    renderKeranjang();
+  }
+
+  function renderKeranjang() {
+    const wadahK = document.getElementById("isi-keranjang");
+    const jumlah = keranjang.reduce((s, i) => s + i.qty, 0);
+    document.getElementById("jumlah-keranjang").textContent = jumlah;
+
+    if (keranjang.length === 0) {
+      wadahK.innerHTML = '<p>Keranjang masih kosong. Pilih produk di atas.</p>';
+      return;
+    }
+
+    let total = 0;
+    const baris = keranjang.map(i => {
+      const subtotal = i.harga * i.qty;
+      total += subtotal;
+      return `
+        <div class="item-keranjang">
+          <div><strong>${i.produk}</strong><br>${i.varian} · ${rupiah(i.harga)}</div>
+          <div class="kontrol">
+            <button onclick="ubahQty(${i.id}, -1)">−</button>
+            <span>${i.qty}</span>
+            <button onclick="ubahQty(${i.id}, 1)">+</button>
+            <button class="hapus" onclick="hapusItem(${i.id})">Hapus</button>
+          </div>
+          <div class="subtotal">${rupiah(subtotal)}</div>
+        </div>`;
+    }).join("");
+
+    wadahK.innerHTML = baris +
+      `<div class="total">Total: <strong>${rupiah(total)}</strong></div>
+       <button class="tombol-lanjut" disabled>Checkout (segera hadir)</button>`;
   }
 
   async function muatProduk() {
     if (!window.supabase) {
-      tampilkanError("library Supabase tidak termuat");
+      wadah.innerHTML = '<p class="info">Gagal: library Supabase tidak termuat</p>';
       return;
     }
 
@@ -73,11 +187,11 @@
 
     const { data, error } = await supabase
       .from("products")
-      .select("id, name, description, categories(name), product_variants(name, price, stock_status)")
+      .select("id, name, categories(name), product_variants(id, name, price, stock_status, is_active)")
       .eq("is_active", true);
 
     if (error) {
-      tampilkanError(error.message);
+      wadah.innerHTML = '<p class="info">Gagal: ' + error.message + '</p>';
       console.error(error);
       return;
     }
@@ -88,20 +202,33 @@
     }
 
     wadah.innerHTML = data.map(p => {
-      const varian = p.product_variants || [];
-      const pertama = varian[0];
-      const harga = pertama ? "Rp " + pertama.price.toLocaleString("id-ID") : "-";
-      const status = pertama && pertama.stock_status === "tersedia" ? "tersedia" : "habis";
+      const kategori = p.categories ? p.categories.name : "";
+      const daftar = (p.product_variants || [])
+        .filter(v => v.is_active)
+        .map(v => {
+          daftarVarian[v.id] = { produk: p.name, varian: v.name, harga: v.price };
+          const tersedia = v.stock_status === "tersedia";
+          return `
+            <div class="varian">
+              <div class="nama">${v.name}</div>
+              <div class="harga">${rupiah(v.price)}</div>
+              <span class="badge ${tersedia ? "tersedia" : "habis"}">${tersedia ? "Tersedia" : "Habis"}</span>
+              ${tersedia
+                ? `<button class="tombol" onclick="tambahKeranjang(${v.id})">Tambah ke keranjang</button>`
+                : ""}
+            </div>`;
+        }).join("");
+
       return `
         <div class="card">
-          <div class="kategori">${p.categories ? p.categories.name : ""}</div>
+          <div class="kategori">${kategori}</div>
           <h3>${p.name}</h3>
-          <div class="harga">mulai ${harga}</div>
-          <span class="badge ${status}">${status === "tersedia" ? "Tersedia" : "Habis"}</span>
+          ${daftar || '<p>Belum ada varian.</p>'}
         </div>`;
     }).join("");
   }
 
+  renderKeranjang();
   muatProduk();
 </script>
 
