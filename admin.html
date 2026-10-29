@@ -29,4 +29,348 @@ button:disabled{opacity:.6}
 .muted{color:var(--dusty)}
 .varian-box{background:#F4F8FB;border-radius:10px;padding:10px;margin-top:10px}
 .varian-box .baris input{margin-top:0}
-.notif{padding:10px;border-radius:10px;margin-top:10px;font-size:.
+.notif{padding:10px;border-radius:10px;margin-top:10px;font-size:.9rem}
+.gagal{background:#F6D5D0;color:#8A2A1A}
+.sukses{background:#DFF3E4;color:#1E6B35}
+.sembunyi{display:none}
+.cb{display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:normal;margin:0}
+.cb input{width:auto;margin:0}
+</style>
+</head>
+<body>
+<h1>Admin KIMMY STORE</h1>
+<p class="sub">Halaman khusus pemilik toko</p>
+
+<section id="halaman-login" class="kartu sembunyi">
+  <label for="email">Email</label>
+  <input id="email" type="email" autocomplete="username">
+  <label for="password">Password</label>
+  <input id="password" type="password" autocomplete="current-password">
+  <button id="tombol-login" onclick="login()">Masuk</button>
+  <div id="notif-login"></div>
+</section>
+
+<section id="halaman-admin" class="sembunyi">
+  <div class="tabs">
+    <button id="tab-pesanan" class="aktif" onclick="showTab('pesanan')">Pesanan</button>
+    <button id="tab-produk" onclick="showTab('produk')">Produk</button>
+    <button class="keluar" onclick="logout()">Keluar</button>
+  </div>
+
+  <div id="bagian-pesanan" class="kartu">
+    <div class="baris">
+      <strong>Pesanan Masuk</strong>
+      <button class="kecil" onclick="muatPesanan()">Refresh</button>
+    </div>
+    <label for="filter">Filter status</label>
+    <select id="filter" onchange="muatPesanan()">
+      <option value="">Semua</option>
+      <option value="menunggu_pembayaran">Menunggu pembayaran</option>
+      <option value="menunggu_verifikasi">Menunggu verifikasi</option>
+      <option value="diproses">Diproses</option>
+      <option value="selesai">Selesai</option>
+      <option value="dibatalkan">Dibatalkan</option>
+    </select>
+    <div id="notif-pesanan"></div>
+    <div id="daftar-pesanan"></div>
+  </div>
+
+  <div id="bagian-produk" class="sembunyi">
+    <div class="kartu">
+      <strong id="judul-form">Tambah Produk Baru</strong>
+      <label for="p-nama">Nama produk</label>
+      <input id="p-nama" type="text" placeholder="Contoh: Netflix Premium">
+      <label for="p-kategori">Kategori</label>
+      <select id="p-kategori"></select>
+      <label for="p-deskripsi">Deskripsi</label>
+      <textarea id="p-deskripsi" rows="2"></textarea>
+      <div class="baris">
+        <button onclick="simpanProduk()">Simpan produk</button>
+        <button class="kecil" onclick="resetForm()">Batal</button>
+      </div>
+      <div id="notif-produk"></div>
+    </div>
+    <div class="kartu" id="daftar-produk-admin"></div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = "https://yftnynobgxvulhmgirdx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E";
+
+const STATUS_LABEL = {
+  menunggu_pembayaran: "Menunggu pembayaran",
+  menunggu_verifikasi: "Menunggu verifikasi",
+  diproses: "Diproses",
+  selesai: "Selesai",
+  dibatalkan: "Dibatalkan"
+};
+const METODE_LABEL = { transfer_bank: "Transfer Bank", qris: "QRIS", dana: "DANA", bca: "Transfer BCA" };
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let editProdukId = null;
+const produkCache = {};
+
+function rupiah(a) { return "Rp " + Number(a).toLocaleString("id-ID"); }
+function escapeHTML(t) {
+  return String(t ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function notif(id, jenis, teks) {
+  document.getElementById(id).innerHTML = teks ? '<div class="notif ' + jenis + '">' + escapeHTML(teks) + '</div>' : "";
+}
+
+function tampilkanSesi(sudahLogin) {
+  document.getElementById("halaman-login").classList.toggle("sembunyi", sudahLogin);
+  document.getElementById("halaman-admin").classList.toggle("sembunyi", !sudahLogin);
+}
+
+async function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const tombol = document.getElementById("tombol-login");
+  if (!email || !password) { notif("notif-login", "gagal", "Email dan password wajib diisi."); return; }
+
+  tombol.disabled = true;
+  const { error } = await supabase.auth.signInWithPassword({ email: email, password: password });
+  tombol.disabled = false;
+
+  if (error) { notif("notif-login", "gagal", "Login gagal: " + error.message); return; }
+  document.getElementById("password").value = "";
+  notif("notif-login", "", "");
+  tampilkanSesi(true);
+  muatPesanan();
+  muatKategori();
+}
+
+async function logout() {
+  await supabase.auth.signOut();
+  tampilkanSesi(false);
+}
+
+function showTab(nama) {
+  const pesanan = nama === "pesanan";
+  document.getElementById("bagian-pesanan").classList.toggle("sembunyi", !pesanan);
+  document.getElementById("bagian-produk").classList.toggle("sembunyi", pesanan);
+  document.getElementById("tab-pesanan").classList.toggle("aktif", pesanan);
+  document.getElementById("tab-produk").classList.toggle("aktif", !pesanan);
+  if (!pesanan) muatProdukAdmin();
+}
+
+/* ---------- PESANAN ---------- */
+
+async function muatPesanan() {
+  const filter = document.getElementById("filter").value;
+  const wadah = document.getElementById("daftar-pesanan");
+  notif("notif-pesanan", "", "");
+  wadah.innerHTML = '<p class="muted">Memuat pesanan...</p>';
+
+  let query = supabase
+    .from("orders")
+    .select("id, order_code, customer_name, customer_whatsapp, total_amount, status, payment_method, notes, created_at, order_items(product_name, variant_name, quantity, subtotal)")
+    .order("created_at", { ascending: false })
+    .limit(50);
+  if (filter) query = query.eq("status", filter);
+
+  const { data, error } = await query;
+  if (error) { wadah.innerHTML = ""; notif("notif-pesanan", "gagal", "Gagal memuat pesanan: " + error.message); return; }
+  if (!data || data.length === 0) { wadah.innerHTML = '<p class="muted">Belum ada pesanan.</p>'; return; }
+
+  wadah.innerHTML = data.map(o => {
+    const tanggal = new Date(o.created_at).toLocaleString("id-ID");
+    const items = (o.order_items || []).map(i =>
+      '<div class="item">' + escapeHTML(i.product_name) + " (" + escapeHTML(i.variant_name) + ") x" + i.quantity + " = " + rupiah(i.subtotal) + "</div>"
+    ).join("");
+    const opsi = Object.keys(STATUS_LABEL).map(s =>
+      '<option value="' + s + '"' + (s === o.status ? " selected" : "") + ">" + STATUS_LABEL[s] + "</option>"
+    ).join("");
+
+    return `
+      <div class="pesanan">
+        <div class="baris">
+          <span class="kode">${escapeHTML(o.order_code)}</span>
+          <span class="status">${STATUS_LABEL[o.status] || escapeHTML(o.status)}</span>
+        </div>
+        <div class="muted">${tanggal}</div>
+        <div><strong>${escapeHTML(o.customer_name)}</strong> · ${escapeHTML(o.customer_whatsapp)}</div>
+        ${items}
+        <div class="muted">Metode: ${METODE_LABEL[o.payment_method] || escapeHTML(o.payment_method || "-")}</div>
+        ${o.notes ? '<div class="muted">Catatan: ' + escapeHTML(o.notes) + "</div>" : ""}
+        <div><strong>Total: ${rupiah(o.total_amount)}</strong></div>
+        <div class="baris" style="margin-top:8px">
+          <select style="width:auto;flex:1" onchange="ubahStatus(${o.id}, this.value)">${opsi}</select>
+          <a href="https://wa.me/${escapeHTML(o.customer_whatsapp)}" target="_blank"><button class="kecil" type="button">WhatsApp</button></a>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+async function ubahStatus(id, statusBaru) {
+  const { error } = await supabase.from("orders").update({ status: statusBaru }).eq("id", id);
+  if (error) { notif("notif-pesanan", "gagal", "Gagal mengubah status: " + error.message); muatPesanan(); return; }
+  notif("notif-pesanan", "sukses", "Status pesanan diperbarui.");
+  muatPesanan();
+}
+
+/* ---------- PRODUK ---------- */
+
+async function muatKategori() {
+  const { data, error } = await supabase.from("categories").select("id, name").order("name");
+  if (error) return;
+  document.getElementById("p-kategori").innerHTML =
+    '<option value="">Tanpa kategori</option>' +
+    data.map(k => '<option value="' + k.id + '">' + escapeHTML(k.name) + "</option>").join("");
+}
+
+async function muatProdukAdmin() {
+  const wadah = document.getElementById("daftar-produk-admin");
+  wadah.innerHTML = '<p class="muted">Memuat produk...</p>';
+
+  const { data, error } = await supabase
+    .from("products")
+    .select("id, name, description, is_active, category_id, categories(name), product_variants(id, name, price, stock_status, is_active)")
+    .order("id");
+
+  if (error) { wadah.innerHTML = ""; notif("notif-produk", "gagal", "Gagal memuat produk: " + error.message); return; }
+  if (!data || data.length === 0) { wadah.innerHTML = '<p class="muted">Belum ada produk.</p>'; return; }
+
+  data.forEach(p => produkCache[p.id] = p);
+
+  wadah.innerHTML = data.map(p => {
+    const varian = (p.product_variants || []).sort((a, b) => a.id - b.id).map(v => `
+      <div class="varian-box">
+        <input id="v-nama-${v.id}" value="${escapeHTML(v.name)}" placeholder="Nama varian">
+        <div class="baris" style="margin-top:6px">
+          <input id="v-harga-${v.id}" type="number" min="0" value="${v.price}" style="width:48%" placeholder="Harga">
+          <select id="v-stok-${v.id}" style="width:48%">
+            <option value="tersedia"${v.stock_status === "tersedia" ? " selected" : ""}>Tersedia</option>
+            <option value="habis"${v.stock_status === "habis" ? " selected" : ""}>Habis</option>
+          </select>
+        </div>
+        <div class="baris" style="margin-top:6px">
+          <label class="cb"><input type="checkbox" id="v-aktif-${v.id}"${v.is_active ? " checked" : ""}> Aktif</label>
+          <button class="kecil" onclick="simpanVarian(${v.id})">Simpan varian</button>
+        </div>
+      </div>`).join("");
+
+    return `
+      <div class="kartu-produk">
+        <div class="baris">
+          <strong>${escapeHTML(p.name)}</strong>
+          <span class="status">${p.is_active ? "Aktif" : "Nonaktif"}</span>
+        </div>
+        <div class="muted">${escapeHTML(p.categories ? p.categories.name : "Tanpa kategori")}</div>
+        <div class="baris" style="margin-top:8px">
+          <button class="kecil" onclick="mulaiEdit(${p.id})">Edit produk</button>
+          <button class="kecil" onclick="toggleProduk(${p.id}, ${!p.is_active})">${p.is_active ? "Nonaktifkan" : "Aktifkan"}</button>
+        </div>
+        ${varian}
+        <div class="varian-box">
+          <strong>Tambah varian baru</strong>
+          <input id="n-nama-${p.id}" placeholder="Nama varian, contoh: 1 Bulan" style="margin-top:6px">
+          <div class="baris" style="margin-top:6px">
+            <input id="n-harga-${p.id}" type="number" min="0" placeholder="Harga" style="width:60%">
+            <button class="kecil" onclick="tambahVarian(${p.id})">Tambah</button>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function mulaiEdit(id) {
+  const p = produkCache[id];
+  if (!p) return;
+  editProdukId = id;
+  document.getElementById("judul-form").textContent = "Edit Produk";
+  document.getElementById("p-nama").value = p.name;
+  document.getElementById("p-kategori").value = p.category_id || "";
+  document.getElementById("p-deskripsi").value = p.description || "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function resetForm() {
+  editProdukId = null;
+  document.getElementById("judul-form").textContent = "Tambah Produk Baru";
+  document.getElementById("p-nama").value = "";
+  document.getElementById("p-kategori").value = "";
+  document.getElementById("p-deskripsi").value = "";
+  notif("notif-produk", "", "");
+}
+
+async function simpanProduk() {
+  const nama = document.getElementById("p-nama").value.trim();
+  const kategori = document.getElementById("p-kategori").value;
+  const deskripsi = document.getElementById("p-deskripsi").value.trim();
+
+  if (nama.length < 2) { notif("notif-produk", "gagal", "Nama produk wajib diisi."); return; }
+
+  const payload = { name: nama, category_id: kategori ? Number(kategori) : null, description: deskripsi };
+  let error;
+
+  if (editProdukId) {
+    ({ error } = await supabase.from("products").update(payload).eq("id", editProdukId));
+  } else {
+    ({ error } = await supabase.from("products").insert({ ...payload, is_active: true }));
+  }
+
+  if (error) { notif("notif-produk", "gagal", "Gagal menyimpan produk: " + error.message); return; }
+  notif("notif-produk", "sukses", editProdukId ? "Produk diperbarui." : "Produk baru ditambahkan.");
+  resetForm();
+  muatProdukAdmin();
+}
+
+async function toggleProduk(id, aktifBaru) {
+  const { error } = await supabase.from("products").update({ is_active: aktifBaru }).eq("id", id);
+  if (error) { notif("notif-produk", "gagal", "Gagal: " + error.message); return; }
+  muatProdukAdmin();
+}
+
+async function simpanVarian(vid) {
+  const nama = document.getElementById("v-nama-" + vid).value.trim();
+  const harga = parseInt(document.getElementById("v-harga-" + vid).value, 10);
+  const stok = document.getElementById("v-stok-" + vid).value;
+  const aktif = document.getElementById("v-aktif-" + vid).checked;
+
+  if (nama.length < 1) { notif("notif-produk", "gagal", "Nama varian wajib diisi."); return; }
+  if (isNaN(harga) || harga < 0) { notif("notif-produk", "gagal", "Harga harus angka, minimal 0."); return; }
+
+  const { error } = await supabase.from("product_variants")
+    .update({ name: nama, price: harga, stock_status: stok, is_active: aktif })
+    .eq("id", vid);
+
+  if (error) { notif("notif-produk", "gagal", "Gagal menyimpan varian: " + error.message); return; }
+  notif("notif-produk", "sukses", "Varian \"" + nama + "\" tersimpan.");
+  muatProdukAdmin();
+}
+
+async function tambahVarian(pid) {
+  const nama = document.getElementById("n-nama-" + pid).value.trim();
+  const harga = parseInt(document.getElementById("n-harga-" + pid).value, 10);
+
+  if (nama.length < 1) { notif("notif-produk", "gagal", "Nama varian wajib diisi."); return; }
+  if (isNaN(harga) || harga < 0) { notif("notif-produk", "gagal", "Harga harus angka, minimal 0."); return; }
+
+  const { error } = await supabase.from("product_variants").insert({
+    product_id: pid, name: nama, price: harga, stock_status: "tersedia", is_active: true
+  });
+
+  if (error) { notif("notif-produk", "gagal", "Gagal menambah varian: " + error.message); return; }
+  notif("notif-produk", "sukses", "Varian baru ditambahkan.");
+  muatProdukAdmin();
+}
+
+async function cekSesi() {
+  const { data } = await supabase.auth.getSession();
+  tampilkanSesi(!!data.session);
+  if (data.session) { muatPesanan(); muatKategori(); }
+}
+
+if (window.supabase) {
+  cekSesi();
+} else {
+  document.getElementById("halaman-login").classList.remove("sembunyi");
+  notif("notif-login", "gagal", "Library Supabase tidak termuat.");
+}
+</script>
+</body>
+</html>
