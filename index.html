@@ -64,12 +64,15 @@
       width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--dusty);
       border-radius: 10px; font-size: 1rem; font-family: inherit;
     }
-    .pilihan { display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
-    .opsi {
-      display: flex; align-items: center; gap: 8px; padding: 10px 14px;
-      border: 1px solid var(--dusty); border-radius: 10px; cursor: pointer; font-size: 0.95rem;
+    .metode { border: 1px solid var(--dusty); border-radius: 12px; padding: 12px; margin-top: 8px; }
+    .metode-pilih { display: flex; align-items: center; gap: 8px; font-weight: bold; cursor: pointer; }
+    .metode-pilih input { width: auto; }
+    .rekening { margin-top: 10px; background: #F4F8FB; border-radius: 10px; padding: 10px; font-size: 0.9rem; }
+    .rekening .nomor { font-size: 1.1rem; font-weight: bold; letter-spacing: 1px; margin-top: 4px; word-break: break-all; }
+    .tombol-salin {
+      margin-top: 8px; background: var(--dusty); color: var(--putih); border: none;
+      border-radius: 999px; padding: 6px 14px; font-size: 0.85rem; cursor: pointer;
     }
-    .opsi input { width: auto; }
     .tombol-checkout {
       width: 100%; margin-top: 16px; background: var(--mustard); color: var(--navy);
       border: none; border-radius: 999px; padding: 12px; font-weight: bold; font-size: 1rem; cursor: pointer;
@@ -107,10 +110,7 @@
       <input id="wa" type="tel" placeholder="Contoh: 081234567890">
 
       <label class="judul">Metode pembayaran</label>
-      <div class="pilihan">
-        <label class="opsi"><input type="radio" name="metode" value="transfer_bank" checked> Transfer Bank</label>
-        <label class="opsi"><input type="radio" name="metode" value="qris"> QRIS</label>
-      </div>
+      <div id="daftar-metode"><p class="info">Memuat metode pembayaran...</p></div>
 
       <label class="judul" for="catatan">Catatan (opsional)</label>
       <textarea id="catatan" rows="3" placeholder="Contoh: tolong kirim akun ke WhatsApp ini"></textarea>
@@ -134,10 +134,10 @@
 
   const MAKS_QTY = 10;
   const KUNCI_KERANJANG = "kimmy_keranjang";
-  const METODE_LABEL = { transfer_bank: "Transfer Bank", qris: "QRIS" };
 
   const wadah = document.getElementById("daftar-produk");
   const daftarVarian = {};
+  let metodeList = [];
   let keranjang = [];
   let supabase = null;
 
@@ -149,6 +149,12 @@
 
   function rupiah(angka) {
     return "Rp " + Number(angka).toLocaleString("id-ID");
+  }
+
+  function escapeHTML(t) {
+    return String(t ?? "").replace(/[&<>"']/g, c => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
   }
 
   function hitungTotal() {
@@ -193,7 +199,50 @@
 
   function tampilkanNotif(jenis, teks) {
     const wadahN = document.getElementById("notif-checkout");
-    wadahN.innerHTML = teks ? '<div class="notif ' + jenis + '">' + teks + '</div>' : "";
+    wadahN.innerHTML = teks ? '<div class="notif ' + jenis + '">' + escapeHTML(teks) + '</div>' : "";
+  }
+
+  async function salinNomor(nomor, tombol) {
+    try {
+      await navigator.clipboard.writeText(nomor);
+    } catch (e) {
+      const area = document.createElement("textarea");
+      area.value = nomor;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand("copy");
+      area.remove();
+    }
+    const teksAsli = tombol.textContent;
+    tombol.textContent = "Tersalin ✓";
+    setTimeout(() => { tombol.textContent = teksAsli; }, 1500);
+  }
+
+  function renderMetode() {
+    const wadahM = document.getElementById("daftar-metode");
+    if (metodeList.length === 0) {
+      wadahM.innerHTML = '<p class="info">Belum ada metode pembayaran.</p>';
+      return;
+    }
+
+    wadahM.innerHTML = metodeList.map((m, idx) => {
+      const rekening = m.account_number
+        ? `<div class="rekening">
+             <div>a.n. ${escapeHTML(m.account_name || "-")}</div>
+             <div class="nomor">${escapeHTML(m.account_number)}</div>
+             <button type="button" class="tombol-salin" onclick="salinNomor('${escapeHTML(m.account_number)}', this)">Salin nomor</button>
+           </div>`
+        : `<div class="rekening">Setelah checkout, admin akan mengirim kode QRIS lewat WhatsApp.</div>`;
+
+      return `
+        <div class="metode">
+          <label class="metode-pilih">
+            <input type="radio" name="metode" value="${escapeHTML(m.code)}" ${idx === 0 ? "checked" : ""}>
+            ${escapeHTML(m.label)}
+          </label>
+          ${rekening}
+        </div>`;
+    }).join("");
   }
 
   function renderKeranjang() {
@@ -211,7 +260,7 @@
     form.style.display = "block";
     const baris = keranjang.map(i => `
       <div class="item-keranjang">
-        <div><strong>${i.produk}</strong><br>${i.varian} · ${rupiah(i.harga)}</div>
+        <div><strong>${escapeHTML(i.produk)}</strong><br>${escapeHTML(i.varian)} · ${rupiah(i.harga)}</div>
         <div class="kontrol">
           <button onclick="ubahQty(${i.id}, -1)">−</button>
           <span>${i.qty}</span>
@@ -229,7 +278,7 @@
     let wa = document.getElementById("wa").value.replace(/[^0-9]/g, "");
     if (wa.startsWith("0")) wa = "62" + wa.slice(1);
     const catatan = document.getElementById("catatan").value.trim();
-    const metode = document.querySelector('input[name="metode"]:checked').value;
+    const pilihan = document.querySelector('input[name="metode"]:checked');
 
     if (nama.length < 2) {
       tampilkanNotif("gagal", "Nama wajib diisi.");
@@ -239,10 +288,18 @@
       tampilkanNotif("gagal", "Nomor WhatsApp tidak valid.");
       return;
     }
+    if (!pilihan) {
+      tampilkanNotif("gagal", "Pilih metode pembayaran.");
+      return;
+    }
     if (keranjang.length === 0) {
       tampilkanNotif("gagal", "Keranjang masih kosong.");
       return;
     }
+
+    const metode = pilihan.value;
+    const metodeInfo = metodeList.find(m => m.code === metode);
+    const labelMetode = metodeInfo ? metodeInfo.label : metode;
 
     const tombol = document.getElementById("tombol-checkout");
     tombol.disabled = true;
@@ -275,17 +332,34 @@
       "Nama: " + nama + "\n\n" +
       ringkasan + "\n\n" +
       "Total: " + rupiah(total) + "\n" +
-      "Metode bayar: " + METODE_LABEL[metode] + "\n" +
+      "Metode bayar: " + labelMetode + "\n" +
       "Catatan: " + (catatan || "-") + "\n\n" +
-      "Mohon info cara pembayarannya. Terima kasih.";
+      "Saya akan kirim bukti transfer setelah membayar. Terima kasih.";
 
     keranjang = [];
     simpanKeranjang();
     document.getElementById("catatan").value = "";
     renderKeranjang();
-    tampilkanNotif("sukses", "Pesanan " + kodePesanan + " tersimpan. Status: menunggu pembayaran.");
+    tampilkanNotif("sukses", "Pesanan " + kodePesanan + " tersimpan. Silakan bayar lalu kirim bukti transfer ke WhatsApp kami.");
 
     window.open("https://wa.me/" + WA_ADMIN + "?text=" + encodeURIComponent(teksWA), "_blank");
+  }
+
+  async function muatMetode() {
+    const { data, error } = await supabase
+      .from("payment_methods")
+      .select("code, label, account_name, account_number, sort_order")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true });
+
+    if (error) {
+      document.getElementById("daftar-metode").innerHTML = '<p class="info">Gagal memuat metode pembayaran.</p>';
+      console.error(error);
+      return;
+    }
+
+    metodeList = data || [];
+    renderMetode();
   }
 
   async function muatProduk() {
@@ -302,7 +376,7 @@
       .eq("is_active", true);
 
     if (error) {
-      wadah.innerHTML = '<p class="info">Gagal: ' + error.message + '</p>';
+      wadah.innerHTML = '<p class="info">Gagal: ' + escapeHTML(error.message) + '</p>';
       console.error(error);
       return;
     }
@@ -321,7 +395,7 @@
           const tersedia = v.stock_status === "tersedia";
           return `
             <div class="varian">
-              <div class="nama">${v.name}</div>
+              <div class="nama">${escapeHTML(v.name)}</div>
               <div class="harga">${rupiah(v.price)}</div>
               <span class="badge ${tersedia ? "tersedia" : "habis"}">${tersedia ? "Tersedia" : "Habis"}</span>
               ${tersedia
@@ -332,8 +406,8 @@
 
       return `
         <div class="card">
-          <div class="kategori">${kategori}</div>
-          <h3>${p.name}</h3>
+          <div class="kategori">${escapeHTML(kategori)}</div>
+          <h3>${escapeHTML(p.name)}</h3>
           ${daftar || '<p>Belum ada varian.</p>'}
         </div>`;
     }).join("");
@@ -341,6 +415,7 @@
 
   renderKeranjang();
   muatProduk();
+  muatMetode();
 </script>
 
 </body>
