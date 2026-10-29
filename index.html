@@ -59,11 +59,17 @@
     .subtotal { text-align: right; font-weight: bold; margin-top: 4px; }
     .total { border-top: 2px solid var(--navy); margin-top: 10px; padding-top: 10px; text-align: right; font-size: 1.05rem; }
     .formulir { margin-top: 16px; border-top: 2px dashed var(--dusty); padding-top: 14px; }
-    .formulir label { display: block; font-size: 0.85rem; margin-top: 10px; font-weight: bold; }
-    .formulir input {
+    .formulir label.judul { display: block; font-size: 0.85rem; margin-top: 12px; font-weight: bold; }
+    .formulir input[type="text"], .formulir input[type="tel"], .formulir textarea {
       width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--dusty);
-      border-radius: 10px; font-size: 1rem;
+      border-radius: 10px; font-size: 1rem; font-family: inherit;
     }
+    .pilihan { display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+    .opsi {
+      display: flex; align-items: center; gap: 8px; padding: 10px 14px;
+      border: 1px solid var(--dusty); border-radius: 10px; cursor: pointer; font-size: 0.95rem;
+    }
+    .opsi input { width: auto; }
     .tombol-checkout {
       width: 100%; margin-top: 16px; background: var(--mustard); color: var(--navy);
       border: none; border-radius: 999px; padding: 12px; font-weight: bold; font-size: 1rem; cursor: pointer;
@@ -92,6 +98,27 @@
   <section class="kotak-keranjang" id="keranjang">
     <h2>Keranjang Saya</h2>
     <div id="isi-keranjang"></div>
+
+    <div id="form-checkout" class="formulir" style="display: none;">
+      <label class="judul" for="nama">Nama lengkap</label>
+      <input id="nama" type="text" placeholder="Contoh: Budi Santoso">
+
+      <label class="judul" for="wa">Nomor WhatsApp</label>
+      <input id="wa" type="tel" placeholder="Contoh: 081234567890">
+
+      <label class="judul">Metode pembayaran</label>
+      <div class="pilihan">
+        <label class="opsi"><input type="radio" name="metode" value="transfer_bank" checked> Transfer Bank</label>
+        <label class="opsi"><input type="radio" name="metode" value="qris"> QRIS</label>
+      </div>
+
+      <label class="judul" for="catatan">Catatan (opsional)</label>
+      <textarea id="catatan" rows="3" placeholder="Contoh: tolong kirim akun ke WhatsApp ini"></textarea>
+
+      <button class="tombol-checkout" id="tombol-checkout" onclick="checkout()">Checkout</button>
+    </div>
+
+    <div id="notif-checkout"></div>
   </section>
 
   <p class="pesan">Trusted & cute since 2022</p>
@@ -107,6 +134,7 @@
 
   const MAKS_QTY = 10;
   const KUNCI_KERANJANG = "kimmy_keranjang";
+  const METODE_LABEL = { transfer_bank: "Transfer Bank", qris: "QRIS" };
 
   const wadah = document.getElementById("daftar-produk");
   const daftarVarian = {};
@@ -121,6 +149,10 @@
 
   function rupiah(angka) {
     return "Rp " + Number(angka).toLocaleString("id-ID");
+  }
+
+  function hitungTotal() {
+    return keranjang.reduce((s, i) => s + i.harga * i.qty, 0);
   }
 
   function simpanKeranjang() {
@@ -159,64 +191,56 @@
     renderKeranjang();
   }
 
-  function renderKeranjang(notifikasi) {
+  function tampilkanNotif(jenis, teks) {
+    const wadahN = document.getElementById("notif-checkout");
+    wadahN.innerHTML = teks ? '<div class="notif ' + jenis + '">' + teks + '</div>' : "";
+  }
+
+  function renderKeranjang() {
     const wadahK = document.getElementById("isi-keranjang");
+    const form = document.getElementById("form-checkout");
     const jumlah = keranjang.reduce((s, i) => s + i.qty, 0);
     document.getElementById("jumlah-keranjang").textContent = jumlah;
 
-    let notifHTML = "";
-    if (notifikasi) {
-      notifHTML = '<div class="notif ' + notifikasi.jenis + '">' + notifikasi.teks + '</div>';
-    }
-
     if (keranjang.length === 0) {
-      wadahK.innerHTML = notifHTML + '<p>Keranjang masih kosong. Pilih produk di atas.</p>';
+      wadahK.innerHTML = '<p>Keranjang masih kosong. Pilih produk di atas.</p>';
+      form.style.display = "none";
       return;
     }
 
-    let total = 0;
-    const baris = keranjang.map(i => {
-      const subtotal = i.harga * i.qty;
-      total += subtotal;
-      return `
-        <div class="item-keranjang">
-          <div><strong>${i.produk}</strong><br>${i.varian} · ${rupiah(i.harga)}</div>
-          <div class="kontrol">
-            <button onclick="ubahQty(${i.id}, -1)">−</button>
-            <span>${i.qty}</span>
-            <button onclick="ubahQty(${i.id}, 1)">+</button>
-            <button class="hapus" onclick="hapusItem(${i.id})">Hapus</button>
-          </div>
-          <div class="subtotal">${rupiah(subtotal)}</div>
-        </div>`;
-    }).join("");
+    form.style.display = "block";
+    const baris = keranjang.map(i => `
+      <div class="item-keranjang">
+        <div><strong>${i.produk}</strong><br>${i.varian} · ${rupiah(i.harga)}</div>
+        <div class="kontrol">
+          <button onclick="ubahQty(${i.id}, -1)">−</button>
+          <span>${i.qty}</span>
+          <button onclick="ubahQty(${i.id}, 1)">+</button>
+          <button class="hapus" onclick="hapusItem(${i.id})">Hapus</button>
+        </div>
+        <div class="subtotal">${rupiah(i.harga * i.qty)}</div>
+      </div>`).join("");
 
-    wadahK.innerHTML = notifHTML + baris +
-      `<div class="total">Total: <strong>${rupiah(total)}</strong></div>
-       <div class="formulir">
-         <label for="nama">Nama lengkap</label>
-         <input id="nama" type="text" placeholder="Contoh: Budi Santoso">
-         <label for="wa">Nomor WhatsApp</label>
-         <input id="wa" type="tel" placeholder="Contoh: 081234567890">
-         <button class="tombol-checkout" id="tombol-checkout" onclick="checkout()">Checkout</button>
-       </div>`;
+    wadahK.innerHTML = baris + `<div class="total">Total: <strong>${rupiah(hitungTotal())}</strong></div>`;
   }
 
   async function checkout() {
     const nama = document.getElementById("nama").value.trim();
     let wa = document.getElementById("wa").value.replace(/[^0-9]/g, "");
     if (wa.startsWith("0")) wa = "62" + wa.slice(1);
+    const catatan = document.getElementById("catatan").value.trim();
+    const metode = document.querySelector('input[name="metode"]:checked').value;
 
     if (nama.length < 2) {
-      renderKeranjang({ jenis: "gagal", teks: "Nama wajib diisi." });
+      tampilkanNotif("gagal", "Nama wajib diisi.");
       return;
     }
     if (!/^[0-9]{9,15}$/.test(wa)) {
-      renderKeranjang({ jenis: "gagal", teks: "Nomor WhatsApp tidak valid." });
+      tampilkanNotif("gagal", "Nomor WhatsApp tidak valid.");
       return;
     }
     if (keranjang.length === 0) {
-      renderKeranjang({ jenis: "gagal", teks: "Keranjang masih kosong." });
+      tampilkanNotif("gagal", "Keranjang masih kosong.");
       return;
     }
 
@@ -226,38 +250,40 @@
 
     const items = keranjang.map(i => ({ variant_id: i.id, qty: i.qty }));
     const ringkasan = keranjang.map(i => "- " + i.produk + " (" + i.varian + ") x" + i.qty + " = " + rupiah(i.harga * i.qty)).join("\n");
-    const total = keranjang.reduce((s, i) => s + i.harga * i.qty, 0);
+    const total = hitungTotal();
 
     const { data: kodePesanan, error } = await supabase.rpc("buat_pesanan", {
       p_nama: nama,
       p_whatsapp: wa,
-      p_items: items
+      p_items: items,
+      p_metode: metode,
+      p_catatan: catatan
     });
 
+    tombol.disabled = false;
+    tombol.textContent = "Checkout";
+
     if (error) {
-      tombol.disabled = false;
-      tombol.textContent = "Checkout";
-      renderKeranjang({ jenis: "gagal", teks: "Gagal menyimpan pesanan: " + error.message });
+      tampilkanNotif("gagal", "Gagal menyimpan pesanan: " + error.message);
       console.error(error);
       return;
     }
-
-    // Pesanan sudah tersimpan di database, sekarang keranjang dikosongkan
-    keranjang = [];
-    simpanKeranjang();
 
     const teksWA =
       "Halo KIMMY STORE, saya mau pesan.\n" +
       "No. pesanan: " + kodePesanan + "\n" +
       "Nama: " + nama + "\n\n" +
       ringkasan + "\n\n" +
-      "Total: " + rupiah(total) + "\n\n" +
+      "Total: " + rupiah(total) + "\n" +
+      "Metode bayar: " + METODE_LABEL[metode] + "\n" +
+      "Catatan: " + (catatan || "-") + "\n\n" +
       "Mohon info cara pembayarannya. Terima kasih.";
 
-    renderKeranjang({
-      jenis: "sukses",
-      teks: "Pesanan " + kodePesanan + " tersimpan. Status: menunggu pembayaran."
-    });
+    keranjang = [];
+    simpanKeranjang();
+    document.getElementById("catatan").value = "";
+    renderKeranjang();
+    tampilkanNotif("sukses", "Pesanan " + kodePesanan + " tersimpan. Status: menunggu pembayaran.");
 
     window.open("https://wa.me/" + WA_ADMIN + "?text=" + encodeURIComponent(teksWA), "_blank");
   }
