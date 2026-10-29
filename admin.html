@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin KIMMY STORE</title>
+<style>
+:root{--navy:#263F55;--dusty:#527A96;--cream:#F7E9B8;--mustard:#D99A3D;--terracotta:#B5654A;--putih:#FFFFFF;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--navy);color:var(--navy);min-height:100vh;padding:16px}
+h1{color:var(--cream);text-align:center;margin-bottom:6px;font-size:1.4rem}
+.sub{color:var(--cream);text-align:center;opacity:.8;font-size:.85rem;margin-bottom:16px}
+.kartu{background:var(--putih);border-radius:14px;padding:16px;max-width:700px;margin:0 auto 14px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+label{display:block;font-size:.85rem;font-weight:bold;margin-top:10px}
+input,select{width:100%;padding:10px;margin-top:4px;border:1px solid var(--dusty);border-radius:10px;font-size:1rem;font-family:inherit}
+button{background:var(--navy);color:var(--cream);border:none;border-radius:999px;padding:10px 16px;font-size:.95rem;cursor:pointer;margin-top:12px}
+button.kecil{padding:6px 12px;font-size:.8rem;margin-top:0}
+button.keluar{background:var(--terracotta)}
+button:disabled{opacity:.6}
+.pesanan{border-top:1px dashed var(--dusty);padding-top:12px;margin-top:12px}
+.baris{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}
+.kode{font-weight:bold}
+.status{display:inline-block;font-size:.75rem;padding:3px 10px;border-radius:999px;background:#E8EEF3;color:var(--navy)}
+.item{font-size:.9rem;margin-top:4px;color:#333}
+.muted{color:var(--dusty);font-size:.85rem}
+.notif{padding:10px;border-radius:10px;margin-top:10px;font-size:.9rem}
+.gagal{background:#F6D5D0;color:#8A2A1A}
+.sukses{background:#DFF3E4;color:#1E6B35}
+.sembunyi{display:none}
+</style>
+</head>
+<body>
+<h1>Admin KIMMY STORE</h1>
+<p class="sub">Halaman khusus pemilik toko</p>
+
+<section id="halaman-login" class="kartu sembunyi">
+  <label for="email">Email</label>
+  <input id="email" type="email" autocomplete="username">
+  <label for="password">Password</label>
+  <input id="password" type="password" autocomplete="current-password">
+  <button id="tombol-login" onclick="login()">Masuk</button>
+  <div id="notif-login"></div>
+</section>
+
+<section id="halaman-admin" class="sembunyi">
+  <div class="kartu">
+    <div class="baris">
+      <strong>Pesanan Masuk</strong>
+      <div>
+        <button class="kecil" onclick="muatPesanan()">Refresh</button>
+        <button class="kecil keluar" onclick="logout()">Keluar</button>
+      </div>
+    </div>
+    <label for="filter">Filter status</label>
+    <select id="filter" onchange="muatPesanan()">
+      <option value="">Semua</option>
+      <option value="menunggu_pembayaran">Menunggu pembayaran</option>
+      <option value="menunggu_verifikasi">Menunggu verifikasi</option>
+      <option value="diproses">Diproses</option>
+      <option value="selesai">Selesai</option>
+      <option value="dibatalkan">Dibatalkan</option>
+    </select>
+    <div id="notif-admin"></div>
+    <div id="daftar-pesanan"></div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = "https://yftnynobgxvulhmgirdx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E";
+
+const STATUS_LABEL = {
+  menunggu_pembayaran: "Menunggu pembayaran",
+  menunggu_verifikasi: "Menunggu verifikasi",
+  diproses: "Diproses",
+  selesai: "Selesai",
+  dibatalkan: "Dibatalkan"
+};
+const METODE_LABEL = { transfer_bank: "Transfer Bank", qris: "QRIS" };
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+function rupiah(a) { return "Rp " + Number(a).toLocaleString("id-ID"); }
+
+function escapeHTML(t) {
+  return String(t ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
+function notif(id, jenis, teks) {
+  document.getElementById(id).innerHTML =
+    teks ? '<div class="notif ' + jenis + '">' + escapeHTML(teks) + '</div>' : "";
+}
+
+function tampilkanSesi(sudahLogin) {
+  document.getElementById("halaman-login").classList.toggle("sembunyi", sudahLogin);
+  document.getElementById("halaman-admin").classList.toggle("sembunyi", !sudahLogin);
+}
+
+async function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const tombol = document.getElementById("tombol-login");
+
+  if (!email || !password) {
+    notif("notif-login", "gagal", "Email dan password wajib diisi.");
+    return;
+  }
+
+  tombol.disabled = true;
+  tombol.textContent = "Memproses...";
+  const { error } = await supabase.auth.signInWithPassword({ email: email, password: password });
+  tombol.disabled = false;
+  tombol.textContent = "Masuk";
+
+  if (error) {
+    notif("notif-login", "gagal", "Login gagal: " + error.message);
+    return;
+  }
+
+  document.getElementById("password").value = "";
+  notif("notif-login", "", "");
+  tampilkanSesi(true);
+  muatPesanan();
+}
+
+async function logout() {
+  await supabase.auth.signOut();
+  tampilkanSesi(false);
+}
+
+async function muatPesanan() {
+  const filter = document.getElementById("filter").value;
+  const wadah = document.getElementById("daftar-pesanan");
+  notif("notif-admin", "", "");
+  wadah.innerHTML = '<p class="muted">Memuat pesanan...</p>';
+
+  let query = supabase
+    .from("orders")
+    .select("id, order_code, customer_name, customer_whatsapp, total_amount, status, payment_method, notes, created_at, order_items(product_name, variant_name, quantity, subtotal)")
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  if (filter) query = query.eq("status", filter);
+
+  const { data, error } = await query;
+
+  if (error) {
+    wadah.innerHTML = "";
+    notif("notif-admin", "gagal", "Gagal memuat pesanan: " + error.message);
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    wadah.innerHTML = '<p class="muted">Belum ada pesanan.</p>';
+    return;
+  }
+
+  wadah.innerHTML = data.map(o => {
+    const tanggal = new Date(o.created_at).toLocaleString("id-ID");
+    const items = (o.order_items || []).map(i =>
+      '<div class="item">' + escapeHTML(i.product_name) + " (" + escapeHTML(i.variant_name) +
+      ") x" + i.quantity + " = " + rupiah(i.subtotal) + "</div>"
+    ).join("");
+
+    const opsi = Object.keys(STATUS_LABEL).map(s =>
+      '<option value="' + s + '"' + (s === o.status ? " selected" : "") + ">" + STATUS_LABEL[s] + "</option>"
+    ).join("");
+
+    return `
+      <div class="pesanan">
+        <div class="baris">
+          <span class="kode">${escapeHTML(o.order_code)}</span>
+          <span class="status">${STATUS_LABEL[o.status] || escapeHTML(o.status)}</span>
+        </div>
+        <div class="muted">${tanggal}</div>
+        <div><strong>${escapeHTML(o.customer_name)}</strong> · ${escapeHTML(o.customer_whatsapp)}</div>
+        ${items}
+        <div class="muted">Metode: ${METODE_LABEL[o.payment_method] || escapeHTML(o.payment_method || "-")}</div>
+        ${o.notes ? '<div class="muted">Catatan: ' + escapeHTML(o.notes) + "</div>" : ""}
+        <div><strong>Total: ${rupiah(o.total_amount)}</strong></div>
+        <div class="baris" style="margin-top:8px">
+          <select style="width:auto;flex:1" onchange="ubahStatus(${o.id}, this.value)">${opsi}</select>
+          <a href="https://wa.me/${escapeHTML(o.customer_whatsapp)}" target="_blank">
+            <button class="kecil" type="button">WhatsApp</button>
+          </a>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+async function ubahStatus(id, statusBaru) {
+  const { error } = await supabase.from("orders").update({ status: statusBaru }).eq("id", id);
+
+  if (error) {
+    notif("notif-admin", "gagal", "Gagal mengubah status: " + error.message);
+    muatPesanan();
+    return;
+  }
+
+  notif("notif-admin", "sukses", "Status pesanan diperbarui.");
+  muatPesanan();
+}
+
+async function cekSesi() {
+  const { data } = await supabase.auth.getSession();
+  tampilkanSesi(!!data.session);
+  if (data.session) muatPesanan();
+}
+
+if (window.supabase) {
+  cekSesi();
+} else {
+  document.getElementById("halaman-login").classList.remove("sembunyi");
+  notif("notif-login", "gagal", "Library Supabase tidak termuat.");
+}
+</script>
+</body>
+  </html>
