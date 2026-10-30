@@ -26,7 +26,6 @@
     }
     .wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
 
-    /* HEADER */
     header.top {
       background: var(--navy); color: var(--cream);
       position: sticky; top: 0; z-index: 20;
@@ -44,7 +43,6 @@
       padding: 7px 14px; border-radius: 999px; font-size: 0.88rem; white-space: nowrap;
     }
 
-    /* HERO */
     .hero {
       background: linear-gradient(135deg, var(--dusty) 0%, var(--navy) 100%);
       color: var(--cream); border-radius: 22px; padding: 24px 20px; margin: 16px 0 14px;
@@ -62,7 +60,6 @@
     .promo-item { background: var(--pink); color: var(--navy); border-radius: 14px; padding: 10px 14px; font-size: 0.92rem; }
     .promo-item span { font-size: 0.82rem; opacity: 0.85; }
 
-    /* KEUNGGULAN */
     .trust { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
     .trust div {
       background: var(--cream); color: var(--navy); border-radius: 16px; padding: 12px 8px;
@@ -70,7 +67,6 @@
     }
     .trust b { display: block; font-size: 1.35rem; margin-bottom: 2px; }
 
-    /* LAYOUT TOKO */
     .shop { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
     h2.judul-bagian { color: var(--cream); font-size: 1.2rem; margin: 4px 0 12px; }
 
@@ -97,7 +93,6 @@
     .kategori { font-size: 0.7rem; color: var(--dusty); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
     .card h3 { font-size: 0.98rem; margin: 2px 0 4px; line-height: 1.3; }
     .varian { border-top: 1px dashed var(--dusty); padding: 8px 0; }
-    .varian:first-of-type { margin-top: auto; }
     .varian .nama { font-weight: 700; font-size: 0.88rem; }
     .harga { font-size: 0.9rem; margin-top: 2px; }
     .harga-coret { color: #7A7A7A; text-decoration: line-through; font-size: 0.8rem; }
@@ -106,14 +101,15 @@
     .badge { display: inline-block; font-size: 0.68rem; padding: 2px 8px; border-radius: 999px; margin-top: 4px; font-weight: 600; }
     .tersedia { background: #DFF3E4; color: #1E6B35; }
     .habis { background: #F6D5D0; color: #8A2A1A; }
+    .sisa { font-size: 0.74rem; color: var(--dusty); margin-top: 3px; font-weight: 600; }
     .garansi { font-size: 0.75rem; color: var(--dusty); margin-top: 3px; }
     .tombol {
       margin-top: 6px; width: 100%; background: var(--navy); color: var(--cream); border: none;
       padding: 8px 10px; border-radius: 999px; font-size: 0.82rem; cursor: pointer; font-family: inherit; font-weight: 600;
     }
     .tombol:hover { background: var(--dusty); }
+    .tombol:disabled { opacity: 0.5; cursor: not-allowed; background: var(--navy); }
 
-    /* KERANJANG */
     .cart {
       background: var(--cream); color: var(--navy); border-radius: 20px; padding: 16px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.2);
@@ -152,7 +148,6 @@
     .info-bayar { background: #F4F8FB; border-radius: 10px; padding: 10px; margin-top: 10px; font-size: 0.88rem; }
     .status-cek { display: inline-block; font-size: 0.85rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: #E8EEF3; margin-top: 6px; }
 
-    /* PANEL BAWAH */
     .panel-bawah { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
     .kotak {
       background: var(--cream); color: var(--navy); border-radius: 20px; padding: 18px;
@@ -189,7 +184,6 @@
     footer nav a { color: var(--cream); text-decoration: none; font-size: 0.88rem; opacity: 0.9; }
     footer nav a:hover { text-decoration: underline; }
 
-    /* TABLET & LAPTOP */
     @media (min-width: 640px) {
       .trust { grid-template-columns: repeat(4, 1fr); }
       .grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
@@ -376,12 +370,19 @@
     return n;
   }
 
-  // Rumus ini sama dengan yang ada di database
   function hitungHargaAkhir(v) {
     if (!v.promo_type || !v.promo_value) return v.price;
     if (v.promo_type === "nominal") return Math.max(v.price - v.promo_value, 0);
     if (v.promo_type === "persen") return Math.round(v.price * (100 - v.promo_value) / 100);
     return v.price;
+  }
+
+  // Batas jumlah yang boleh dibeli: mengikuti stok jika ada, kalau tidak pakai MAKS_QTY
+  function batasQty(id) {
+    const v = daftarVarian[id];
+    if (!v) return 0;
+    if (v.stok === null || v.stok === undefined) return MAKS_QTY;
+    return Math.min(v.stok, MAKS_QTY);
   }
 
   function hitungTotal() {
@@ -392,41 +393,54 @@
     localStorage.setItem(KUNCI_KERANJANG, JSON.stringify(keranjang));
   }
 
+  function tampilkanNotif(jenis, teks) {
+    document.getElementById("notif-checkout").innerHTML =
+      teks ? '<div class="notif ' + jenis + '">' + escapeHTML(teks) + '</div>' : "";
+  }
+
   function tambahKeranjang(id) {
     const v = daftarVarian[id];
     if (!v) return;
+    const batas = batasQty(id);
     const item = keranjang.find(i => i.id === id);
+    const qtySekarang = item ? item.qty : 0;
+
+    if (batas < 1 || qtySekarang >= batas) {
+      tampilkanNotif("gagal", "Stok " + v.varian + " tidak mencukupi untuk ditambah lagi.");
+      return;
+    }
+
     if (item) {
-      if (item.qty < MAKS_QTY) item.qty++;
+      item.qty++;
     } else {
       keranjang.push({ id: id, produk: v.produk, varian: v.varian, harga: v.harga, qty: 1 });
     }
     simpanKeranjang();
     renderKeranjang();
+    renderProduk();
   }
 
   function ubahQty(id, selisih) {
     const item = keranjang.find(i => i.id === id);
     if (!item) return;
+    const batas = batasQty(id);
     item.qty += selisih;
     if (item.qty < 1) {
       keranjang = keranjang.filter(i => i.id !== id);
-    } else if (item.qty > MAKS_QTY) {
-      item.qty = MAKS_QTY;
+    } else if (item.qty > batas) {
+      item.qty = batas;
+      tampilkanNotif("gagal", "Jumlah dibatasi sesuai sisa stok.");
     }
     simpanKeranjang();
     renderKeranjang();
+    renderProduk();
   }
 
   function hapusItem(id) {
     keranjang = keranjang.filter(i => i.id !== id);
     simpanKeranjang();
     renderKeranjang();
-  }
-
-  function tampilkanNotif(jenis, teks) {
-    document.getElementById("notif-checkout").innerHTML =
-      teks ? '<div class="notif ' + jenis + '">' + escapeHTML(teks) + '</div>' : "";
+    renderProduk();
   }
 
   async function salinNomor(nomor, tombol) {
@@ -544,6 +558,7 @@
     if (error) {
       tampilkanNotif("gagal", "Gagal menyimpan pesanan: " + error.message);
       console.error(error);
+      await muatProduk();
       return;
     }
 
@@ -564,6 +579,7 @@
     tampilkanNotif("sukses", "Pesanan " + kodePesanan + " tersimpan. Simpan kode ini untuk cek status. Silakan bayar lalu kirim bukti transfer ke WhatsApp kami.");
 
     window.open("https://wa.me/" + waAdmin + "?text=" + encodeURIComponent(teksWA), "_blank");
+    await muatProduk();
   }
 
   async function cekStatus() {
@@ -707,9 +723,9 @@
         .map(v => {
           const hargaAkhir = hitungHargaAkhir(v);
           const adaPromo = hargaAkhir < v.price;
-          daftarVarian[v.id] = { produk: p.name, varian: v.name, harga: hargaAkhir };
+          daftarVarian[v.id] = { produk: p.name, varian: v.name, harga: hargaAkhir, stok: v.stok };
 
-          const tersedia = v.stock_status === "tersedia";
+          const stokHabis = v.stock_status !== "tersedia" || v.stok === 0;
           const hargaHTML = adaPromo
             ? '<div class="harga-coret">' + rupiah(v.price) + '</div><div class="harga-promo">' + rupiah(hargaAkhir) + '</div>'
             : '<div class="harga">' + rupiah(v.price) + '</div>';
@@ -717,6 +733,13 @@
             ? '<span class="badge-promo">' + escapeHTML(v.promo_label || "PROMO") + '</span>' : "";
           const garansi = v.warranty_days && v.warranty_days > 0
             ? '<div class="garansi">🛡️ Garansi ' + v.warranty_days + ' hari</div>' : "";
+          const sisa = v.stok !== null && v.stok !== undefined && !stokHabis
+            ? '<div class="sisa">Sisa ' + v.stok + ' akun</div>' : "";
+
+          const sudahDiKeranjang = keranjang.find(i => i.id === v.id);
+          const batas = batasQty(v.id);
+          const penuh = sudahDiKeranjang && sudahDiKeranjang.qty >= batas;
+          const tombolNonaktif = stokHabis || penuh;
 
           return `
             <div class="varian">
@@ -724,8 +747,11 @@
               ${hargaHTML}
               ${badgePromo}
               ${garansi}
-              <span class="badge ${tersedia ? "tersedia" : "habis"}">${tersedia ? "Tersedia" : "Habis"}</span>
-              ${tersedia ? `<button class="tombol" onclick="tambahKeranjang(${v.id})">+ Keranjang</button>` : ""}
+              <span class="badge ${stokHabis ? "habis" : "tersedia"}">${stokHabis ? "Habis" : "Tersedia"}</span>
+              ${sisa}
+              <button class="tombol" ${tombolNonaktif ? "disabled" : ""} onclick="tambahKeranjang(${v.id})">
+                ${stokHabis ? "Habis" : (penuh ? "Maks. di keranjang" : "+ Keranjang")}
+              </button>
             </div>`;
         }).join("");
 
@@ -747,11 +773,11 @@
       return;
     }
 
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    if (!supabase) supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const { data, error } = await supabase
       .from("products")
-      .select("id, name, image_url, categories(name), product_variants(id, name, price, promo_type, promo_value, promo_label, warranty_days, stock_status, is_active)")
+      .select("id, name, image_url, categories(name), product_variants(id, name, price, promo_type, promo_value, promo_label, warranty_days, stock_status, stok, is_active)")
       .eq("is_active", true);
 
     if (error) {
@@ -763,11 +789,7 @@
     semuaProduk = data || [];
     renderChips();
     renderProduk();
-
-    muatInfoToko();
-    muatMetode();
-    muatBannerPromo();
-    muatFaq();
+    renderKeranjang();
   }
 
   document.getElementById("chips").addEventListener("click", e => {
@@ -785,6 +807,10 @@
 
   renderKeranjang();
   muatProduk();
+  muatInfoToko();
+  muatMetode();
+  muatBannerPromo();
+  muatFaq();
 </script>
 
 </body>
