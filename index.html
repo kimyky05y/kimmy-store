@@ -41,6 +41,13 @@
     main { padding: 16px; max-width: 900px; margin: 0 auto; }
     h2 { color: var(--cream); margin: 20px 0 12px; font-size: 1.2rem; }
     .info { color: var(--cream); line-height: 1.5; word-break: break-word; }
+    .banner-promo { margin-top: 16px; display: grid; gap: 10px; }
+    .banner-promo:empty { display: none; }
+    .promo-item {
+      background: var(--mustard); color: var(--navy); border-radius: 14px;
+      padding: 12px 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); font-size: 0.95rem;
+    }
+    .promo-item span { font-size: 0.85rem; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
     .card { background: var(--putih); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
     .foto-produk { width: 100%; height: 160px; object-fit: cover; display: block; background: #E8EEF3; }
@@ -50,6 +57,12 @@
     .varian { border-top: 1px dashed var(--dusty); padding: 10px 0; }
     .varian .nama { font-weight: bold; }
     .varian .harga { color: var(--navy); margin-top: 2px; }
+    .harga-coret { color: #8A8A8A; text-decoration: line-through; font-size: 0.85rem; margin-top: 2px; }
+    .harga-promo { color: #B5654A; font-weight: bold; font-size: 1.05rem; }
+    .badge-promo {
+      display: inline-block; font-size: 0.7rem; font-weight: bold; padding: 3px 8px;
+      border-radius: 999px; background: var(--terracotta); color: var(--putih); margin-top: 6px;
+    }
     .badge { display: inline-block; font-size: 0.7rem; padding: 3px 8px; border-radius: 999px; margin-top: 6px; }
     .tersedia { background: #DFF3E4; color: #1E6B35; }
     .habis { background: #F6D5D0; color: #8A2A1A; }
@@ -120,6 +133,8 @@
 </nav>
 
 <main>
+  <section class="banner-promo" id="banner-promo"></section>
+
   <h2 id="produk">Produk Kami</h2>
   <div class="grid" id="daftar-produk">
     <p class="info">Memuat produk...</p>
@@ -203,6 +218,14 @@
     let n = String(nomor || "").replace(/[^0-9]/g, "");
     if (n.startsWith("0")) n = "62" + n.slice(1);
     return n;
+  }
+
+  // Rumus harga promo ini sama dengan yang ada di database
+  function hitungHargaAkhir(v) {
+    if (!v.promo_type || !v.promo_value) return v.price;
+    if (v.promo_type === "nominal") return Math.max(v.price - v.promo_value, 0);
+    if (v.promo_type === "persen") return Math.round(v.price * (100 - v.promo_value) / 100);
+    return v.price;
   }
 
   function hitungTotal() {
@@ -468,6 +491,25 @@
     renderMetode();
   }
 
+  async function muatBannerPromo() {
+    const { data, error } = await supabase
+      .from("promos")
+      .select("judul, deskripsi")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      document.getElementById("banner-promo").innerHTML = "";
+      return;
+    }
+
+    document.getElementById("banner-promo").innerHTML = data.map(p => `
+      <div class="promo-item">
+        <strong>${escapeHTML(p.judul)}</strong>
+        ${p.deskripsi ? '<br><span>' + escapeHTML(p.deskripsi) + '</span>' : ""}
+      </div>`).join("");
+  }
+
   async function muatProduk() {
     if (!window.supabase) {
       wadah.innerHTML = '<p class="info">Gagal: library Supabase tidak termuat</p>';
@@ -478,7 +520,7 @@
 
     const { data, error } = await supabase
       .from("products")
-      .select("id, name, image_url, categories(name), product_variants(id, name, price, stock_status, is_active)")
+      .select("id, name, image_url, categories(name), product_variants(id, name, price, promo_type, promo_value, promo_label, stock_status, is_active)")
       .eq("is_active", true);
 
     if (error) {
@@ -497,15 +539,27 @@
       const foto = p.image_url
         ? '<img class="foto-produk" src="' + escapeHTML(p.image_url) + '" alt="' + escapeHTML(p.name) + '">'
         : "";
+
       const daftar = (p.product_variants || [])
         .filter(v => v.is_active)
         .map(v => {
-          daftarVarian[v.id] = { produk: p.name, varian: v.name, harga: v.price };
+          const hargaAkhir = hitungHargaAkhir(v);
+          const adaPromo = hargaAkhir < v.price;
+          daftarVarian[v.id] = { produk: p.name, varian: v.name, harga: hargaAkhir };
+
           const tersedia = v.stock_status === "tersedia";
+          const hargaHTML = adaPromo
+            ? '<div class="harga-coret">' + rupiah(v.price) + '</div><div class="harga-promo">' + rupiah(hargaAkhir) + '</div>'
+            : '<div class="harga">' + rupiah(v.price) + '</div>';
+          const badgePromo = adaPromo
+            ? '<span class="badge-promo">' + escapeHTML(v.promo_label || "PROMO") + '</span>'
+            : "";
+
           return `
             <div class="varian">
               <div class="nama">${escapeHTML(v.name)}</div>
-              <div class="harga">${rupiah(v.price)}</div>
+              ${hargaHTML}
+              ${badgePromo}
               <span class="badge ${tersedia ? "tersedia" : "habis"}">${tersedia ? "Tersedia" : "Habis"}</span>
               ${tersedia
                 ? `<button class="tombol" onclick="tambahKeranjang(${v.id})">Tambah ke keranjang</button>`
@@ -526,6 +580,7 @@
 
     muatPengaturan();
     muatMetode();
+    muatBannerPromo();
   }
 
   renderKeranjang();
