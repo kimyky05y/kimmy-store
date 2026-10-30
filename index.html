@@ -26,12 +26,12 @@
     header p { font-size: 0.9rem; opacity: 0.85; margin-top: 4px; }
     nav.menu {
       position: sticky; top: 0; z-index: 10; background: var(--navy);
-      display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;
+      display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;
       padding: 10px 12px; border-bottom: 1px solid rgba(247,233,184,0.2);
     }
     nav.menu a {
-      color: var(--cream); text-decoration: none; font-size: 0.85rem;
-      padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(247,233,184,0.4);
+      color: var(--cream); text-decoration: none; font-size: 0.8rem;
+      padding: 6px 11px; border-radius: 999px; border: 1px solid rgba(247,233,184,0.4);
     }
     nav.menu a.penting { background: var(--mustard); color: var(--navy); border-color: var(--mustard); font-weight: bold; }
     .tombol-keranjang-atas {
@@ -63,6 +63,7 @@
       display: inline-block; font-size: 0.7rem; font-weight: bold; padding: 3px 8px;
       border-radius: 999px; background: var(--terracotta); color: var(--putih); margin-top: 6px;
     }
+    .garansi { font-size: 0.8rem; color: var(--dusty); margin-top: 4px; }
     .badge { display: inline-block; font-size: 0.7rem; padding: 3px 8px; border-radius: 999px; margin-top: 6px; }
     .tersedia { background: #DFF3E4; color: #1E6B35; }
     .habis { background: #F6D5D0; color: #8A2A1A; }
@@ -70,11 +71,11 @@
       display: inline-block; margin-top: 8px; background: var(--navy); color: var(--cream);
       padding: 7px 16px; border: none; border-radius: 999px; font-size: 0.85rem; cursor: pointer;
     }
-    .kotak-keranjang, .kotak-cek {
+    .kotak-keranjang, .kotak-cek, .kotak-info {
       background: var(--putih); color: var(--navy); border-radius: 14px;
       padding: 14px; margin-top: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
-    .kotak-keranjang h2, .kotak-cek h2 { color: var(--navy); margin-top: 0; }
+    .kotak-keranjang h2, .kotak-cek h2, .kotak-info h2 { color: var(--navy); margin-top: 0; }
     .item-keranjang { border-top: 1px dashed var(--dusty); padding: 10px 0; }
     .kontrol { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
     .kontrol button {
@@ -115,7 +116,21 @@
     }
     .muted { color: var(--dusty); font-size: 0.85rem; }
     .info-bayar { background: #F4F8FB; border-radius: 10px; padding: 10px; margin-top: 12px; font-size: 0.9rem; }
-    .pesan { color: var(--cream); text-align: center; margin-top: 24px; font-size: 0.85rem; }
+    .blok-info { border-top: 1px dashed var(--dusty); padding: 12px 0; }
+    .blok-info h3 { font-size: 1rem; margin-bottom: 6px; }
+    .blok-info p { font-size: 0.92rem; line-height: 1.5; }
+    .faq-item { border-top: 1px dashed var(--dusty); padding: 10px 0; }
+    .faq-item strong { display: block; margin-bottom: 4px; }
+    .tombol-wa {
+      display: inline-block; margin-top: 8px; background: #1E6B35; color: var(--putih);
+      padding: 9px 18px; border-radius: 999px; text-decoration: none; font-weight: bold; font-size: 0.9rem;
+    }
+    footer {
+      background: var(--putih); color: var(--navy); border-radius: 14px; padding: 16px;
+      margin-top: 24px; font-size: 0.88rem; text-align: center;
+    }
+    footer nav a { color: var(--dusty); margin: 0 6px; text-decoration: none; }
+    .pesan { color: var(--cream); text-align: center; margin-top: 18px; font-size: 0.85rem; }
   </style>
 </head>
 <body>
@@ -129,7 +144,11 @@
 <nav class="menu">
   <a href="#produk">Produk</a>
   <a href="#keranjang">Keranjang</a>
-  <a href="#cek-status" class="penting">Cek Status Pesanan</a>
+  <a href="#cek-status" class="penting">Cek Status</a>
+  <a href="#tentang">Tentang</a>
+  <a href="#faq">FAQ</a>
+  <a href="#kebijakan">Kebijakan</a>
+  <a href="#kontak">Kontak</a>
 </nav>
 
 <main>
@@ -172,7 +191,46 @@
     <div id="hasil-cek"></div>
   </section>
 
-  <p class="pesan">Trusted & cute since 2022</p>
+  <section class="kotak-info" id="tentang">
+    <h2>Tentang Kami</h2>
+    <div class="blok-info"><p id="info-tentang" class="muted">Memuat...</p></div>
+  </section>
+
+  <section class="kotak-info" id="faq">
+    <h2>Pertanyaan yang Sering Ditanyakan</h2>
+    <div id="daftar-faq"><p class="muted">Memuat...</p></div>
+  </section>
+
+  <section class="kotak-info" id="kebijakan">
+    <h2>Kebijakan Toko</h2>
+    <div class="blok-info"><h3>Pembayaran</h3><p id="info-pembayaran" class="muted">Memuat...</p></div>
+    <div class="blok-info"><h3>Garansi</h3><p id="info-garansi" class="muted">Memuat...</p></div>
+    <div class="blok-info"><h3>Pengembalian dana</h3><p id="info-pengembalian" class="muted">Memuat...</p></div>
+  </section>
+
+  <section class="kotak-info" id="kontak">
+    <h2>Kontak Admin</h2>
+    <div class="blok-info">
+      <p><strong>WhatsApp:</strong> <span id="info-kontak">-</span></p>
+      <p><strong>Jam operasional:</strong> <span id="info-jam">-</span></p>
+      <a class="tombol-wa" id="tombol-hubungi" href="#" target="_blank">Hubungi Admin</a>
+    </div>
+  </section>
+
+  <footer>
+    <strong>KIMMY STORE</strong>
+    <p class="muted">Digital products &amp; app services</p>
+    <nav>
+      <a href="#beranda">Beranda</a>
+      <a href="#produk">Katalog</a>
+      <a href="#cek-status">Cek Status</a>
+      <a href="#tentang">Tentang</a>
+      <a href="#faq">FAQ</a>
+      <a href="#kontak">Kontak</a>
+    </nav>
+  </footer>
+
+  <p class="pesan">Trusted &amp; cute since 2022</p>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
@@ -220,7 +278,7 @@
     return n;
   }
 
-  // Rumus harga promo ini sama dengan yang ada di database
+  // Rumus ini sama dengan yang ada di database
   function hitungHargaAkhir(v) {
     if (!v.promo_type || !v.promo_value) return v.price;
     if (v.promo_type === "nominal") return Math.max(v.price - v.promo_value, 0);
@@ -465,14 +523,46 @@
       </div>`;
   }
 
-  async function muatPengaturan() {
+  async function muatInfoToko() {
+    const kunci = ["wa_admin", "tentang", "jam_operasional", "kebijakan_pembayaran", "kebijakan_garansi", "kebijakan_pengembalian"];
     const { data, error } = await supabase
       .from("store_settings")
-      .select("value")
-      .eq("key", "wa_admin")
-      .maybeSingle();
+      .select("key, value")
+      .in("key", kunci);
+
     if (error) { console.error(error); return; }
-    waAdmin = normalisasiWA(data ? data.value : "");
+
+    const info = {};
+    (data || []).forEach(r => info[r.key] = r.value);
+
+    waAdmin = normalisasiWA(info.wa_admin || "");
+    const teksWA = waAdmin ? "https://wa.me/" + waAdmin : "#";
+    document.getElementById("tombol-hubungi").href = teksWA;
+    document.getElementById("info-kontak").textContent = info.wa_admin || "-";
+    document.getElementById("info-jam").textContent = info.jam_operasional || "-";
+    document.getElementById("info-tentang").textContent = info.tentang || "-";
+    document.getElementById("info-pembayaran").textContent = info.kebijakan_pembayaran || "-";
+    document.getElementById("info-garansi").textContent = info.kebijakan_garansi || "-";
+    document.getElementById("info-pengembalian").textContent = info.kebijakan_pengembalian || "-";
+  }
+
+  async function muatFaq() {
+    const { data, error } = await supabase
+      .from("faqs")
+      .select("pertanyaan, jawaban")
+      .eq("is_active", true)
+      .order("urutan", { ascending: true });
+
+    const wadahF = document.getElementById("daftar-faq");
+    if (error || !data || data.length === 0) {
+      wadahF.innerHTML = '<p class="muted">Belum ada FAQ.</p>';
+      return;
+    }
+    wadahF.innerHTML = data.map(f => `
+      <div class="faq-item">
+        <strong>${escapeHTML(f.pertanyaan)}</strong>
+        <div class="muted">${escapeHTML(f.jawaban)}</div>
+      </div>`).join("");
   }
 
   async function muatMetode() {
@@ -520,7 +610,7 @@
 
     const { data, error } = await supabase
       .from("products")
-      .select("id, name, image_url, categories(name), product_variants(id, name, price, promo_type, promo_value, promo_label, stock_status, is_active)")
+      .select("id, name, image_url, categories(name), product_variants(id, name, price, promo_type, promo_value, promo_label, warranty_days, stock_status, is_active)")
       .eq("is_active", true);
 
     if (error) {
@@ -554,12 +644,16 @@
           const badgePromo = adaPromo
             ? '<span class="badge-promo">' + escapeHTML(v.promo_label || "PROMO") + '</span>'
             : "";
+          const garansi = v.warranty_days && v.warranty_days > 0
+            ? '<div class="garansi">Garansi ' + v.warranty_days + ' hari</div>'
+            : "";
 
           return `
             <div class="varian">
               <div class="nama">${escapeHTML(v.name)}</div>
               ${hargaHTML}
               ${badgePromo}
+              ${garansi}
               <span class="badge ${tersedia ? "tersedia" : "habis"}">${tersedia ? "Tersedia" : "Habis"}</span>
               ${tersedia
                 ? `<button class="tombol" onclick="tambahKeranjang(${v.id})">Tambah ke keranjang</button>`
@@ -578,9 +672,10 @@
         </div>`;
     }).join("");
 
-    muatPengaturan();
+    muatInfoToko();
     muatMetode();
     muatBannerPromo();
+    muatFaq();
   }
 
   renderKeranjang();
