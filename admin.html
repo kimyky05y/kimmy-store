@@ -48,6 +48,12 @@ button:disabled{opacity:.6}
 .kpi.untung{background:#DFF3E4}.kpi.untung .angka{color:#1E6B35}
 .kpi.rugi{background:#F6D5D0}.kpi.rugi .angka{color:#8A2A1A}
 .baris-tanggal{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grafik{display:flex;align-items:flex-end;gap:8px;height:190px;margin-top:12px}
+.kolom{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;min-width:0}
+.nilai{font-size:.68rem;color:var(--dusty);height:18px;white-space:nowrap;font-weight:bold}
+.batang-wrap{flex:1;width:100%;display:flex;align-items:flex-end;background:#F4F8FB;border-radius:10px;overflow:hidden}
+.batang{width:100%;background:var(--mustard);border-radius:10px 10px 0 0;transition:height .3s}
+.hari{font-size:.72rem;margin-top:5px;color:var(--navy);font-weight:bold}
 </style>
 </head>
 <body>
@@ -95,6 +101,11 @@ button:disabled{opacity:.6}
     </div>
     <p class="muted">Pendapatan hanya dihitung dari pesanan berstatus Diproses dan Selesai.</p>
     <div id="isi-ringkasan"></div>
+    <div class="blok">
+      <strong>Penjualan 7 hari terakhir</strong>
+      <p class="muted">Hanya pesanan Diproses dan Selesai. Angka dalam ribuan rupiah.</p>
+      <div id="grafik-7hari"></div>
+    </div>
     <div id="notif-ringkasan"></div>
   </div>
 
@@ -461,6 +472,50 @@ async function muatRingkasan(){
       <div class="kpi"><div class="label">Pengeluaran</div><div class="angka">${rupiah(pengeluaran)}</div></div>
       <div class="kpi ${untung>=0?"untung":"rugi"}"><div class="label">Keuntungan</div><div class="angka">${rupiah(untung)}</div></div>
     </div>`;
+
+  muatGrafik();
+}
+
+async function muatGrafik(){
+  const wadah=document.getElementById("grafik-7hari");
+  wadah.innerHTML='<p class="muted">Memuat grafik...</p>';
+
+  const hariIni=new Date();
+  hariIni.setHours(0,0,0,0);
+  const awal=new Date(hariIni.getTime()-6*24*3600*1000);
+
+  const {data,error}=await supabase.from("orders")
+    .select("status,total_amount,created_at")
+    .gte("created_at",awal.toISOString())
+    .in("status",["diproses","selesai"]);
+  if(error){wadah.innerHTML='<p class="muted">Gagal memuat grafik: '+esc(error.message)+'</p>';return;}
+
+  const hari=[];
+  for(let i=0;i<7;i++){
+    const d=new Date(awal.getTime()+i*24*3600*1000);
+    hari.push({tgl:tglLokal(d),label:d.toLocaleDateString("id-ID",{weekday:"short"}),total:0});
+  }
+  (data||[]).forEach(o=>{
+    const kunci=tglLokal(new Date(o.created_at));
+    const h=hari.find(x=>x.tgl===kunci);
+    if(h)h.total+=Number(o.total_amount||0);
+  });
+
+  const maks=Math.max(...hari.map(h=>h.total),1);
+  const totalMinggu=hari.reduce((s,h)=>s+h.total,0);
+
+  wadah.innerHTML=
+    '<div class="muted">Total 7 hari: <strong>'+rupiah(totalMinggu)+'</strong></div>'+
+    '<div class="grafik">'+hari.map(h=>{
+      const persen=Math.round(h.total/maks*100);
+      const tinggi=h.total>0?Math.max(persen,4):0;
+      const nilai=h.total>0?Math.round(h.total/1000)+"rb":"";
+      return '<div class="kolom">'+
+        '<div class="nilai">'+nilai+'</div>'+
+        '<div class="batang-wrap"><div class="batang" style="height:'+tinggi+'%"></div></div>'+
+        '<div class="hari">'+esc(h.label)+'</div>'+
+      '</div>';
+    }).join("")+'</div>';
 }
 
 /* ---------- LAPORAN ---------- */
