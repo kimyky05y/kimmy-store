@@ -1,515 +1,597 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KIMMY STORE</title>
-  <style>
-    :root {
-      --navy: #263F55;
-      --dusty: #527A96;
-      --cream: #F7E9B8;
-      --mustard: #D99A3D;
-      --terracotta: #B5654A;
-      --putih: #FFFFFF;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: 70px; }
-    body {
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      background: var(--navy);
-      color: var(--navy);
-      min-height: 100vh;
-    }
-    header { background: var(--navy); color: var(--cream); padding: 20px 16px 12px; text-align: center; }
-    header h1 { font-size: 1.6rem; letter-spacing: 1px; }
-    header p { font-size: 0.9rem; opacity: 0.85; margin-top: 4px; }
-    nav.menu {
-      position: sticky; top: 0; z-index: 10; background: var(--navy);
-      display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;
-      padding: 10px 12px; border-bottom: 1px solid rgba(247,233,184,0.2);
-    }
-    nav.menu a {
-      color: var(--cream); text-decoration: none; font-size: 0.85rem;
-      padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(247,233,184,0.4);
-    }
-    nav.menu a.penting { background: var(--mustard); color: var(--navy); border-color: var(--mustard); font-weight: bold; }
-    .tombol-keranjang-atas {
-      display: inline-block; margin-top: 10px; background: var(--mustard); color: var(--navy);
-      padding: 6px 14px; border-radius: 999px; text-decoration: none; font-weight: bold; font-size: 0.85rem;
-    }
-    main { padding: 16px; max-width: 900px; margin: 0 auto; }
-    h2 { color: var(--cream); margin: 20px 0 12px; font-size: 1.2rem; }
-    .info { color: var(--cream); line-height: 1.5; word-break: break-word; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
-    .card { background: var(--putih); border-radius: 14px; padding: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
-    .card h3 { font-size: 1.05rem; margin-bottom: 4px; }
-    .card .kategori { font-size: 0.75rem; color: var(--dusty); }
-    .varian { border-top: 1px dashed var(--dusty); padding: 10px 0; }
-    .varian .nama { font-weight: bold; }
-    .varian .harga { color: var(--navy); margin-top: 2px; }
-    .badge { display: inline-block; font-size: 0.7rem; padding: 3px 8px; border-radius: 999px; margin-top: 6px; }
-    .tersedia { background: #DFF3E4; color: #1E6B35; }
-    .habis { background: #F6D5D0; color: #8A2A1A; }
-    .tombol {
-      display: inline-block; margin-top: 8px; background: var(--navy); color: var(--cream);
-      padding: 7px 16px; border: none; border-radius: 999px; font-size: 0.85rem; cursor: pointer;
-    }
-    .kotak-keranjang, .kotak-cek {
-      background: var(--putih); color: var(--navy); border-radius: 14px;
-      padding: 14px; margin-top: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    }
-    .kotak-keranjang h2, .kotak-cek h2 { color: var(--navy); margin-top: 0; }
-    .item-keranjang { border-top: 1px dashed var(--dusty); padding: 10px 0; }
-    .kontrol { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
-    .kontrol button {
-      background: var(--dusty); color: var(--putih); border: none; border-radius: 8px;
-      padding: 4px 10px; font-size: 0.95rem; cursor: pointer;
-    }
-    .kontrol .hapus { background: var(--terracotta); margin-left: auto; font-size: 0.8rem; }
-    .subtotal { text-align: right; font-weight: bold; margin-top: 4px; }
-    .total { border-top: 2px solid var(--navy); margin-top: 10px; padding-top: 10px; text-align: right; font-size: 1.05rem; }
-    .formulir { margin-top: 16px; border-top: 2px dashed var(--dusty); padding-top: 14px; }
-    .formulir label.judul { display: block; font-size: 0.85rem; margin-top: 12px; font-weight: bold; }
-    .formulir input[type="text"], .formulir input[type="tel"], .formulir textarea, .kotak-cek input {
-      width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--dusty);
-      border-radius: 10px; font-size: 1rem; font-family: inherit;
-    }
-    .kotak-cek input { text-transform: uppercase; }
-    .metode { border: 1px solid var(--dusty); border-radius: 12px; padding: 12px; margin-top: 8px; }
-    .metode-pilih { display: flex; align-items: center; gap: 8px; font-weight: bold; cursor: pointer; }
-    .metode-pilih input { width: auto; }
-    .rekening { margin-top: 10px; background: #F4F8FB; border-radius: 10px; padding: 10px; font-size: 0.9rem; }
-    .rekening .nomor { font-size: 1.1rem; font-weight: bold; letter-spacing: 1px; margin-top: 4px; word-break: break-all; }
-    .tombol-salin {
-      margin-top: 8px; background: var(--dusty); color: var(--putih); border: none;
-      border-radius: 999px; padding: 6px 14px; font-size: 0.85rem; cursor: pointer;
-    }
-    .tombol-checkout, .tombol-cek-status {
-      width: 100%; margin-top: 16px; background: var(--mustard); color: var(--navy);
-      border: none; border-radius: 999px; padding: 12px; font-weight: bold; font-size: 1rem; cursor: pointer;
-    }
-    .tombol-checkout:disabled, .tombol-cek-status:disabled { opacity: 0.6; cursor: not-allowed; }
-    .notif { margin-top: 12px; padding: 10px; border-radius: 10px; font-size: 0.9rem; }
-    .notif.sukses { background: #DFF3E4; color: #1E6B35; }
-    .notif.gagal { background: #F6D5D0; color: #8A2A1A; }
-    .status-cek {
-      display: inline-block; font-size: 0.85rem; font-weight: bold; padding: 4px 12px;
-      border-radius: 999px; background: #E8EEF3; margin-top: 8px;
-    }
-    .muted { color: var(--dusty); font-size: 0.85rem; }
-    .info-bayar { background: #F4F8FB; border-radius: 10px; padding: 10px; margin-top: 12px; font-size: 0.9rem; }
-    .pesan { color: var(--cream); text-align: center; margin-top: 24px; font-size: 0.85rem; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin KIMMY STORE</title>
+<style>
+:root{--navy:#263F55;--dusty:#527A96;--cream:#F7E9B8;--mustard:#D99A3D;--terracotta:#B5654A;--putih:#FFFFFF;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--navy);color:var(--navy);min-height:100vh;padding:16px}
+h1{color:var(--cream);text-align:center;margin-bottom:6px;font-size:1.4rem}
+.sub{color:var(--cream);text-align:center;opacity:.8;font-size:.85rem;margin-bottom:14px}
+.kartu{background:var(--putih);border-radius:14px;padding:16px;max-width:700px;margin:0 auto 14px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+label{display:block;font-size:.85rem;font-weight:bold;margin-top:10px}
+input,select,textarea{width:100%;padding:9px;margin-top:4px;border:1px solid var(--dusty);border-radius:10px;font-size:.95rem;font-family:inherit}
+input[type="file"]{padding:7px;background:#F4F8FB}
+button{background:var(--navy);color:var(--cream);border:none;border-radius:999px;padding:9px 16px;font-size:.9rem;cursor:pointer;margin-top:10px}
+button.kecil{padding:6px 12px;font-size:.8rem;margin-top:0}
+button.keluar{background:var(--terracotta)}
+button:disabled{opacity:.6}
+.tabs{display:flex;gap:8px;max-width:700px;margin:0 auto 14px;flex-wrap:wrap}
+.tabs button{flex:1;margin-top:0;background:var(--dusty);min-width:90px}
+.tabs button.aktif{background:var(--cream);color:var(--navy)}
+.pesanan,.kartu-produk,.metode-admin{border-top:1px dashed var(--dusty);padding-top:12px;margin-top:12px}
+.baris{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}
+.kode{font-weight:bold}
+.status{display:inline-block;font-size:.75rem;padding:3px 10px;border-radius:999px;background:#E8EEF3}
+.item,.muted{font-size:.85rem;color:#444;margin-top:3px}
+.muted{color:var(--dusty)}
+.varian-box{background:#F4F8FB;border-radius:10px;padding:10px;margin-top:10px}
+.varian-box .baris input{margin-top:0}
+.notif{padding:10px;border-radius:10px;margin-top:10px;font-size:.9rem}
+.gagal{background:#F6D5D0;color:#8A2A1A}
+.sukses{background:#DFF3E4;color:#1E6B35}
+.sembunyi{display:none}
+.cb{display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:normal;margin:0}
+.cb input{width:auto;margin:0}
+.thumb{width:64px;height:64px;object-fit:cover;border-radius:10px;margin-top:6px;background:#F4F8FB}
+.preview{width:100%;max-height:220px;object-fit:contain;border-radius:10px;margin-top:8px;background:#F4F8FB}
+</style>
 </head>
 <body>
+<h1>Admin KIMMY STORE</h1>
+<p class="sub">Halaman khusus pemilik toko</p>
 
-<header id="beranda">
-  <h1>KIMMY STORE</h1>
-  <p>Digital products & app services</p>
-  <a class="tombol-keranjang-atas" href="#keranjang">Keranjang (<span id="jumlah-keranjang">0</span>)</a>
-</header>
+<section id="halaman-login" class="kartu sembunyi">
+  <label for="email">Email</label>
+  <input id="email" type="email" autocomplete="username">
+  <label for="password">Password</label>
+  <input id="password" type="password" autocomplete="current-password">
+  <button id="tombol-login" onclick="login()">Masuk</button>
+  <div id="notif-login"></div>
+</section>
 
-<nav class="menu">
-  <a href="#produk">Produk</a>
-  <a href="#keranjang">Keranjang</a>
-  <a href="#cek-status" class="penting">Cek Status Pesanan</a>
-</nav>
-
-<main>
-  <h2 id="produk">Produk Kami</h2>
-  <div class="grid" id="daftar-produk">
-    <p class="info">Memuat produk...</p>
+<section id="halaman-admin" class="sembunyi">
+  <div class="tabs">
+    <button id="tab-pesanan" class="aktif" onclick="showTab('pesanan')">Pesanan</button>
+    <button id="tab-produk" onclick="showTab('produk')">Produk</button>
+    <button id="tab-pengaturan" onclick="showTab('pengaturan')">Pengaturan</button>
+    <button class="keluar" onclick="logout()">Keluar</button>
   </div>
 
-  <section class="kotak-keranjang" id="keranjang">
-    <h2>Keranjang Saya</h2>
-    <div id="isi-keranjang"></div>
+  <div id="bagian-pesanan" class="kartu">
+    <div class="baris">
+      <strong>Pesanan Masuk</strong>
+      <button class="kecil" onclick="muatPesanan()">Refresh</button>
+    </div>
+    <label for="filter">Filter status</label>
+    <select id="filter" onchange="muatPesanan()">
+      <option value="">Semua</option>
+      <option value="menunggu_pembayaran">Menunggu pembayaran</option>
+      <option value="menunggu_verifikasi">Menunggu verifikasi</option>
+      <option value="diproses">Diproses</option>
+      <option value="selesai">Selesai</option>
+      <option value="dibatalkan">Dibatalkan</option>
+    </select>
+    <div id="notif-pesanan"></div>
+    <div id="daftar-pesanan"></div>
+  </div>
 
-    <div id="form-checkout" class="formulir" style="display: none;">
-      <label class="judul" for="nama">Nama lengkap</label>
-      <input id="nama" type="text" placeholder="Contoh: Budi Santoso">
+  <div id="bagian-produk" class="sembunyi">
+    <div class="kartu">
+      <strong id="judul-form">Tambah Produk Baru</strong>
+      <label for="p-nama">Nama produk</label>
+      <input id="p-nama" type="text" placeholder="Contoh: Netflix Premium">
+      <label for="p-kategori">Kategori</label>
+      <select id="p-kategori"></select>
+      <label for="p-deskripsi">Deskripsi</label>
+      <textarea id="p-deskripsi" rows="2"></textarea>
+      <label for="p-gambar">Foto produk (maks 2 MB)</label>
+      <input id="p-gambar" type="file" accept="image/*" onchange="previewFile('p-gambar', 'p-preview')">
+      <img id="p-preview" class="preview sembunyi" alt="Pratinjau foto produk">
+      <div class="baris">
+        <button id="tombol-simpan-produk" onclick="simpanProduk()">Simpan produk</button>
+        <button class="kecil" onclick="resetForm()">Batal</button>
+      </div>
+      <div id="notif-produk"></div>
+    </div>
+    <div class="kartu" id="daftar-produk-admin"></div>
+  </div>
 
-      <label class="judul" for="wa">Nomor WhatsApp</label>
-      <input id="wa" type="tel" placeholder="Contoh: 081234567890">
-
-      <label class="judul">Metode pembayaran</label>
-      <div id="daftar-metode"><p class="info">Memuat metode pembayaran...</p></div>
-
-      <label class="judul" for="catatan">Catatan (opsional)</label>
-      <textarea id="catatan" rows="3" placeholder="Contoh: tolong kirim akun ke WhatsApp ini"></textarea>
-
-      <button class="tombol-checkout" id="tombol-checkout" onclick="checkout()">Checkout</button>
+  <div id="bagian-pengaturan" class="sembunyi">
+    <div class="kartu">
+      <strong>Nomor WhatsApp Toko</strong>
+      <p class="muted">Pesanan dari pelanggan akan dikirim ke nomor ini.</p>
+      <label for="wa-toko">Nomor WhatsApp</label>
+      <input id="wa-toko" type="tel" placeholder="Contoh: 085722994977">
+      <button onclick="simpanWA()">Simpan nomor WA</button>
+      <div id="notif-wa"></div>
     </div>
 
-    <div id="notif-checkout"></div>
-  </section>
-
-  <section class="kotak-cek" id="cek-status">
-    <h2>Cek Status Pesanan</h2>
-    <p class="muted">Masukkan kode pesanan yang kamu terima setelah checkout, contoh: KS-261030-AB12C</p>
-    <label class="judul" for="kode-cek" style="display:block;font-size:0.85rem;margin-top:12px;font-weight:bold;">Kode pesanan</label>
-    <input id="kode-cek" type="text" placeholder="KS-XXXXXX-XXXXX" autocomplete="off">
-    <button class="tombol-cek-status" id="tombol-cek-status" onclick="cekStatus()">Cek Status</button>
-    <div id="hasil-cek"></div>
-  </section>
-
-  <p class="pesan">Trusted & cute since 2022</p>
-</main>
+    <div class="kartu">
+      <strong>Metode Pembayaran</strong>
+      <p class="muted">Perubahan di sini langsung tampil di website toko. Untuk QRIS, unggah gambar QR di kolom Gambar.</p>
+      <div id="notif-pengaturan"></div>
+      <div id="daftar-metode-admin"></div>
+    </div>
+    <div class="kartu">
+      <strong>Tambah Metode Baru</strong>
+      <label for="m-kode">Kode (huruf kecil, tanpa spasi)</label>
+      <input id="m-kode" type="text" placeholder="Contoh: ovo">
+      <label for="m-label">Nama yang tampil</label>
+      <input id="m-label" type="text" placeholder="Contoh: OVO">
+      <label for="m-an">Atas nama</label>
+      <input id="m-an" type="text" placeholder="Nama pemilik rekening">
+      <label for="m-nomor">Nomor rekening / HP</label>
+      <input id="m-nomor" type="text" placeholder="Nomor tujuan transfer">
+      <button onclick="tambahMetode()">Tambah metode</button>
+      <div id="notif-tambah-metode"></div>
+    </div>
+  </div>
+</section>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-  const SUPABASE_URL = "https://yftnynobgxvulhmgirdx.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E";
+const SUPABASE_URL = "https://yftnynobgxvulhmgirdx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E";
 
-  const MAKS_QTY = 10;
-  const KUNCI_KERANJANG = "kimmy_keranjang";
-  const METODE_LABEL = { transfer_bank: "Transfer Bank", qris: "QRIS", dana: "DANA", bca: "Transfer BCA" };
-  const STATUS_LABEL = {
-    menunggu_pembayaran: "Menunggu pembayaran",
-    menunggu_verifikasi: "Pembayaran sedang diverifikasi",
-    diproses: "Pesanan diproses",
-    selesai: "Pesanan selesai",
-    dibatalkan: "Pesanan dibatalkan"
-  };
+const STATUS_LABEL = {
+  menunggu_pembayaran: "Menunggu pembayaran",
+  menunggu_verifikasi: "Menunggu verifikasi",
+  diproses: "Diproses",
+  selesai: "Selesai",
+  dibatalkan: "Dibatalkan"
+};
+const METODE_LABEL = { transfer_bank: "Transfer Bank", qris: "QRIS", dana: "DANA", bca: "Transfer BCA" };
 
-  const wadah = document.getElementById("daftar-produk");
-  const daftarVarian = {};
-  let metodeList = [];
-  let keranjang = [];
-  let supabase = null;
-  let waAdmin = "";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let editProdukId = null;
+let editProdukGambar = null;
+const produkCache = {};
+const metodeCache = {};
 
-  try {
-    keranjang = JSON.parse(localStorage.getItem(KUNCI_KERANJANG)) || [];
-  } catch (e) {
-    keranjang = [];
-  }
+function rupiah(a) { return "Rp " + Number(a).toLocaleString("id-ID"); }
+function escapeHTML(t) {
+  return String(t ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function notif(id, jenis, teks) {
+  document.getElementById(id).innerHTML = teks ? '<div class="notif ' + jenis + '">' + escapeHTML(teks) + '</div>' : "";
+}
 
-  function rupiah(angka) {
-    return "Rp " + Number(angka).toLocaleString("id-ID");
-  }
+function previewFile(inputId, imgId) {
+  const file = document.getElementById(inputId).files[0];
+  const img = document.getElementById(imgId);
+  if (!file) { img.classList.add("sembunyi"); img.removeAttribute("src"); return; }
+  img.src = URL.createObjectURL(file);
+  img.classList.remove("sembunyi");
+}
 
-  function escapeHTML(t) {
-    return String(t ?? "").replace(/[&<>"']/g, c => ({
-      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-    }[c]));
-  }
+async function uploadGambar(file, folder) {
+  if (!file.type.startsWith("image/")) throw new Error("File harus berupa gambar.");
+  if (file.size > 2 * 1024 * 1024) throw new Error("Ukuran gambar maksimal 2 MB.");
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  const path = folder + "/" + Date.now() + "." + ext;
+  const { error } = await supabase.storage.from("gambar").upload(path, file, { contentType: file.type, upsert: false });
+  if (error) throw error;
+  const { data } = supabase.storage.from("gambar").getPublicUrl(path);
+  return data.publicUrl;
+}
 
-  function normalisasiWA(nomor) {
-    let n = String(nomor || "").replace(/[^0-9]/g, "");
-    if (n.startsWith("0")) n = "62" + n.slice(1);
-    return n;
-  }
+function tampilkanSesi(sudahLogin) {
+  document.getElementById("halaman-login").classList.toggle("sembunyi", sudahLogin);
+  document.getElementById("halaman-admin").classList.toggle("sembunyi", !sudahLogin);
+}
 
-  function hitungTotal() {
-    return keranjang.reduce((s, i) => s + i.harga * i.qty, 0);
-  }
+async function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const tombol = document.getElementById("tombol-login");
+  if (!email || !password) { notif("notif-login", "gagal", "Email dan password wajib diisi."); return; }
 
-  function simpanKeranjang() {
-    localStorage.setItem(KUNCI_KERANJANG, JSON.stringify(keranjang));
-  }
+  tombol.disabled = true;
+  const { error } = await supabase.auth.signInWithPassword({ email: email, password: password });
+  tombol.disabled = false;
 
-  function tambahKeranjang(id) {
-    const v = daftarVarian[id];
-    if (!v) return;
-    const item = keranjang.find(i => i.id === id);
-    if (item) {
-      if (item.qty < MAKS_QTY) item.qty++;
-    } else {
-      keranjang.push({ id: id, produk: v.produk, varian: v.varian, harga: v.harga, qty: 1 });
-    }
-    simpanKeranjang();
-    renderKeranjang();
-  }
+  if (error) { notif("notif-login", "gagal", "Login gagal: " + error.message); return; }
+  document.getElementById("password").value = "";
+  notif("notif-login", "", "");
+  tampilkanSesi(true);
+  muatPesanan();
+  muatKategori();
+}
 
-  function ubahQty(id, selisih) {
-    const item = keranjang.find(i => i.id === id);
-    if (!item) return;
-    item.qty += selisih;
-    if (item.qty < 1) {
-      keranjang = keranjang.filter(i => i.id !== id);
-    } else if (item.qty > MAKS_QTY) {
-      item.qty = MAKS_QTY;
-    }
-    simpanKeranjang();
-    renderKeranjang();
-  }
+async function logout() {
+  await supabase.auth.signOut();
+  tampilkanSesi(false);
+}
 
-  function hapusItem(id) {
-    keranjang = keranjang.filter(i => i.id !== id);
-    simpanKeranjang();
-    renderKeranjang();
-  }
+function showTab(nama) {
+  const bagian = { pesanan: "bagian-pesanan", produk: "bagian-produk", pengaturan: "bagian-pengaturan" };
+  Object.keys(bagian).forEach(k => {
+    document.getElementById(bagian[k]).classList.toggle("sembunyi", k !== nama);
+    document.getElementById("tab-" + k).classList.toggle("aktif", k === nama);
+  });
+  if (nama === "produk") muatProdukAdmin();
+  if (nama === "pengaturan") { muatWA(); muatMetodeAdmin(); }
+}
 
-  function tampilkanNotif(jenis, teks) {
-    const wadahN = document.getElementById("notif-checkout");
-    wadahN.innerHTML = teks ? '<div class="notif ' + jenis + '">' + escapeHTML(teks) + '</div>' : "";
-  }
+/* ---------- PESANAN ---------- */
 
-  async function salinNomor(nomor, tombol) {
-    try {
-      await navigator.clipboard.writeText(nomor);
-    } catch (e) {
-      const area = document.createElement("textarea");
-      area.value = nomor;
-      document.body.appendChild(area);
-      area.select();
-      document.execCommand("copy");
-      area.remove();
-    }
-    const teksAsli = tombol.textContent;
-    tombol.textContent = "Tersalin ✓";
-    setTimeout(() => { tombol.textContent = teksAsli; }, 1500);
-  }
+async function muatPesanan() {
+  const filter = document.getElementById("filter").value;
+  const wadah = document.getElementById("daftar-pesanan");
+  notif("notif-pesanan", "", "");
+  wadah.innerHTML = '<p class="muted">Memuat pesanan...</p>';
 
-  function renderMetode() {
-    const wadahM = document.getElementById("daftar-metode");
-    if (metodeList.length === 0) {
-      wadahM.innerHTML = '<p class="info">Belum ada metode pembayaran.</p>';
-      return;
-    }
+  let query = supabase
+    .from("orders")
+    .select("id, order_code, customer_name, customer_whatsapp, total_amount, status, payment_method, notes, created_at, order_items(product_name, variant_name, quantity, subtotal)")
+    .order("created_at", { ascending: false })
+    .limit(50);
+  if (filter) query = query.eq("status", filter);
 
-    wadahM.innerHTML = metodeList.map((m, idx) => {
-      const rekening = m.account_number
-        ? `<div class="rekening">
-             <div>a.n. ${escapeHTML(m.account_name || "-")}</div>
-             <div class="nomor">${escapeHTML(m.account_number)}</div>
-             <button type="button" class="tombol-salin" onclick="salinNomor('${escapeHTML(m.account_number)}', this)">Salin nomor</button>
-           </div>`
-        : `<div class="rekening">Setelah checkout, admin akan mengirim kode QRIS lewat WhatsApp.</div>`;
+  const { data, error } = await query;
+  if (error) { wadah.innerHTML = ""; notif("notif-pesanan", "gagal", "Gagal memuat pesanan: " + error.message); return; }
+  if (!data || data.length === 0) { wadah.innerHTML = '<p class="muted">Belum ada pesanan.</p>'; return; }
 
-      return `
-        <div class="metode">
-          <label class="metode-pilih">
-            <input type="radio" name="metode" value="${escapeHTML(m.code)}" ${idx === 0 ? "checked" : ""}>
-            ${escapeHTML(m.label)}
-          </label>
-          ${rekening}
-        </div>`;
-    }).join("");
-  }
-
-  function renderKeranjang() {
-    const wadahK = document.getElementById("isi-keranjang");
-    const form = document.getElementById("form-checkout");
-    const jumlah = keranjang.reduce((s, i) => s + i.qty, 0);
-    document.getElementById("jumlah-keranjang").textContent = jumlah;
-
-    if (keranjang.length === 0) {
-      wadahK.innerHTML = '<p>Keranjang masih kosong. Pilih produk di atas.</p>';
-      form.style.display = "none";
-      return;
-    }
-
-    form.style.display = "block";
-    const baris = keranjang.map(i => `
-      <div class="item-keranjang">
-        <div><strong>${escapeHTML(i.produk)}</strong><br>${escapeHTML(i.varian)} · ${rupiah(i.harga)}</div>
-        <div class="kontrol">
-          <button onclick="ubahQty(${i.id}, -1)">−</button>
-          <span>${i.qty}</span>
-          <button onclick="ubahQty(${i.id}, 1)">+</button>
-          <button class="hapus" onclick="hapusItem(${i.id})">Hapus</button>
-        </div>
-        <div class="subtotal">${rupiah(i.harga * i.qty)}</div>
-      </div>`).join("");
-
-    wadahK.innerHTML = baris + `<div class="total">Total: <strong>${rupiah(hitungTotal())}</strong></div>`;
-  }
-
-  async function checkout() {
-    const nama = document.getElementById("nama").value.trim();
-    const wa = normalisasiWA(document.getElementById("wa").value);
-    const catatan = document.getElementById("catatan").value.trim();
-    const pilihan = document.querySelector('input[name="metode"]:checked');
-
-    if (nama.length < 2) { tampilkanNotif("gagal", "Nama wajib diisi."); return; }
-    if (!/^[0-9]{9,15}$/.test(wa)) { tampilkanNotif("gagal", "Nomor WhatsApp tidak valid."); return; }
-    if (!pilihan) { tampilkanNotif("gagal", "Pilih metode pembayaran."); return; }
-    if (keranjang.length === 0) { tampilkanNotif("gagal", "Keranjang masih kosong."); return; }
-    if (!waAdmin) { tampilkanNotif("gagal", "Nomor WhatsApp toko belum diatur. Coba lagi nanti."); return; }
-
-    const metode = pilihan.value;
-    const metodeInfo = metodeList.find(m => m.code === metode);
-    const labelMetode = metodeInfo ? metodeInfo.label : metode;
-
-    const tombol = document.getElementById("tombol-checkout");
-    tombol.disabled = true;
-    tombol.textContent = "Menyimpan pesanan...";
-
-    const items = keranjang.map(i => ({ variant_id: i.id, qty: i.qty }));
-    const ringkasan = keranjang.map(i => "- " + i.produk + " (" + i.varian + ") x" + i.qty + " = " + rupiah(i.harga * i.qty)).join("\n");
-    const total = hitungTotal();
-
-    const { data: kodePesanan, error } = await supabase.rpc("buat_pesanan", {
-      p_nama: nama,
-      p_whatsapp: wa,
-      p_items: items,
-      p_metode: metode,
-      p_catatan: catatan
-    });
-
-    tombol.disabled = false;
-    tombol.textContent = "Checkout";
-
-    if (error) {
-      tampilkanNotif("gagal", "Gagal menyimpan pesanan: " + error.message);
-      console.error(error);
-      return;
-    }
-
-    const teksWA =
-      "Halo KIMMY STORE, saya mau pesan.\n" +
-      "No. pesanan: " + kodePesanan + "\n" +
-      "Nama: " + nama + "\n\n" +
-      ringkasan + "\n\n" +
-      "Total: " + rupiah(total) + "\n" +
-      "Metode bayar: " + labelMetode + "\n" +
-      "Catatan: " + (catatan || "-") + "\n\n" +
-      "Saya akan kirim bukti transfer setelah membayar. Terima kasih.";
-
-    keranjang = [];
-    simpanKeranjang();
-    document.getElementById("catatan").value = "";
-    renderKeranjang();
-    tampilkanNotif("sukses", "Pesanan " + kodePesanan + " tersimpan. Simpan kode ini untuk cek status. Silakan bayar lalu kirim bukti transfer ke WhatsApp kami.");
-
-    window.open("https://wa.me/" + waAdmin + "?text=" + encodeURIComponent(teksWA), "_blank");
-  }
-
-  async function cekStatus() {
-    const kode = document.getElementById("kode-cek").value.trim().toUpperCase();
-    const tombol = document.getElementById("tombol-cek-status");
-    const hasil = document.getElementById("hasil-cek");
-
-    if (kode.length < 6) {
-      hasil.innerHTML = '<div class="notif gagal">Masukkan kode pesanan dengan lengkap.</div>';
-      return;
-    }
-    if (!supabase) {
-      hasil.innerHTML = '<div class="notif gagal">Koneksi belum siap. Coba lagi sebentar.</div>';
-      return;
-    }
-
-    tombol.disabled = true;
-    tombol.textContent = "Mencari...";
-    const { data, error } = await supabase.rpc("cek_status_pesanan", { p_kode: kode });
-    tombol.disabled = false;
-    tombol.textContent = "Cek Status";
-
-    if (error) {
-      hasil.innerHTML = '<div class="notif gagal">Gagal mengecek: ' + escapeHTML(error.message) + '</div>';
-      return;
-    }
-    if (!data) {
-      hasil.innerHTML = '<div class="notif gagal">Kode pesanan tidak ditemukan. Periksa lagi penulisannya.</div>';
-      return;
-    }
-
-    const items = (data.items || []).map(i =>
-      '<div>' + escapeHTML(i.product_name) + " (" + escapeHTML(i.variant_name) + ") x" + i.quantity + " = " + rupiah(i.subtotal) + "</div>"
+  wadah.innerHTML = data.map(o => {
+    const tanggal = new Date(o.created_at).toLocaleString("id-ID");
+    const items = (o.order_items || []).map(i =>
+      '<div class="item">' + escapeHTML(i.product_name) + " (" + escapeHTML(i.variant_name) + ") x" + i.quantity + " = " + rupiah(i.subtotal) + "</div>"
+    ).join("");
+    const opsi = Object.keys(STATUS_LABEL).map(s =>
+      '<option value="' + s + '"' + (s === o.status ? " selected" : "") + ">" + STATUS_LABEL[s] + "</option>"
     ).join("");
 
-    const infoBayar = data.status === "menunggu_pembayaran"
-      ? '<div class="info-bayar">Silakan lakukan pembayaran lalu kirim bukti transfer ke WhatsApp toko.</div>'
-      : "";
-
-    hasil.innerHTML = `
-      <div style="margin-top:14px;">
-        <div><strong>${escapeHTML(data.order_code)}</strong></div>
-        <div class="muted">${new Date(data.created_at).toLocaleString("id-ID")}</div>
-        <div class="status-cek">${STATUS_LABEL[data.status] || escapeHTML(data.status)}</div>
-        <div class="muted" style="margin-top:8px;">Metode: ${METODE_LABEL[data.payment_method] || escapeHTML(data.payment_method || "-")}</div>
-        <div style="margin-top:8px;">${items}</div>
-        <div class="total">Total: ${rupiah(data.total_amount)}</div>
-        ${infoBayar}
+    return `
+      <div class="pesanan">
+        <div class="baris">
+          <span class="kode">${escapeHTML(o.order_code)}</span>
+          <span class="status">${STATUS_LABEL[o.status] || escapeHTML(o.status)}</span>
+        </div>
+        <div class="muted">${tanggal}</div>
+        <div><strong>${escapeHTML(o.customer_name)}</strong> · ${escapeHTML(o.customer_whatsapp)}</div>
+        ${items}
+        <div class="muted">Metode: ${METODE_LABEL[o.payment_method] || escapeHTML(o.payment_method || "-")}</div>
+        ${o.notes ? '<div class="muted">Catatan: ' + escapeHTML(o.notes) + "</div>" : ""}
+        <div><strong>Total: ${rupiah(o.total_amount)}</strong></div>
+        <div class="baris" style="margin-top:8px">
+          <select style="width:auto;flex:1" onchange="ubahStatus(${o.id}, this.value)">${opsi}</select>
+          <a href="https://wa.me/${escapeHTML(o.customer_whatsapp)}" target="_blank"><button class="kecil" type="button">WhatsApp</button></a>
+        </div>
       </div>`;
-  }
+  }).join("");
+}
 
-  async function muatPengaturan() {
-    const { data, error } = await supabase
-      .from("store_settings")
-      .select("value")
-      .eq("key", "wa_admin")
-      .maybeSingle();
-    if (error) { console.error(error); return; }
-    waAdmin = normalisasiWA(data ? data.value : "");
-  }
+async function ubahStatus(id, statusBaru) {
+  const { error } = await supabase.from("orders").update({ status: statusBaru }).eq("id", id);
+  if (error) { notif("notif-pesanan", "gagal", "Gagal mengubah status: " + error.message); muatPesanan(); return; }
+  notif("notif-pesanan", "sukses", "Status pesanan diperbarui.");
+  muatPesanan();
+}
 
-  async function muatMetode() {
-    const { data, error } = await supabase
-      .from("payment_methods")
-      .select("code, label, account_name, account_number, sort_order")
-      .eq("is_active", true)
-      .order("sort_order", { ascending: true });
+/* ---------- PRODUK ---------- */
 
-    if (error) {
-      document.getElementById("daftar-metode").innerHTML = '<p class="info">Gagal memuat metode pembayaran.</p>';
-      console.error(error);
+async function muatKategori() {
+  const { data, error } = await supabase.from("categories").select("id, name").order("name");
+  if (error) return;
+  document.getElementById("p-kategori").innerHTML =
+    '<option value="">Tanpa kategori</option>' +
+    data.map(k => '<option value="' + k.id + '">' + escapeHTML(k.name) + "</option>").join("");
+}
+
+async function muatProdukAdmin() {
+  const wadah = document.getElementById("daftar-produk-admin");
+  wadah.innerHTML = '<p class="muted">Memuat produk...</p>';
+
+  const { data, error } = await supabase
+    .from("products")
+    .select("id, name, description, image_url, is_active, category_id, categories(name), product_variants(id, name, price, stock_status, is_active)")
+    .order("id");
+
+  if (error) { wadah.innerHTML = ""; notif("notif-produk", "gagal", "Gagal memuat produk: " + error.message); return; }
+  if (!data || data.length === 0) { wadah.innerHTML = '<p class="muted">Belum ada produk.</p>'; return; }
+
+  data.forEach(p => produkCache[p.id] = p);
+
+  wadah.innerHTML = data.map(p => {
+    const varian = (p.product_variants || []).sort((a, b) => a.id - b.id).map(v => `
+      <div class="varian-box">
+        <input id="v-nama-${v.id}" value="${escapeHTML(v.name)}" placeholder="Nama varian">
+        <div class="baris" style="margin-top:6px">
+          <input id="v-harga-${v.id}" type="number" min="0" value="${v.price}" style="width:48%" placeholder="Harga">
+          <select id="v-stok-${v.id}" style="width:48%">
+            <option value="tersedia"${v.stock_status === "tersedia" ? " selected" : ""}>Tersedia</option>
+            <option value="habis"${v.stock_status === "habis" ? " selected" : ""}>Habis</option>
+          </select>
+        </div>
+        <div class="baris" style="margin-top:6px">
+          <label class="cb"><input type="checkbox" id="v-aktif-${v.id}"${v.is_active ? " checked" : ""}> Aktif</label>
+          <button class="kecil" onclick="simpanVarian(${v.id})">Simpan varian</button>
+        </div>
+      </div>`).join("");
+
+    return `
+      <div class="kartu-produk">
+        <div class="baris">
+          <div style="display:flex;gap:10px;align-items:center;">
+            ${p.image_url ? '<img class="thumb" src="' + escapeHTML(p.image_url) + '" alt="">' : ""}
+            <div>
+              <strong>${escapeHTML(p.name)}</strong>
+              <div class="muted">${escapeHTML(p.categories ? p.categories.name : "Tanpa kategori")}</div>
+            </div>
+          </div>
+          <span class="status">${p.is_active ? "Aktif" : "Nonaktif"}</span>
+        </div>
+        <div class="baris" style="margin-top:8px">
+          <button class="kecil" onclick="mulaiEdit(${p.id})">Edit produk</button>
+          <button class="kecil" onclick="toggleProduk(${p.id}, ${!p.is_active})">${p.is_active ? "Nonaktifkan" : "Aktifkan"}</button>
+        </div>
+        ${varian}
+        <div class="varian-box">
+          <strong>Tambah varian baru</strong>
+          <input id="n-nama-${p.id}" placeholder="Nama varian, contoh: 1 Bulan" style="margin-top:6px">
+          <div class="baris" style="margin-top:6px">
+            <input id="n-harga-${p.id}" type="number" min="0" placeholder="Harga" style="width:60%">
+            <button class="kecil" onclick="tambahVarian(${p.id})">Tambah</button>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function mulaiEdit(id) {
+  const p = produkCache[id];
+  if (!p) return;
+  editProdukId = id;
+  editProdukGambar = p.image_url || null;
+  document.getElementById("judul-form").textContent = "Edit Produk";
+  document.getElementById("p-nama").value = p.name;
+  document.getElementById("p-kategori").value = p.category_id || "";
+  document.getElementById("p-deskripsi").value = p.description || "";
+  document.getElementById("p-gambar").value = "";
+  const img = document.getElementById("p-preview");
+  if (p.image_url) { img.src = p.image_url; img.classList.remove("sembunyi"); }
+  else { img.removeAttribute("src"); img.classList.add("sembunyi"); }
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function resetForm() {
+  editProdukId = null;
+  editProdukGambar = null;
+  document.getElementById("judul-form").textContent = "Tambah Produk Baru";
+  document.getElementById("p-nama").value = "";
+  document.getElementById("p-kategori").value = "";
+  document.getElementById("p-deskripsi").value = "";
+  document.getElementById("p-gambar").value = "";
+  const img = document.getElementById("p-preview");
+  img.removeAttribute("src");
+  img.classList.add("sembunyi");
+  notif("notif-produk", "", "");
+}
+
+async function simpanProduk() {
+  const nama = document.getElementById("p-nama").value.trim();
+  const kategori = document.getElementById("p-kategori").value;
+  const deskripsi = document.getElementById("p-deskripsi").value.trim();
+  const fileInput = document.getElementById("p-gambar");
+  const tombol = document.getElementById("tombol-simpan-produk");
+
+  if (nama.length < 2) { notif("notif-produk", "gagal", "Nama produk wajib diisi."); return; }
+
+  tombol.disabled = true;
+  let imageUrl = editProdukGambar;
+
+  if (fileInput.files[0]) {
+    try {
+      imageUrl = await uploadGambar(fileInput.files[0], "produk");
+    } catch (e) {
+      tombol.disabled = false;
+      notif("notif-produk", "gagal", "Gagal mengunggah foto: " + e.message);
       return;
     }
-    metodeList = data || [];
-    renderMetode();
   }
 
-  async function muatProduk() {
-    if (!window.supabase) {
-      wadah.innerHTML = '<p class="info">Gagal: library Supabase tidak termuat</p>';
-      return;
-    }
+  const payload = {
+    name: nama,
+    category_id: kategori ? Number(kategori) : null,
+    description: deskripsi,
+    image_url: imageUrl || null
+  };
+  let error;
 
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    const { data, error } = await supabase
-      .from("products")
-      .select("id, name, categories(name), product_variants(id, name, price, stock_status, is_active)")
-      .eq("is_active", true);
-
-    if (error) {
-      wadah.innerHTML = '<p class="info">Gagal: ' + escapeHTML(error.message) + '</p>';
-      console.error(error);
-      return;
-    }
-
-    if (!data || data.length === 0) {
-      wadah.innerHTML = '<p class="info">Belum ada produk.</p>';
-      return;
-    }
-
-    wadah.innerHTML = data.map(p => {
-      const kategori = p.categories ? p.categories.name : "";
-      const daftar = (p.product_variants || [])
-        .filter(v => v.is_active)
-        .map(v => {
-          daftarVarian[v.id] = { produk: p.name, varian: v.name, harga: v.price };
-          const tersedia = v.stock_status === "tersedia";
-          return `
-            <div class="varian">
-              <div class="nama">${escapeHTML(v.name)}</div>
-              <div class="harga">${rupiah(v.price)}</div>
-              <span class="badge ${tersedia ? "tersedia" : "habis"}">${tersedia ? "Tersedia" : "Habis"}</span>
-              ${tersedia
-                ? `<button class="tombol" onclick="tambahKeranjang(${v.id})">Tambah ke keranjang</button>`
-                : ""}
-            </div>`;
-        }).join("");
-
-      return `
-        <div class="card">
-          <div class="kategori">${escapeHTML(kategori)}</div>
-          <h3>${escapeHTML(p.name)}</h3>
-          ${daftar || '<p>Belum ada varian.</p>'}
-        </div>`;
-    }).join("");
-
-    muatPengaturan();
-    muatMetode();
+  if (editProdukId) {
+    ({ error } = await supabase.from("products").update(payload).eq("id", editProdukId));
+  } else {
+    ({ error } = await supabase.from("products").insert({ ...payload, is_active: true }));
   }
 
-  renderKeranjang();
-  muatProduk();
+  tombol.disabled = false;
+  if (error) { notif("notif-produk", "gagal", "Gagal menyimpan produk: " + error.message); return; }
+  notif("notif-produk", "sukses", editProdukId ? "Produk diperbarui." : "Produk baru ditambahkan.");
+  resetForm();
+  muatProdukAdmin();
+}
+
+async function toggleProduk(id, aktifBaru) {
+  const { error } = await supabase.from("products").update({ is_active: aktifBaru }).eq("id", id);
+  if (error) { notif("notif-produk", "gagal", "Gagal: " + error.message); return; }
+  muatProdukAdmin();
+}
+
+async function simpanVarian(vid) {
+  const nama = document.getElementById("v-nama-" + vid).value.trim();
+  const harga = parseInt(document.getElementById("v-harga-" + vid).value, 10);
+  const stok = document.getElementById("v-stok-" + vid).value;
+  const aktif = document.getElementById("v-aktif-" + vid).checked;
+
+  if (nama.length < 1) { notif("notif-produk", "gagal", "Nama varian wajib diisi."); return; }
+  if (isNaN(harga) || harga < 0) { notif("notif-produk", "gagal", "Harga harus angka, minimal 0."); return; }
+
+  const { error } = await supabase.from("product_variants")
+    .update({ name: nama, price: harga, stock_status: stok, is_active: aktif })
+    .eq("id", vid);
+
+  if (error) { notif("notif-produk", "gagal", "Gagal menyimpan varian: " + error.message); return; }
+  notif("notif-produk", "sukses", "Varian \"" + nama + "\" tersimpan.");
+  muatProdukAdmin();
+}
+
+async function tambahVarian(pid) {
+  const nama = document.getElementById("n-nama-" + pid).value.trim();
+  const harga = parseInt(document.getElementById("n-harga-" + pid).value, 10);
+
+  if (nama.length < 1) { notif("notif-produk", "gagal", "Nama varian wajib diisi."); return; }
+  if (isNaN(harga) || harga < 0) { notif("notif-produk", "gagal", "Harga harus angka, minimal 0."); return; }
+
+  const { error } = await supabase.from("product_variants").insert({
+    product_id: pid, name: nama, price: harga, stock_status: "tersedia", is_active: true
+  });
+
+  if (error) { notif("notif-produk", "gagal", "Gagal menambah varian: " + error.message); return; }
+  notif("notif-produk", "sukses", "Varian baru ditambahkan.");
+  muatProdukAdmin();
+}
+
+/* ---------- PENGATURAN ---------- */
+
+async function muatWA() {
+  const { data, error } = await supabase
+    .from("store_settings")
+    .select("value")
+    .eq("key", "wa_admin")
+    .maybeSingle();
+
+  if (error) { notif("notif-wa", "gagal", "Gagal memuat nomor: " + error.message); return; }
+  document.getElementById("wa-toko").value = data ? data.value : "";
+}
+
+async function simpanWA() {
+  const nomor = document.getElementById("wa-toko").value.replace(/[^0-9]/g, "");
+
+  if (!/^(0|62)[0-9]{8,13}$/.test(nomor)) {
+    notif("notif-wa", "gagal", "Nomor tidak valid. Contoh: 085722994977");
+    return;
+  }
+
+  const { error } = await supabase
+    .from("store_settings")
+    .upsert({ key: "wa_admin", value: nomor }, { onConflict: "key" });
+
+  if (error) { notif("notif-wa", "gagal", "Gagal menyimpan: " + error.message); return; }
+  notif("notif-wa", "sukses", "Nomor WhatsApp toko tersimpan.");
+  muatWA();
+}
+
+async function muatMetodeAdmin() {
+  const wadah = document.getElementById("daftar-metode-admin");
+  wadah.innerHTML = '<p class="muted">Memuat metode...</p>';
+
+  const { data, error } = await supabase
+    .from("payment_methods")
+    .select("id, code, label, account_name, account_number, image_url, is_active, sort_order")
+    .order("sort_order", { ascending: true });
+
+  if (error) { wadah.innerHTML = ""; notif("notif-pengaturan", "gagal", "Gagal memuat metode: " + error.message); return; }
+  if (!data || data.length === 0) { wadah.innerHTML = '<p class="muted">Belum ada metode.</p>'; return; }
+
+  data.forEach(m => metodeCache[m.id] = m);
+
+  wadah.innerHTML = data.map(m => `
+    <div class="metode-admin">
+      <div class="baris">
+        <strong>${escapeHTML(m.label)}</strong>
+        <span class="status">${m.is_active ? "Tampil" : "Disembunyikan"}</span>
+      </div>
+      <div class="muted">Kode: ${escapeHTML(m.code)}</div>
+      <label>Nama yang tampil</label>
+      <input id="mt-label-${m.id}" value="${escapeHTML(m.label)}">
+      <label>Atas nama</label>
+      <input id="mt-an-${m.id}" value="${escapeHTML(m.account_name || "")}">
+      <label>Nomor rekening / HP</label>
+      <input id="mt-nomor-${m.id}" value="${escapeHTML(m.account_number || "")}">
+      <label>Gambar QRIS (opsional, maks 2 MB)</label>
+      ${m.image_url ? '<img class="preview" src="' + escapeHTML(m.image_url) + '" alt="Gambar QRIS">' : ""}
+      <input id="mt-file-${m.id}" type="file" accept="image/*">
+      <div class="baris" style="margin-top:8px">
+        <label class="cb"><input type="checkbox" id="mt-aktif-${m.id}"${m.is_active ? " checked" : ""}> Tampilkan di toko</label>
+        <button class="kecil" id="mt-tombol-${m.id}" onclick="simpanMetode(${m.id})">Simpan</button>
+      </div>
+    </div>`).join("");
+}
+
+async function simpanMetode(id) {
+  const label = document.getElementById("mt-label-" + id).value.trim();
+  const an = document.getElementById("mt-an-" + id).value.trim();
+  const nomor = document.getElementById("mt-nomor-" + id).value.trim();
+  const aktif = document.getElementById("mt-aktif-" + id).checked;
+  const fileInput = document.getElementById("mt-file-" + id);
+  const tombol = document.getElementById("mt-tombol-" + id);
+
+  if (label.length < 2) { notif("notif-pengaturan", "gagal", "Nama yang tampil wajib diisi."); return; }
+
+  tombol.disabled = true;
+  let imageUrl = metodeCache[id] ? metodeCache[id].image_url : null;
+
+  if (fileInput.files[0]) {
+    try {
+      imageUrl = await uploadGambar(fileInput.files[0], "qris");
+    } catch (e) {
+      tombol.disabled = false;
+      notif("notif-pengaturan", "gagal", "Gagal mengunggah gambar: " + e.message);
+      return;
+    }
+  }
+
+  const { error } = await supabase.from("payment_methods")
+    .update({
+      label: label,
+      account_name: an || null,
+      account_number: nomor || null,
+      image_url: imageUrl || null,
+      is_active: aktif
+    })
+    .eq("id", id);
+
+  tombol.disabled = false;
+  if (error) { notif("notif-pengaturan", "gagal", "Gagal menyimpan: " + error.message); return; }
+  notif("notif-pengaturan", "sukses", "Metode \"" + label + "\" tersimpan.");
+  muatMetodeAdmin();
+}
+
+async function tambahMetode() {
+  const kode = document.getElementById("m-kode").value.trim().toLowerCase();
+  const label = document.getElementById("m-label").value.trim();
+  const an = document.getElementById("m-an").value.trim();
+  const nomor = document.getElementById("m-nomor").value.trim();
+
+  if (!/^[a-z0-9_]{2,20}$/.test(kode)) { notif("notif-tambah-metode", "gagal", "Kode hanya huruf kecil, angka, atau garis bawah (2–20 karakter)."); return; }
+  if (label.length < 2) { notif("notif-tambah-metode", "gagal", "Nama yang tampil wajib diisi."); return; }
+
+  const { error } = await supabase.from("payment_methods").insert({
+    code: kode, label: label, account_name: an || null, account_number: nomor || null, is_active: true, sort_order: 99
+  });
+
+  if (error) { notif("notif-tambah-metode", "gagal", "Gagal menambah metode: " + error.message); return; }
+
+  ["m-kode", "m-label", "m-an", "m-nomor"].forEach(id => document.getElementById(id).value = "");
+  notif("notif-tambah-metode", "sukses", "Metode baru ditambahkan. Unggah gambar QRIS di kolom Gambar jika ada.");
+  muatMetodeAdmin();
+}
+
+async function cekSesi() {
+  const { data } = await supabase.auth.getSession();
+  tampilkanSesi(!!data.session);
+  if (data.session) { muatPesanan(); muatKategori(); }
+}
+
+if (window.supabase) {
+  cekSesi();
+} else {
+  document.getElementById("halaman-login").classList.remove("sembunyi");
+  notif("notif-login", "gagal", "Library Supabase tidak termuat.");
+}
 </script>
-
 </body>
 </html>
