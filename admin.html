@@ -64,6 +64,7 @@ button:disabled{opacity:.6}
     <button id="tab-ringkasan" class="aktif" onclick="showTab('ringkasan')">Ringkasan</button>
     <button id="tab-pesanan" onclick="showTab('pesanan')">Pesanan</button>
     <button id="tab-produk" onclick="showTab('produk')">Produk</button>
+    <button id="tab-kategori" onclick="showTab('kategori')">Kategori</button>
     <button id="tab-promo" onclick="showTab('promo')">Promo</button>
     <button id="tab-keuangan" onclick="showTab('keuangan')">Keuangan</button>
     <button id="tab-garansi" onclick="showTab('garansi')">Garansi</button>
@@ -121,6 +122,18 @@ button:disabled{opacity:.6}
       <div id="notif-produk"></div>
     </div>
     <div class="kartu" id="daftar-produk-admin"></div>
+  </div>
+
+  <div id="bagian-kategori" class="sembunyi">
+    <div class="kartu">
+      <strong>Tambah Kategori</strong>
+      <p class="muted">Kategori dipakai untuk memilah produk di katalog. Kalau kategori dihapus, produk di dalamnya menjadi tanpa kategori.</p>
+      <label for="kat-baru">Nama kategori</label>
+      <input id="kat-baru" type="text" placeholder="Contoh: Aplikasi Premium">
+      <button onclick="tambahKategori()">Tambah kategori</button>
+      <div id="notif-kategori"></div>
+    </div>
+    <div class="kartu" id="daftar-kategori"></div>
   </div>
 
   <div id="bagian-promo" class="sembunyi">
@@ -244,17 +257,17 @@ button:disabled{opacity:.6}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-const SUPABASE_URL = "https://yftnynobgxvulhmgirdx.supabase.co";
-const SUPABASE_KEY = "sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E";
+const SUPABASE_URL="https://yftnynobgxvulhmgirdx.supabase.co";
+const SUPABASE_KEY="sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E";
 
-const STATUS_LABEL = {menunggu_pembayaran:"Menunggu pembayaran",menunggu_verifikasi:"Menunggu verifikasi",diproses:"Diproses",selesai:"Selesai",dibatalkan:"Dibatalkan"};
-const STATUS_KLAIM = {diajukan:"Diajukan",diproses:"Diproses",disetujui:"Disetujui",ditolak:"Ditolak",selesai:"Selesai"};
-const METODE_LABEL = {transfer_bank:"Transfer Bank",qris:"QRIS",dana:"DANA",bca:"Transfer BCA"};
-const BAGIAN = ["ringkasan","pesanan","produk","promo","keuangan","garansi","toko","pengaturan"];
+const STATUS_LABEL={menunggu_pembayaran:"Menunggu pembayaran",menunggu_verifikasi:"Menunggu verifikasi",diproses:"Diproses",selesai:"Selesai",dibatalkan:"Dibatalkan"};
+const STATUS_KLAIM={diajukan:"Diajukan",diproses:"Diproses",disetujui:"Disetujui",ditolak:"Ditolak",selesai:"Selesai"};
+const METODE_LABEL={transfer_bank:"Transfer Bank",qris:"QRIS",dana:"DANA",bca:"Transfer BCA"};
+const BAGIAN=["ringkasan","pesanan","produk","kategori","promo","keuangan","garansi","toko","pengaturan"];
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let editProdukId = null, editProdukGambar = null, keuanganCache = [];
-const produkCache = {}, metodeCache = {};
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let editProdukId=null,editProdukGambar=null,keuanganCache=[];
+const produkCache={},metodeCache={};
 
 function rupiah(a){return "Rp "+Number(a||0).toLocaleString("id-ID");}
 function esc(t){return String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
@@ -305,7 +318,7 @@ function showTab(nama){
     document.getElementById("tab-"+k).classList.toggle("aktif",k===nama);
   });
   const loader={
-    ringkasan:muatRingkasan,pesanan:muatPesanan,produk:muatProdukAdmin,promo:muatPromo,
+    ringkasan:muatRingkasan,pesanan:muatPesanan,produk:muatProdukAdmin,kategori:muatKategoriAdmin,promo:muatPromo,
     keuangan:()=>{setVal("k-tanggal",tglLokal(new Date()));muatKeuangan();},
     garansi:muatKlaim,toko:muatToko,pengaturan:muatMetodeAdmin
   };
@@ -402,13 +415,57 @@ async function ubahStatus(id,baru){
   notif("notif-pesanan","sukses","Status pesanan diperbarui.");muatPesanan();
 }
 
-/* ---------- PRODUK ---------- */
+/* ---------- KATEGORI ---------- */
 
 async function muatKategori(){
   const {data,error}=await supabase.from("categories").select("id,name").order("name");
   if(error)return;
   document.getElementById("p-kategori").innerHTML='<option value="">Tanpa kategori</option>'+data.map(k=>'<option value="'+k.id+'">'+esc(k.name)+"</option>").join("");
 }
+
+async function muatKategoriAdmin(){
+  const wadah=document.getElementById("daftar-kategori");
+  wadah.innerHTML='<p class="muted">Memuat kategori...</p>';
+  const {data,error}=await supabase.from("categories").select("id,name").order("name");
+  if(error){wadah.innerHTML="";notif("notif-kategori","gagal","Gagal memuat kategori: "+error.message);return;}
+  if(!data||data.length===0){wadah.innerHTML='<p class="muted">Belum ada kategori.</p>';return;}
+  wadah.innerHTML='<strong>Daftar kategori</strong>'+data.map(k=>`
+    <div class="blok">
+      <input id="kat-nama-${k.id}" value="${esc(k.name)}">
+      <div class="baris" style="margin-top:8px">
+        <button class="kecil" onclick="ubahKategori(${k.id})">Simpan nama</button>
+        <button class="kecil keluar" onclick="hapusKategori(${k.id})">Hapus</button>
+      </div>
+    </div>`).join("");
+}
+
+async function tambahKategori(){
+  const nama=val("kat-baru");
+  if(nama.length<2){notif("notif-kategori","gagal","Nama kategori minimal 2 huruf.");return;}
+  const {error}=await supabase.from("categories").insert({name:nama});
+  if(error){notif("notif-kategori","gagal",error.message.includes("duplicate")?"Kategori dengan nama itu sudah ada.":"Gagal menambah: "+error.message);return;}
+  setVal("kat-baru","");notif("notif-kategori","sukses","Kategori \""+nama+"\" ditambahkan.");
+  muatKategoriAdmin();muatKategori();
+}
+
+async function ubahKategori(id){
+  const nama=val("kat-nama-"+id);
+  if(nama.length<2){notif("notif-kategori","gagal","Nama kategori minimal 2 huruf.");return;}
+  const {error}=await supabase.from("categories").update({name:nama}).eq("id",id);
+  if(error){notif("notif-kategori","gagal",error.message.includes("duplicate")?"Nama itu sudah dipakai kategori lain.":"Gagal menyimpan: "+error.message);return;}
+  notif("notif-kategori","sukses","Nama kategori diperbarui.");
+  muatKategoriAdmin();muatKategori();
+}
+
+async function hapusKategori(id){
+  if(!confirm("Hapus kategori ini? Produk di dalamnya akan menjadi tanpa kategori."))return;
+  const {error}=await supabase.from("categories").delete().eq("id",id);
+  if(error){notif("notif-kategori","gagal","Gagal menghapus: "+error.message);return;}
+  notif("notif-kategori","sukses","Kategori dihapus.");
+  muatKategoriAdmin();muatKategori();
+}
+
+/* ---------- PRODUK ---------- */
 
 function hitungPreview(vid){
   const harga=parseInt(val("v-harga-"+vid),10),tipe=val("v-tipe-"+vid),nilai=parseInt(val("v-nilai-"+vid),10);
@@ -857,4 +914,4 @@ if(window.supabase){
 }
 </script>
 </body>
-  </html>
+</html>
