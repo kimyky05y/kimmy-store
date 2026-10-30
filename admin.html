@@ -44,6 +44,7 @@ button:disabled{opacity:.6}
 .kpi .angka{font-size:1.05rem;font-weight:bold;margin-top:4px;word-break:break-word}
 .kpi.untung{background:#DFF3E4}.kpi.untung .angka{color:#1E6B35}
 .kpi.rugi{background:#F6D5D0}.kpi.rugi .angka{color:#8A2A1A}
+.baris-tanggal{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 </style>
 </head>
 <body>
@@ -62,6 +63,7 @@ button:disabled{opacity:.6}
 <section id="halaman-admin" class="sembunyi">
   <div class="tabs">
     <button id="tab-ringkasan" class="aktif" onclick="showTab('ringkasan')">Ringkasan</button>
+    <button id="tab-laporan" onclick="showTab('laporan')">Laporan</button>
     <button id="tab-pesanan" onclick="showTab('pesanan')">Pesanan</button>
     <button id="tab-produk" onclick="showTab('produk')">Produk</button>
     <button id="tab-kategori" onclick="showTab('kategori')">Kategori</button>
@@ -86,6 +88,29 @@ button:disabled{opacity:.6}
     <p class="muted">Pendapatan hanya dihitung dari pesanan berstatus Diproses dan Selesai.</p>
     <div id="isi-ringkasan"></div>
     <div id="notif-ringkasan"></div>
+  </div>
+
+  <div id="bagian-laporan" class="sembunyi">
+    <div class="kartu">
+      <strong>Laporan Penjualan</strong>
+      <p class="muted">Pilih rentang tanggal. Pendapatan hanya dihitung dari pesanan Diproses dan Selesai.</p>
+      <div class="baris-tanggal">
+        <div>
+          <label for="lap-dari">Dari tanggal</label>
+          <input id="lap-dari" type="date">
+        </div>
+        <div>
+          <label for="lap-sampai">Sampai tanggal</label>
+          <input id="lap-sampai" type="date">
+        </div>
+      </div>
+      <div class="baris" style="margin-top:10px">
+        <button onclick="muatLaporan()">Tampilkan laporan</button>
+        <button class="kecil" onclick="unduhLaporan()">Unduh CSV</button>
+      </div>
+      <div id="notif-laporan"></div>
+      <div id="isi-laporan"></div>
+    </div>
   </div>
 
   <div id="bagian-pesanan" class="kartu sembunyi">
@@ -263,10 +288,10 @@ const SUPABASE_KEY="sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E";
 const STATUS_LABEL={menunggu_pembayaran:"Menunggu pembayaran",menunggu_verifikasi:"Menunggu verifikasi",diproses:"Diproses",selesai:"Selesai",dibatalkan:"Dibatalkan"};
 const STATUS_KLAIM={diajukan:"Diajukan",diproses:"Diproses",disetujui:"Disetujui",ditolak:"Ditolak",selesai:"Selesai"};
 const METODE_LABEL={transfer_bank:"Transfer Bank",qris:"QRIS",dana:"DANA",bca:"Transfer BCA"};
-const BAGIAN=["ringkasan","pesanan","produk","kategori","promo","keuangan","garansi","toko","pengaturan"];
+const BAGIAN=["ringkasan","laporan","pesanan","produk","kategori","promo","keuangan","garansi","toko","pengaturan"];
 
 const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let editProdukId=null,editProdukGambar=null,keuanganCache=[];
+let editProdukId=null,editProdukGambar=null,keuanganCache=[],laporanCache=[];
 const produkCache={},metodeCache={};
 
 function rupiah(a){return "Rp "+Number(a||0).toLocaleString("id-ID");}
@@ -318,7 +343,7 @@ function showTab(nama){
     document.getElementById("tab-"+k).classList.toggle("aktif",k===nama);
   });
   const loader={
-    ringkasan:muatRingkasan,pesanan:muatPesanan,produk:muatProdukAdmin,kategori:muatKategoriAdmin,promo:muatPromo,
+    ringkasan:muatRingkasan,laporan:siapkanLaporan,pesanan:muatPesanan,produk:muatProdukAdmin,kategori:muatKategoriAdmin,promo:muatPromo,
     keuangan:()=>{setVal("k-tanggal",tglLokal(new Date()));muatKeuangan();},
     garansi:muatKlaim,toko:muatToko,pengaturan:muatMetodeAdmin
   };
@@ -372,6 +397,112 @@ async function muatRingkasan(){
       <div class="kpi"><div class="label">Pengeluaran</div><div class="angka">${rupiah(pengeluaran)}</div></div>
       <div class="kpi ${untung>=0?"untung":"rugi"}"><div class="label">Keuntungan</div><div class="angka">${rupiah(untung)}</div></div>
     </div>`;
+}
+
+/* ---------- LAPORAN ---------- */
+
+function siapkanLaporan(){
+  const now=new Date();
+  if(!val("lap-dari"))setVal("lap-dari",tglLokal(new Date(now.getFullYear(),now.getMonth(),1)));
+  if(!val("lap-sampai"))setVal("lap-sampai",tglLokal(now));
+  muatLaporan();
+}
+
+async function ambilLaporan(){
+  const dari=val("lap-dari"),sampai=val("lap-sampai");
+  if(!dari||!sampai){notif("notif-laporan","gagal","Isi tanggal dari dan sampai.");return null;}
+  const awal=new Date(dari+"T00:00:00");
+  const akhir=new Date(sampai+"T00:00:00");
+  akhir.setDate(akhir.getDate()+1);
+  if(akhir<=awal){notif("notif-laporan","gagal","Tanggal sampai harus sama atau setelah tanggal dari.");return null;}
+
+  const {data,error}=await supabase.from("orders")
+    .select("order_code,customer_name,customer_whatsapp,total_amount,status,payment_method,created_at,order_items(product_name,variant_name,quantity,subtotal)")
+    .gte("created_at",awal.toISOString())
+    .lt("created_at",akhir.toISOString())
+    .order("created_at",{ascending:true});
+  if(error){notif("notif-laporan","gagal","Gagal memuat laporan: "+error.message);return null;}
+  return data||[];
+}
+
+async function muatLaporan(){
+  const wadah=document.getElementById("isi-laporan");
+  notif("notif-laporan","","");
+  wadah.innerHTML='<p class="muted">Memuat laporan...</p>';
+  const data=await ambilLaporan();
+  if(!data){wadah.innerHTML="";return;}
+  laporanCache=data;
+
+  const lunas=data.filter(o=>o.status==="diproses"||o.status==="selesai");
+  const pendapatan=lunas.reduce((s,o)=>s+Number(o.total_amount||0),0);
+  const dibatalkan=data.filter(o=>o.status==="dibatalkan").length;
+
+  let itemTerjual=0;
+  const produkMap={};
+  lunas.forEach(o=>(o.order_items||[]).forEach(i=>{
+    itemTerjual+=Number(i.quantity||0);
+    const kunci=i.product_name+" ("+i.variant_name+")";
+    if(!produkMap[kunci])produkMap[kunci]={qty:0,omzet:0};
+    produkMap[kunci].qty+=Number(i.quantity||0);
+    produkMap[kunci].omzet+=Number(i.subtotal||0);
+  }));
+  const terlaris=Object.entries(produkMap).sort((a,b)=>b[1].qty-a[1].qty).slice(0,5);
+
+  const daftarTerlaris=terlaris.length
+    ? terlaris.map((t,idx)=>`<div class="item">${idx+1}. ${esc(t[0])} · ${t[1].qty} terjual · ${rupiah(t[1].omzet)}</div>`).join("")
+    : '<p class="muted">Belum ada penjualan lunas pada periode ini.</p>';
+
+  wadah.innerHTML=`
+    <div class="grid-kpi">
+      <div class="kpi"><div class="label">Total pesanan</div><div class="angka">${data.length}</div></div>
+      <div class="kpi"><div class="label">Pesanan lunas</div><div class="angka">${lunas.length}</div></div>
+      <div class="kpi"><div class="label">Dibatalkan</div><div class="angka">${dibatalkan}</div></div>
+      <div class="kpi"><div class="label">Item terjual</div><div class="angka">${itemTerjual}</div></div>
+      <div class="kpi"><div class="label">Pendapatan</div><div class="angka">${rupiah(pendapatan)}</div></div>
+    </div>
+    <div class="blok">
+      <strong>Produk terlaris</strong>
+      ${daftarTerlaris}
+    </div>
+    <div class="blok">
+      <strong>Daftar pesanan (${data.length})</strong>
+      ${data.length===0?'<p class="muted">Tidak ada pesanan pada periode ini.</p>':data.map(o=>`
+        <div class="item" style="border-top:1px dashed var(--dusty);padding-top:6px;margin-top:6px">
+          <span class="kode">${esc(o.order_code)}</span> · ${new Date(o.created_at).toLocaleDateString("id-ID")} · ${STATUS_LABEL[o.status]||esc(o.status)}<br>
+          ${esc(o.customer_name)} · ${rupiah(o.total_amount)}
+        </div>`).join("")}
+    </div>`;
+}
+
+async function unduhLaporan(){
+  const data=await ambilLaporan();
+  if(!data){return;}
+  if(data.length===0){notif("notif-laporan","gagal","Tidak ada pesanan pada periode ini untuk diunduh.");return;}
+
+  const baris=[["Kode pesanan","Tanggal","Nama pelanggan","WhatsApp","Metode","Status","Lunas","Item","Total"]];
+  data.forEach(o=>{
+    const lunas=(o.status==="diproses"||o.status==="selesai")?"Ya":"Tidak";
+    const item=(o.order_items||[]).map(i=>i.product_name+" ("+i.variant_name+") x"+i.quantity).join("; ");
+    baris.push([
+      o.order_code,
+      new Date(o.created_at).toLocaleString("id-ID"),
+      o.customer_name,
+      o.customer_whatsapp,
+      METODE_LABEL[o.payment_method]||o.payment_method||"-",
+      STATUS_LABEL[o.status]||o.status,
+      lunas,
+      item,
+      o.total_amount
+    ]);
+  });
+
+  const csv=baris.map(r=>r.map(c=>'"'+String(c??"").replace(/"/g,'""')+'"').join(",")).join("\n");
+  const url=URL.createObjectURL(new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"}));
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="laporan-kimmy-"+val("lap-dari")+"-sampai-"+val("lap-sampai")+".csv";
+  document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+  notif("notif-laporan","sukses","CSV laporan berhasil diunduh.");
 }
 
 /* ---------- PESANAN ---------- */
