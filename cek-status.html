@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cek Status Pesanan - KIMMY STORE</title>
+<style>
+:root{--navy:#263F55;--dusty:#527A96;--cream:#F7E9B8;--mustard:#D99A3D;--terracotta:#B5654A;--putih:#FFFFFF;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--navy);color:var(--navy);min-height:100vh;padding:16px}
+header{text-align:center;color:var(--cream);padding:16px 0}
+header h1{font-size:1.5rem;letter-spacing:1px}
+header a{color:var(--mustard);font-size:.9rem}
+.kartu{background:var(--putih);border-radius:14px;padding:16px;max-width:560px;margin:0 auto 14px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+label{display:block;font-size:.85rem;font-weight:bold;margin-top:6px}
+input{width:100%;padding:10px;margin-top:6px;border:1px solid var(--dusty);border-radius:10px;font-size:1rem;text-transform:uppercase}
+button{width:100%;margin-top:12px;background:var(--mustard);color:var(--navy);border:none;border-radius:999px;padding:11px;font-size:1rem;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6}
+.muted{color:var(--dusty);font-size:.85rem}
+.item{font-size:.9rem;margin-top:4px}
+.status{display:inline-block;font-size:.85rem;font-weight:bold;padding:4px 12px;border-radius:999px;background:#E8EEF3;margin-top:8px}
+.total{border-top:2px solid var(--navy);margin-top:10px;padding-top:10px;text-align:right;font-weight:bold}
+.notif{padding:10px;border-radius:10px;margin-top:12px;font-size:.9rem}
+.gagal{background:#F6D5D0;color:#8A2A1A}
+.sukses{background:#DFF3E4;color:#1E6B35}
+.info-bayar{background:#F4F8FB;border-radius:10px;padding:10px;margin-top:12px;font-size:.9rem}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>KIMMY STORE</h1>
+  <p>Cek Status Pesanan</p>
+  <a href="index.html">← Kembali ke toko</a>
+</header>
+
+<section class="kartu">
+  <label for="kode">Masukkan kode pesanan</label>
+  <input id="kode" type="text" placeholder="Contoh: KS-261030-AB12C" autocomplete="off">
+  <button id="tombol-cek" onclick="cekStatus()">Cek Status</button>
+  <div id="hasil"></div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = "https://yftnynobgxvulhmgirdx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E";
+const WA_TOKO_DEFAULT = "";
+
+const STATUS_LABEL = {
+  menunggu_pembayaran: "Menunggu pembayaran",
+  menunggu_verifikasi: "Pembayaran sedang diverifikasi",
+  diproses: "Pesanan diproses",
+  selesai: "Pesanan selesai",
+  dibatalkan: "Pesanan dibatalkan"
+};
+const METODE_LABEL = { transfer_bank: "Transfer Bank", qris: "QRIS", dana: "DANA", bca: "Transfer BCA" };
+
+function rupiah(a) { return "Rp " + Number(a).toLocaleString("id-ID"); }
+function escapeHTML(t) {
+  return String(t ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function tampilkan(html) {
+  document.getElementById("hasil").innerHTML = html;
+}
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function cekStatus() {
+  const kode = document.getElementById("kode").value.trim().toUpperCase();
+  const tombol = document.getElementById("tombol-cek");
+
+  if (kode.length < 6) {
+    tampilkan('<div class="notif gagal">Masukkan kode pesanan dengan lengkap.</div>');
+    return;
+  }
+
+  tombol.disabled = true;
+  tombol.textContent = "Mencari...";
+  const { data, error } = await supabase.rpc("cek_status_pesanan", { p_kode: kode });
+  tombol.disabled = false;
+  tombol.textContent = "Cek Status";
+
+  if (error) {
+    tampilkan('<div class="notif gagal">Gagal mengecek: ' + escapeHTML(error.message) + '</div>');
+    return;
+  }
+  if (!data) {
+    tampilkan('<div class="notif gagal">Kode pesanan tidak ditemukan. Periksa lagi penulisannya.</div>');
+    return;
+  }
+
+  const items = (data.items || []).map(i =>
+    '<div class="item">' + escapeHTML(i.product_name) + " (" + escapeHTML(i.variant_name) + ") x" + i.quantity + " = " + rupiah(i.subtotal) + "</div>"
+  ).join("");
+
+  const sudahBayar = data.status !== "menunggu_pembayaran";
+  const infoBayar = data.status === "menunggu_pembayaran"
+    ? '<div class="info-bayar">Silakan lakukan pembayaran lalu kirim bukti transfer ke WhatsApp toko.</div>'
+    : "";
+
+  tampilkan(`
+    <div class="kartu" style="box-shadow:none;max-width:none;margin:0;padding:0">
+      <div><strong>${escapeHTML(data.order_code)}</strong></div>
+      <div class="muted">${new Date(data.created_at).toLocaleString("id-ID")}</div>
+      <div class="status">${STATUS_LABEL[data.status] || escapeHTML(data.status)}</div>
+      <div class="muted" style="margin-top:8px">Metode: ${METODE_LABEL[data.payment_method] || escapeHTML(data.payment_method || "-")}</div>
+      <div style="margin-top:8px">${items}</div>
+      <div class="total">Total: ${rupiah(data.total_amount)}</div>
+      ${infoBayar}
+    </div>`);
+}
+</script>
+</body>
+</html>
