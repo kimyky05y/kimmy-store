@@ -30,6 +30,8 @@ button:disabled{opacity:.6}
 .varian-box{background:#F4F8FB;border-radius:10px;padding:10px;margin-top:10px}
 .varian-box .baris input{margin-top:0}
 .promo-box{background:#FFF6E5;border-radius:10px;padding:8px;margin-top:8px;border:1px dashed var(--mustard)}
+.promo-box label{margin-top:4px}
+.preview-harga{font-size:.85rem;color:#1E6B35;font-weight:bold;margin-top:6px;min-height:1em}
 .notif{padding:10px;border-radius:10px;margin-top:10px;font-size:.9rem}
 .gagal{background:#F6D5D0;color:#8A2A1A}
 .sukses{background:#DFF3E4;color:#1E6B35}
@@ -57,6 +59,7 @@ button:disabled{opacity:.6}
   <div class="tabs">
     <button id="tab-pesanan" class="aktif" onclick="showTab('pesanan')">Pesanan</button>
     <button id="tab-produk" onclick="showTab('produk')">Produk</button>
+    <button id="tab-promo" onclick="showTab('promo')">Promo</button>
     <button id="tab-pengaturan" onclick="showTab('pengaturan')">Pengaturan</button>
     <button class="keluar" onclick="logout()">Keluar</button>
   </div>
@@ -98,6 +101,23 @@ button:disabled{opacity:.6}
       <div id="notif-produk"></div>
     </div>
     <div class="kartu" id="daftar-produk-admin"></div>
+  </div>
+
+  <div id="bagian-promo" class="sembunyi">
+    <div class="kartu">
+      <strong>Tambah Promo Teks (Banner)</strong>
+      <p class="muted">Untuk promo berupa kata-kata, seperti "Beli 2 gratis 1" atau "Bonus garansi 30 hari". Promo ini tidak mengubah harga.</p>
+      <label for="pr-judul">Judul promo</label>
+      <input id="pr-judul" type="text" placeholder="Contoh: Beli 2 gratis 1">
+      <label for="pr-deskripsi">Keterangan (opsional)</label>
+      <textarea id="pr-deskripsi" rows="2" placeholder="Contoh: Berlaku sampai akhir bulan"></textarea>
+      <div class="baris">
+        <label class="cb"><input type="checkbox" id="pr-aktif" checked> Tampilkan di toko</label>
+        <button onclick="simpanPromo()">Tambah promo</button>
+      </div>
+      <div id="notif-promo"></div>
+    </div>
+    <div class="kartu" id="daftar-promo"></div>
   </div>
 
   <div id="bagian-pengaturan" class="sembunyi">
@@ -208,12 +228,13 @@ async function logout() {
 }
 
 function showTab(nama) {
-  const bagian = { pesanan: "bagian-pesanan", produk: "bagian-produk", pengaturan: "bagian-pengaturan" };
+  const bagian = { pesanan: "bagian-pesanan", produk: "bagian-produk", promo: "bagian-promo", pengaturan: "bagian-pengaturan" };
   Object.keys(bagian).forEach(k => {
     document.getElementById(bagian[k]).classList.toggle("sembunyi", k !== nama);
     document.getElementById("tab-" + k).classList.toggle("aktif", k === nama);
   });
   if (nama === "produk") muatProdukAdmin();
+  if (nama === "promo") muatPromo();
   if (nama === "pengaturan") { muatWA(); muatMetodeAdmin(); }
 }
 
@@ -282,13 +303,28 @@ async function muatKategori() {
     data.map(k => '<option value="' + k.id + '">' + escapeHTML(k.name) + "</option>").join("");
 }
 
+function hitungPreview(vid) {
+  const harga = parseInt(document.getElementById("v-harga-" + vid).value, 10);
+  const tipe = document.getElementById("v-tipe-" + vid).value;
+  const nilai = parseInt(document.getElementById("v-nilai-" + vid).value, 10);
+  const el = document.getElementById("preview-" + vid);
+
+  if (!tipe) { el.textContent = ""; return; }
+  if (isNaN(harga) || isNaN(nilai)) { el.textContent = "Isi harga normal dan nilai promo untuk melihat hasilnya."; return; }
+
+  const akhir = tipe === "nominal"
+    ? Math.max(harga - nilai, 0)
+    : Math.round(harga * (100 - nilai) / 100);
+  el.textContent = "Harga setelah promo: " + rupiah(akhir);
+}
+
 async function muatProdukAdmin() {
   const wadah = document.getElementById("daftar-produk-admin");
   wadah.innerHTML = '<p class="muted">Memuat produk...</p>';
 
   const { data, error } = await supabase
     .from("products")
-    .select("id, name, description, image_url, is_active, category_id, categories(name), product_variants(id, name, price, promo_price, promo_label, stock_status, is_active)")
+    .select("id, name, description, image_url, is_active, category_id, categories(name), product_variants(id, name, price, promo_type, promo_value, promo_label, stock_status, is_active)")
     .order("id");
 
   if (error) { wadah.innerHTML = ""; notif("notif-produk", "gagal", "Gagal memuat produk: " + error.message); return; }
@@ -301,17 +337,24 @@ async function muatProdukAdmin() {
       <div class="varian-box">
         <input id="v-nama-${v.id}" value="${escapeHTML(v.name)}" placeholder="Nama varian">
         <div class="baris" style="margin-top:6px">
-          <input id="v-harga-${v.id}" type="number" min="0" value="${v.price}" style="width:48%" placeholder="Harga normal">
+          <input id="v-harga-${v.id}" type="number" min="0" value="${v.price}" style="width:48%" placeholder="Harga normal" oninput="hitungPreview(${v.id})">
           <select id="v-stok-${v.id}" style="width:48%">
             <option value="tersedia"${v.stock_status === "tersedia" ? " selected" : ""}>Tersedia</option>
             <option value="habis"${v.stock_status === "habis" ? " selected" : ""}>Habis</option>
           </select>
         </div>
         <div class="promo-box">
-          <div class="baris">
-            <input id="v-promo-${v.id}" type="number" min="0" value="${v.promo_price ?? ""}" style="width:48%" placeholder="Harga promo (kosongkan jika tidak)">
-            <input id="v-label-${v.id}" value="${escapeHTML(v.promo_label || "")}" style="width:48%" placeholder="Label, contoh: HEMAT 20%">
+          <label>Jenis promo</label>
+          <select id="v-tipe-${v.id}" onchange="hitungPreview(${v.id})">
+            <option value=""${!v.promo_type ? " selected" : ""}>Tanpa promo</option>
+            <option value="nominal"${v.promo_type === "nominal" ? " selected" : ""}>Potongan nominal (Rp)</option>
+            <option value="persen"${v.promo_type === "persen" ? " selected" : ""}>Potongan persen (%)</option>
+          </select>
+          <div class="baris" style="margin-top:6px">
+            <input id="v-nilai-${v.id}" type="number" min="1" value="${v.promo_value ?? ""}" style="width:48%" placeholder="Nilai (Rp atau %)" oninput="hitungPreview(${v.id})">
+            <input id="v-label-${v.id}" value="${escapeHTML(v.promo_label || "")}" style="width:48%" placeholder="Label (opsional)">
           </div>
+          <div class="preview-harga" id="preview-${v.id}"></div>
         </div>
         <div class="baris" style="margin-top:6px">
           <label class="cb"><input type="checkbox" id="v-aktif-${v.id}"${v.is_active ? " checked" : ""}> Aktif</label>
@@ -346,6 +389,8 @@ async function muatProdukAdmin() {
         </div>
       </div>`;
   }).join("");
+
+  data.forEach(p => (p.product_variants || []).forEach(v => hitungPreview(v.id)));
 }
 
 function mulaiEdit(id) {
@@ -432,17 +477,31 @@ async function simpanVarian(vid) {
   const harga = parseInt(document.getElementById("v-harga-" + vid).value, 10);
   const stok = document.getElementById("v-stok-" + vid).value;
   const aktif = document.getElementById("v-aktif-" + vid).checked;
-  const promoRaw = document.getElementById("v-promo-" + vid).value.trim();
+  const tipe = document.getElementById("v-tipe-" + vid).value;
+  const nilaiRaw = document.getElementById("v-nilai-" + vid).value.trim();
   const labelPromo = document.getElementById("v-label-" + vid).value.trim();
 
   if (nama.length < 1) { notif("notif-produk", "gagal", "Nama varian wajib diisi."); return; }
-  if (isNaN(harga) || harga < 0) { notif("notif-produk", "gagal", "Harga harus angka, minimal 0."); return; }
+  if (isNaN(harga) || harga < 0) { notif("notif-produk", "gagal", "Harga normal harus angka, minimal 0."); return; }
 
-  let promo = null;
-  if (promoRaw !== "") {
-    promo = parseInt(promoRaw, 10);
-    if (isNaN(promo) || promo < 0) { notif("notif-produk", "gagal", "Harga promo harus angka, minimal 0."); return; }
-    if (promo >= harga) { notif("notif-produk", "gagal", "Harga promo harus lebih kecil dari harga normal."); return; }
+  let promoTipe = null;
+  let promoNilai = null;
+
+  if (tipe) {
+    promoNilai = parseInt(nilaiRaw, 10);
+    if (isNaN(promoNilai) || promoNilai <= 0) {
+      notif("notif-produk", "gagal", "Nilai promo harus angka lebih dari 0.");
+      return;
+    }
+    if (tipe === "persen" && promoNilai > 99) {
+      notif("notif-produk", "gagal", "Potongan persen maksimal 99%.");
+      return;
+    }
+    if (tipe === "nominal" && promoNilai >= harga) {
+      notif("notif-produk", "gagal", "Potongan nominal harus lebih kecil dari harga normal.");
+      return;
+    }
+    promoTipe = tipe;
   }
 
   const { error } = await supabase.from("product_variants")
@@ -451,8 +510,9 @@ async function simpanVarian(vid) {
       price: harga,
       stock_status: stok,
       is_active: aktif,
-      promo_price: promo,
-      promo_label: promo !== null && labelPromo ? labelPromo : null
+      promo_type: promoTipe,
+      promo_value: promoNilai,
+      promo_label: promoTipe && labelPromo ? labelPromo : null
     })
     .eq("id", vid);
 
@@ -475,6 +535,68 @@ async function tambahVarian(pid) {
   if (error) { notif("notif-produk", "gagal", "Gagal menambah varian: " + error.message); return; }
   notif("notif-produk", "sukses", "Varian baru ditambahkan.");
   muatProdukAdmin();
+}
+
+/* ---------- PROMO TEKS ---------- */
+
+async function muatPromo() {
+  const wadah = document.getElementById("daftar-promo");
+  wadah.innerHTML = '<p class="muted">Memuat promo...</p>';
+
+  const { data, error } = await supabase
+    .from("promos")
+    .select("id, judul, deskripsi, is_active")
+    .order("created_at", { ascending: false });
+
+  if (error) { wadah.innerHTML = ""; notif("notif-promo", "gagal", "Gagal memuat promo: " + error.message); return; }
+  if (!data || data.length === 0) { wadah.innerHTML = '<p class="muted">Belum ada promo teks.</p>'; return; }
+
+  wadah.innerHTML = data.map(p => `
+    <div class="kartu-produk">
+      <div class="baris">
+        <strong>${escapeHTML(p.judul)}</strong>
+        <span class="status">${p.is_active ? "Tampil" : "Disembunyikan"}</span>
+      </div>
+      ${p.deskripsi ? '<div class="muted">' + escapeHTML(p.deskripsi) + "</div>" : ""}
+      <div class="baris" style="margin-top:8px">
+        <button class="kecil" onclick="togglePromo(${p.id}, ${!p.is_active})">${p.is_active ? "Sembunyikan" : "Tampilkan"}</button>
+        <button class="kecil keluar" onclick="hapusPromo(${p.id})">Hapus</button>
+      </div>
+    </div>`).join("");
+}
+
+async function simpanPromo() {
+  const judul = document.getElementById("pr-judul").value.trim();
+  const deskripsi = document.getElementById("pr-deskripsi").value.trim();
+  const aktif = document.getElementById("pr-aktif").checked;
+
+  if (judul.length < 3) { notif("notif-promo", "gagal", "Judul promo wajib diisi, minimal 3 huruf."); return; }
+
+  const { error } = await supabase.from("promos").insert({
+    judul: judul, deskripsi: deskripsi || null, is_active: aktif
+  });
+
+  if (error) { notif("notif-promo", "gagal", "Gagal menyimpan promo: " + error.message); return; }
+
+  document.getElementById("pr-judul").value = "";
+  document.getElementById("pr-deskripsi").value = "";
+  document.getElementById("pr-aktif").checked = true;
+  notif("notif-promo", "sukses", "Promo baru ditambahkan.");
+  muatPromo();
+}
+
+async function togglePromo(id, aktifBaru) {
+  const { error } = await supabase.from("promos").update({ is_active: aktifBaru }).eq("id", id);
+  if (error) { notif("notif-promo", "gagal", "Gagal: " + error.message); return; }
+  muatPromo();
+}
+
+async function hapusPromo(id) {
+  if (!confirm("Hapus promo ini?")) return;
+  const { error } = await supabase.from("promos").delete().eq("id", id);
+  if (error) { notif("notif-promo", "gagal", "Gagal menghapus: " + error.message); return; }
+  notif("notif-promo", "sukses", "Promo dihapus.");
+  muatPromo();
 }
 
 /* ---------- PENGATURAN ---------- */
