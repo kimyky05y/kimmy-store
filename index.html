@@ -11,216 +11,291 @@
       --cream: #F7E9B8;
       --mustard: #D99A3D;
       --terracotta: #B5654A;
+      --pink: #F4C7C3;
       --putih: #FFFFFF;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
     body {
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       background: var(--navy);
       color: var(--navy);
       min-height: 100vh;
     }
-    header { background: var(--navy); color: var(--cream); padding: 20px 16px 12px; text-align: center; }
-    header h1 { font-size: 1.6rem; letter-spacing: 1px; }
-    header p { font-size: 0.9rem; opacity: 0.85; margin-top: 4px; }
-    nav.menu {
-      position: sticky; top: 0; z-index: 10; background: var(--navy);
-      display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;
-      padding: 10px 12px; border-bottom: 1px solid rgba(247,233,184,0.2);
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+
+    /* HEADER */
+    header.top { background: var(--navy); color: var(--cream); position: sticky; top: 0; z-index: 20; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .top-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; }
+    .logo { font-weight: 800; letter-spacing: 1px; font-size: 1.15rem; display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--cream); }
+    .logo-ikon { width: 34px; height: 34px; border-radius: 50%; background: var(--cream); display: grid; place-items: center; font-size: 1.1rem; }
+    nav.menu { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+    nav.menu::-webkit-scrollbar { display: none; }
+    nav.menu a { color: var(--cream); text-decoration: none; font-size: 0.85rem; padding: 6px 10px; border-radius: 999px; white-space: nowrap; }
+    nav.menu a:hover { background: rgba(247,233,184,0.15); }
+    .tombol-keranjang {
+      background: var(--mustard); color: var(--navy); text-decoration: none; font-weight: 700;
+      padding: 7px 14px; border-radius: 999px; font-size: 0.85rem; white-space: nowrap;
     }
-    nav.menu a {
-      color: var(--cream); text-decoration: none; font-size: 0.8rem;
-      padding: 6px 11px; border-radius: 999px; border: 1px solid rgba(247,233,184,0.4);
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--dusty) 0%, var(--navy) 100%);
+      color: var(--cream); border-radius: 22px; padding: 26px 22px; margin: 16px 0;
+      position: relative; overflow: hidden;
     }
-    nav.menu a.penting { background: var(--mustard); color: var(--navy); border-color: var(--mustard); font-weight: bold; }
-    .tombol-keranjang-atas {
-      display: inline-block; margin-top: 10px; background: var(--mustard); color: var(--navy);
-      padding: 6px 14px; border-radius: 999px; text-decoration: none; font-weight: bold; font-size: 0.85rem;
+    .hero::after { content: "✦"; position: absolute; right: 18px; top: 10px; color: var(--mustard); font-size: 1.6rem; }
+    .hero h1 { font-size: clamp(1.4rem, 4vw, 2.1rem); line-height: 1.25; }
+    .hero p { margin-top: 8px; opacity: 0.9; font-size: 0.95rem; }
+    .hero .tombol-utama {
+      display: inline-block; margin-top: 14px; background: var(--mustard); color: var(--navy);
+      padding: 10px 20px; border-radius: 999px; text-decoration: none; font-weight: 700;
     }
-    main { padding: 16px; max-width: 900px; margin: 0 auto; }
-    h2 { color: var(--cream); margin: 20px 0 12px; font-size: 1.2rem; }
-    .info { color: var(--cream); line-height: 1.5; word-break: break-word; }
-    .banner-promo { margin-top: 16px; display: grid; gap: 10px; }
+    .banner-promo { display: grid; gap: 8px; margin-top: 16px; }
     .banner-promo:empty { display: none; }
-    .promo-item {
-      background: var(--mustard); color: var(--navy); border-radius: 14px;
-      padding: 12px 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); font-size: 0.95rem;
+    .promo-item { background: var(--pink); color: var(--navy); border-radius: 14px; padding: 10px 14px; font-size: 0.92rem; }
+    .promo-item span { font-size: 0.82rem; opacity: 0.85; }
+
+    /* KEUNGGULAN */
+    .trust { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 18px; }
+    .trust div {
+      background: var(--cream); color: var(--navy); border-radius: 16px; padding: 12px;
+      text-align: center; font-size: 0.85rem; font-weight: 600;
     }
-    .promo-item span { font-size: 0.85rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
-    .card { background: var(--putih); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
-    .foto-produk { width: 100%; height: 160px; object-fit: cover; display: block; background: #E8EEF3; }
-    .isi-card { padding: 14px; }
-    .card h3 { font-size: 1.05rem; margin-bottom: 4px; }
-    .card .kategori { font-size: 0.75rem; color: var(--dusty); }
-    .varian { border-top: 1px dashed var(--dusty); padding: 10px 0; }
-    .varian .nama { font-weight: bold; }
-    .varian .harga { color: var(--navy); margin-top: 2px; }
-    .harga-coret { color: #8A8A8A; text-decoration: line-through; font-size: 0.85rem; margin-top: 2px; }
-    .harga-promo { color: #B5654A; font-weight: bold; font-size: 1.05rem; }
-    .badge-promo {
-      display: inline-block; font-size: 0.7rem; font-weight: bold; padding: 3px 8px;
-      border-radius: 999px; background: var(--terracotta); color: var(--putih); margin-top: 6px;
+    .trust b { display: block; font-size: 1.4rem; margin-bottom: 2px; }
+
+    /* LAYOUT TOKO */
+    .shop { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
+    h2.judul-bagian { color: var(--cream); font-size: 1.25rem; margin: 6px 0 12px; }
+
+    .cari {
+      width: 100%; padding: 11px 14px; border-radius: 999px; border: none; font-size: 0.95rem;
+      margin-bottom: 10px; font-family: inherit;
     }
-    .garansi { font-size: 0.8rem; color: var(--dusty); margin-top: 4px; }
-    .badge { display: inline-block; font-size: 0.7rem; padding: 3px 8px; border-radius: 999px; margin-top: 6px; }
+    .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip {
+      border: 1px solid rgba(247,233,184,0.5); background: transparent; color: var(--cream);
+      padding: 6px 14px; border-radius: 999px; font-size: 0.85rem; cursor: pointer; white-space: nowrap; font-family: inherit;
+    }
+    .chip.aktif { background: var(--cream); color: var(--navy); border-color: var(--cream); font-weight: 700; }
+
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .card {
+      background: var(--cream); color: var(--navy); border-radius: 18px; overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.18); display: flex; flex-direction: column;
+    }
+    .foto { width: 100%; height: 120px; object-fit: cover; display: block; background: #E8EEF3; }
+    .foto-kosong { height: 120px; display: grid; place-items: center; background: var(--dusty); color: var(--cream); font-size: 2rem; }
+    .isi { padding: 12px; display: flex; flex-direction: column; flex: 1; }
+    .kategori { font-size: 0.72rem; color: var(--dusty); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .card h3 { font-size: 0.98rem; margin: 2px 0 6px; line-height: 1.3; }
+    .varian { border-top: 1px dashed var(--dusty); padding: 8px 0; }
+    .varian .nama { font-weight: 700; font-size: 0.88rem; }
+    .harga { font-size: 0.9rem; margin-top: 2px; }
+    .harga-coret { color: #7A7A7A; text-decoration: line-through; font-size: 0.8rem; }
+    .harga-promo { color: var(--terracotta); font-weight: 800; font-size: 0.98rem; }
+    .badge-promo { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--terracotta); color: var(--putih); margin-top: 4px; }
+    .badge { display: inline-block; font-size: 0.68rem; padding: 2px 8px; border-radius: 999px; margin-top: 4px; font-weight: 600; }
     .tersedia { background: #DFF3E4; color: #1E6B35; }
     .habis { background: #F6D5D0; color: #8A2A1A; }
+    .garansi { font-size: 0.75rem; color: var(--dusty); margin-top: 3px; }
     .tombol {
-      display: inline-block; margin-top: 8px; background: var(--navy); color: var(--cream);
-      padding: 7px 16px; border: none; border-radius: 999px; font-size: 0.85rem; cursor: pointer;
+      margin-top: 6px; width: 100%; background: var(--navy); color: var(--cream); border: none;
+      padding: 8px 10px; border-radius: 999px; font-size: 0.82rem; cursor: pointer; font-family: inherit; font-weight: 600;
     }
-    .kotak-keranjang, .kotak-cek, .kotak-info {
-      background: var(--putih); color: var(--navy); border-radius: 14px;
-      padding: 14px; margin-top: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    .tombol:disabled { opacity: 0.5; }
+
+    /* KERANJANG */
+    .cart {
+      background: var(--cream); color: var(--navy); border-radius: 20px; padding: 16px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.2);
     }
-    .kotak-keranjang h2, .kotak-cek h2, .kotak-info h2 { color: var(--navy); margin-top: 0; }
+    .cart h2 { font-size: 1.15rem; margin-bottom: 6px; }
     .item-keranjang { border-top: 1px dashed var(--dusty); padding: 10px 0; }
-    .kontrol { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
-    .kontrol button {
-      background: var(--dusty); color: var(--putih); border: none; border-radius: 8px;
-      padding: 4px 10px; font-size: 0.95rem; cursor: pointer;
-    }
+    .kontrol { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+    .kontrol button { background: var(--dusty); color: var(--putih); border: none; border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 0.95rem; }
     .kontrol .hapus { background: var(--terracotta); margin-left: auto; font-size: 0.8rem; }
-    .subtotal { text-align: right; font-weight: bold; margin-top: 4px; }
-    .total { border-top: 2px solid var(--navy); margin-top: 10px; padding-top: 10px; text-align: right; font-size: 1.05rem; }
-    .formulir { margin-top: 16px; border-top: 2px dashed var(--dusty); padding-top: 14px; }
-    .formulir label.judul, .kotak-cek label.judul { display: block; font-size: 0.85rem; margin-top: 12px; font-weight: bold; }
+    .subtotal { text-align: right; font-weight: 700; margin-top: 4px; }
+    .total { border-top: 2px solid var(--navy); margin-top: 8px; padding-top: 8px; text-align: right; font-size: 1.05rem; }
+    .formulir { margin-top: 12px; border-top: 2px dashed var(--dusty); padding-top: 12px; }
+    .formulir label, .kotak-cek label { display: block; font-size: 0.85rem; margin-top: 10px; font-weight: 700; }
     .formulir input[type="text"], .formulir input[type="tel"], .formulir textarea, .kotak-cek input {
-      width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--dusty);
-      border-radius: 10px; font-size: 1rem; font-family: inherit;
+      width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--dusty); border-radius: 12px;
+      font-size: 0.95rem; font-family: inherit; background: var(--putih);
     }
-    .kotak-cek input { text-transform: uppercase; }
-    .metode { border: 1px solid var(--dusty); border-radius: 12px; padding: 12px; margin-top: 8px; }
-    .metode-pilih { display: flex; align-items: center; gap: 8px; font-weight: bold; cursor: pointer; }
+    .metode { border: 1px solid var(--dusty); border-radius: 14px; padding: 10px; margin-top: 8px; background: var(--putih); }
+    .metode-pilih { display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer; margin: 0; }
     .metode-pilih input { width: auto; }
-    .rekening { margin-top: 10px; background: #F4F8FB; border-radius: 10px; padding: 10px; font-size: 0.9rem; }
-    .rekening .nomor { font-size: 1.1rem; font-weight: bold; letter-spacing: 1px; margin-top: 4px; word-break: break-all; }
-    .tombol-salin {
-      margin-top: 8px; background: var(--dusty); color: var(--putih); border: none;
-      border-radius: 999px; padding: 6px 14px; font-size: 0.85rem; cursor: pointer;
+    .rekening { margin-top: 8px; background: #F4F8FB; border-radius: 10px; padding: 10px; font-size: 0.88rem; }
+    .rekening .nomor { font-size: 1.05rem; font-weight: 800; letter-spacing: 1px; margin-top: 4px; word-break: break-all; }
+    .tombol-salin { margin-top: 6px; background: var(--dusty); color: var(--putih); border: none; border-radius: 999px; padding: 6px 14px; font-size: 0.82rem; cursor: pointer; font-family: inherit; }
+    .qris-img { display: block; width: 100%; max-width: 240px; margin: 8px auto 0; border-radius: 10px; background: #fff; }
+    .tombol-checkout, .tombol-cek {
+      width: 100%; margin-top: 14px; background: var(--mustard); color: var(--navy); border: none;
+      border-radius: 999px; padding: 12px; font-weight: 800; font-size: 1rem; cursor: pointer; font-family: inherit;
     }
-    .qris-img { display: block; width: 100%; max-width: 260px; margin: 10px auto 0; border-radius: 10px; background: #fff; }
-    .tombol-checkout, .tombol-cek-status {
-      width: 100%; margin-top: 16px; background: var(--mustard); color: var(--navy);
-      border: none; border-radius: 999px; padding: 12px; font-weight: bold; font-size: 1rem; cursor: pointer;
-    }
-    .tombol-checkout:disabled, .tombol-cek-status:disabled { opacity: 0.6; cursor: not-allowed; }
-    .notif { margin-top: 12px; padding: 10px; border-radius: 10px; font-size: 0.9rem; }
+    .tombol-checkout:disabled, .tombol-cek:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .notif { margin-top: 10px; padding: 10px; border-radius: 12px; font-size: 0.9rem; }
     .notif.sukses { background: #DFF3E4; color: #1E6B35; }
     .notif.gagal { background: #F6D5D0; color: #8A2A1A; }
-    .status-cek {
-      display: inline-block; font-size: 0.85rem; font-weight: bold; padding: 4px 12px;
-      border-radius: 999px; background: #E8EEF3; margin-top: 8px;
-    }
     .muted { color: var(--dusty); font-size: 0.85rem; }
-    .info-bayar { background: #F4F8FB; border-radius: 10px; padding: 10px; margin-top: 12px; font-size: 0.9rem; }
-    .blok-info { border-top: 1px dashed var(--dusty); padding: 12px 0; }
-    .blok-info h3 { font-size: 1rem; margin-bottom: 6px; }
-    .blok-info p { font-size: 0.92rem; line-height: 1.5; }
+    .info-bayar { background: #F4F8FB; border-radius: 10px; padding: 10px; margin-top: 10px; font-size: 0.88rem; }
+    .status-cek { display: inline-block; font-size: 0.85rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: #E8EEF3; margin-top: 6px; }
+
+    /* SECTION INFO */
+    .panel-bawah { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
+    .kotak {
+      background: var(--cream); color: var(--navy); border-radius: 20px; padding: 18px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+    .kotak h2 { font-size: 1.1rem; margin-bottom: 8px; }
+    .kotak p { font-size: 0.92rem; line-height: 1.55; margin-bottom: 8px; }
     .faq-item { border-top: 1px dashed var(--dusty); padding: 10px 0; }
-    .faq-item strong { display: block; margin-bottom: 4px; }
+    .faq-item strong { display: block; margin-bottom: 3px; font-size: 0.95rem; }
+    .faq-item div { font-size: 0.88rem; color: #3A4D5E; line-height: 1.5; }
     .tombol-wa {
-      display: inline-block; margin-top: 8px; background: #1E6B35; color: var(--putih);
-      padding: 9px 18px; border-radius: 999px; text-decoration: none; font-weight: bold; font-size: 0.9rem;
+      display: inline-block; margin-top: 6px; background: #1E6B35; color: var(--putih);
+      padding: 10px 18px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 0.92rem;
     }
-    footer {
-      background: var(--putih); color: var(--navy); border-radius: 14px; padding: 16px;
-      margin-top: 24px; font-size: 0.88rem; text-align: center;
+
+    footer { margin-top: 24px; padding: 20px 0 28px; color: var(--cream); text-align: center; font-size: 0.88rem; }
+    footer nav a { color: var(--cream); margin: 0 8px; text-decoration: none; opacity: 0.9; }
+    footer .sub { opacity: 0.75; margin-top: 6px; }
+
+    /* LAYAR BESAR (laptop) */
+    @media (min-width: 640px) {
+      .trust { grid-template-columns: repeat(4, 1fr); }
+      .grid { grid-template-columns: repeat(3, 1fr); }
+      .panel-bawah { grid-template-columns: 1fr 1fr; }
     }
-    footer nav a { color: var(--dusty); margin: 0 6px; text-decoration: none; }
-    .pesan { color: var(--cream); text-align: center; margin-top: 18px; font-size: 0.85rem; }
+    @media (min-width: 900px) {
+      .shop { grid-template-columns: 1fr 360px; }
+      .cart { position: sticky; top: 84px; max-height: calc(100vh - 100px); overflow-y: auto; }
+      .hero { padding: 34px 36px; }
+      nav.menu { overflow: visible; }
+    }
+    @media (max-width: 480px) {
+      .logo span.teks { display: none; }
+      nav.menu a { font-size: 0.78rem; padding: 5px 8px; }
+    }
   </style>
 </head>
 <body>
 
-<header id="beranda">
-  <h1>KIMMY STORE</h1>
-  <p>Digital products & app services</p>
-  <a class="tombol-keranjang-atas" href="#keranjang">Keranjang (<span id="jumlah-keranjang">0</span>)</a>
+<header class="top">
+  <div class="wrap top-inner">
+    <a class="logo" href="#beranda">
+      <span class="logo-ikon">🐱</span>
+      <span class="teks">KIMMY STORE</span>
+    </a>
+    <nav class="menu">
+      <a href="#produk">Katalog</a>
+      <a href="#cek-status">Cek Status</a>
+      <a href="#tentang">Tentang</a>
+      <a href="#faq">FAQ</a>
+      <a href="#kontak">Kontak</a>
+    </nav>
+    <a class="tombol-keranjang" href="#keranjang">🛒 <span id="jumlah-keranjang">0</span></a>
+  </div>
 </header>
 
-<nav class="menu">
-  <a href="#produk">Produk</a>
-  <a href="#keranjang">Keranjang</a>
-  <a href="#cek-status" class="penting">Cek Status</a>
-  <a href="#tentang">Tentang</a>
-  <a href="#faq">FAQ</a>
-  <a href="#kebijakan">Kebijakan</a>
-  <a href="#kontak">Kontak</a>
-</nav>
+<main class="wrap" id="beranda">
 
-<main>
-  <section class="banner-promo" id="banner-promo"></section>
+  <section class="hero">
+    <h1>Produk Digital<br>Pilihan Terbaik untuk Kamu</h1>
+    <p>Akun premium dan aplikasi pilihan, proses cepat, dan siap dikirim setelah pembayaran diverifikasi.</p>
+    <a class="tombol-utama" href="#produk">Lihat Katalog</a>
+    <div class="banner-promo" id="banner-promo"></div>
+  </section>
 
-  <h2 id="produk">Produk Kami</h2>
-  <div class="grid" id="daftar-produk">
-    <p class="info">Memuat produk...</p>
+  <div class="trust">
+    <div><b>🛡️</b>Aman &amp; Terpercaya</div>
+    <div><b>⚡</b>Proses Cepat</div>
+    <div><b>💰</b>Harga Terbaik</div>
+    <div><b>💬</b>Customer Support</div>
   </div>
 
-  <section class="kotak-keranjang" id="keranjang">
-    <h2>Keranjang Saya</h2>
-    <div id="isi-keranjang"></div>
+  <div class="shop">
 
-    <div id="form-checkout" class="formulir" style="display: none;">
-      <label class="judul" for="nama">Nama lengkap</label>
-      <input id="nama" type="text" placeholder="Contoh: Budi Santoso">
+    <section id="produk">
+      <h2 class="judul-bagian">Katalog Produk</h2>
+      <input id="cari" class="cari" type="search" placeholder="🔍 Cari produk, contoh: Netflix">
+      <div class="chips" id="chips"></div>
+      <div class="grid" id="daftar-produk" style="margin-top:12px">
+        <p class="muted">Memuat produk...</p>
+      </div>
+    </section>
 
-      <label class="judul" for="wa">Nomor WhatsApp</label>
-      <input id="wa" type="tel" placeholder="Contoh: 081234567890">
+    <section class="cart" id="keranjang">
+      <h2>Keranjang Saya</h2>
+      <div id="isi-keranjang"></div>
 
-      <label class="judul">Metode pembayaran</label>
-      <div id="daftar-metode"><p class="info">Memuat metode pembayaran...</p></div>
+      <div id="form-checkout" class="formulir" style="display: none;">
+        <label for="nama">Nama lengkap</label>
+        <input id="nama" type="text" placeholder="Contoh: Budi Santoso">
 
-      <label class="judul" for="catatan">Catatan (opsional)</label>
-      <textarea id="catatan" rows="3" placeholder="Contoh: tolong kirim akun ke WhatsApp ini"></textarea>
+        <label for="wa">Nomor WhatsApp</label>
+        <input id="wa" type="tel" placeholder="Contoh: 081234567890">
 
-      <button class="tombol-checkout" id="tombol-checkout" onclick="checkout()">Checkout</button>
-    </div>
+        <label>Metode pembayaran</label>
+        <div id="daftar-metode"><p class="muted">Memuat metode pembayaran...</p></div>
 
-    <div id="notif-checkout"></div>
-  </section>
+        <label for="catatan">Catatan (opsional)</label>
+        <textarea id="catatan" rows="2" placeholder="Contoh: tolong kirim akun ke WhatsApp ini"></textarea>
 
-  <section class="kotak-cek" id="cek-status">
-    <h2>Cek Status Pesanan</h2>
-    <p class="muted">Masukkan kode pesanan yang kamu terima setelah checkout, contoh: KS-261030-AB12C</p>
-    <label class="judul" for="kode-cek">Kode pesanan</label>
-    <input id="kode-cek" type="text" placeholder="KS-XXXXXX-XXXXX" autocomplete="off">
-    <button class="tombol-cek-status" id="tombol-cek-status" onclick="cekStatus()">Cek Status</button>
-    <div id="hasil-cek"></div>
-  </section>
+        <button class="tombol-checkout" id="tombol-checkout" onclick="checkout()">Checkout</button>
+      </div>
+      <div id="notif-checkout"></div>
+    </section>
 
-  <section class="kotak-info" id="tentang">
-    <h2>Tentang Kami</h2>
-    <div class="blok-info"><p id="info-tentang" class="muted">Memuat...</p></div>
-  </section>
+  </div>
 
-  <section class="kotak-info" id="faq">
-    <h2>Pertanyaan yang Sering Ditanyakan</h2>
-    <div id="daftar-faq"><p class="muted">Memuat...</p></div>
-  </section>
+  <div class="panel-bawah">
+    <section class="kotak" id="cek-status">
+      <h2>Cek Status Pesanan</h2>
+      <p class="muted">Masukkan kode pesanan yang kamu terima setelah checkout, contoh: KS-261030-AB12C</p>
+      <label for="kode-cek" style="display:block;font-size:.85rem;font-weight:700;margin-top:8px;">Kode pesanan</label>
+      <input id="kode-cek" type="text" placeholder="KS-XXXXXX-XXXXX" autocomplete="off"
+        style="width:100%;padding:10px;margin-top:4px;border:1px solid var(--dusty);border-radius:12px;font-size:.95rem;text-transform:uppercase;font-family:inherit;background:#fff;">
+      <button class="tombol-cek" id="tombol-cek-status" onclick="cekStatus()">Cek Status</button>
+      <div id="hasil-cek"></div>
+    </section>
 
-  <section class="kotak-info" id="kebijakan">
-    <h2>Kebijakan Toko</h2>
-    <div class="blok-info"><h3>Pembayaran</h3><p id="info-pembayaran" class="muted">Memuat...</p></div>
-    <div class="blok-info"><h3>Garansi</h3><p id="info-garansi" class="muted">Memuat...</p></div>
-    <div class="blok-info"><h3>Pengembalian dana</h3><p id="info-pengembalian" class="muted">Memuat...</p></div>
-  </section>
+    <section class="kotak" id="tentang">
+      <h2>Tentang Kami</h2>
+      <p id="info-tentang" class="muted">Memuat...</p>
+      <h2 style="margin-top:14px;">Jam Operasional</h2>
+      <p id="info-jam" class="muted">-</p>
+    </section>
 
-  <section class="kotak-info" id="kontak">
-    <h2>Kontak Admin</h2>
-    <div class="blok-info">
+    <section class="kotak" id="faq">
+      <h2>Pertanyaan yang Sering Ditanyakan</h2>
+      <div id="daftar-faq"><p class="muted">Memuat...</p></div>
+    </section>
+
+    <section class="kotak" id="kebijakan">
+      <h2>Kebijakan Toko</h2>
+      <p><strong>Pembayaran:</strong> <span id="info-pembayaran" class="muted">Memuat...</span></p>
+      <p><strong>Garansi:</strong> <span id="info-garansi" class="muted">Memuat...</span></p>
+      <p><strong>Pengembalian dana:</strong> <span id="info-pengembalian" class="muted">Memuat...</span></p>
+    </section>
+
+    <section class="kotak" id="kontak">
+      <h2>Kontak Admin</h2>
       <p><strong>WhatsApp:</strong> <span id="info-kontak">-</span></p>
-      <p><strong>Jam operasional:</strong> <span id="info-jam">-</span></p>
-      <a class="tombol-wa" id="tombol-hubungi" href="#" target="_blank">Hubungi Admin</a>
-    </div>
-  </section>
+      <a class="tombol-wa" id="tombol-hubungi" href="#" target="_blank">💬 Hubungi Admin</a>
+    </section>
+  </div>
 
-  <footer>
-    <strong>KIMMY STORE</strong>
-    <p class="muted">Digital products &amp; app services</p>
-    <nav>
+</main>
+
+<footer>
+  <div class="wrap">
+    <strong>🐱 KIMMY STORE</strong>
+    <div class="sub">Digital products &amp; app services · Trusted &amp; cute since 2022</div>
+    <nav style="margin-top:10px;">
       <a href="#beranda">Beranda</a>
       <a href="#produk">Katalog</a>
       <a href="#cek-status">Cek Status</a>
@@ -228,10 +303,8 @@
       <a href="#faq">FAQ</a>
       <a href="#kontak">Kontak</a>
     </nav>
-  </footer>
-
-  <p class="pesan">Trusted &amp; cute since 2022</p>
-</main>
+  </div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
@@ -251,6 +324,9 @@
 
   const wadah = document.getElementById("daftar-produk");
   const daftarVarian = {};
+  let semuaProduk = [];
+  let kategoriAktif = "Semua";
+  let kataCari = "";
   let metodeList = [];
   let keranjang = [];
   let supabase = null;
@@ -262,9 +338,7 @@
     keranjang = [];
   }
 
-  function rupiah(angka) {
-    return "Rp " + Number(angka).toLocaleString("id-ID");
-  }
+  function rupiah(angka) { return "Rp " + Number(angka).toLocaleString("id-ID"); }
 
   function escapeHTML(t) {
     return String(t ?? "").replace(/[&<>"']/g, c => ({
@@ -327,8 +401,8 @@
   }
 
   function tampilkanNotif(jenis, teks) {
-    const wadahN = document.getElementById("notif-checkout");
-    wadahN.innerHTML = teks ? '<div class="notif ' + jenis + '">' + escapeHTML(teks) + '</div>' : "";
+    document.getElementById("notif-checkout").innerHTML =
+      teks ? '<div class="notif ' + jenis + '">' + escapeHTML(teks) + '</div>' : "";
   }
 
   async function salinNomor(nomor, tombol) {
@@ -350,10 +424,9 @@
   function renderMetode() {
     const wadahM = document.getElementById("daftar-metode");
     if (metodeList.length === 0) {
-      wadahM.innerHTML = '<p class="info">Belum ada metode pembayaran.</p>';
+      wadahM.innerHTML = '<p class="muted">Belum ada metode pembayaran.</p>';
       return;
     }
-
     wadahM.innerHTML = metodeList.map((m, idx) => {
       let isi = "";
       if (m.account_number) {
@@ -374,7 +447,6 @@
       } else {
         isi = `<div class="rekening">Setelah checkout, admin akan mengirim kode QRIS lewat WhatsApp.</div>`;
       }
-
       return `
         <div class="metode">
           <label class="metode-pilih">
@@ -393,7 +465,7 @@
     document.getElementById("jumlah-keranjang").textContent = jumlah;
 
     if (keranjang.length === 0) {
-      wadahK.innerHTML = '<p>Keranjang masih kosong. Pilih produk di atas.</p>';
+      wadahK.innerHTML = '<p class="muted">Keranjang masih kosong. Pilih produk di katalog.</p>';
       form.style.display = "none";
       return;
     }
@@ -439,11 +511,7 @@
     const total = hitungTotal();
 
     const { data: kodePesanan, error } = await supabase.rpc("buat_pesanan", {
-      p_nama: nama,
-      p_whatsapp: wa,
-      p_items: items,
-      p_metode: metode,
-      p_catatan: catatan
+      p_nama: nama, p_whatsapp: wa, p_items: items, p_metode: metode, p_catatan: catatan
     });
 
     tombol.disabled = false;
@@ -506,18 +574,17 @@
     const items = (data.items || []).map(i =>
       '<div>' + escapeHTML(i.product_name) + " (" + escapeHTML(i.variant_name) + ") x" + i.quantity + " = " + rupiah(i.subtotal) + "</div>"
     ).join("");
-
     const infoBayar = data.status === "menunggu_pembayaran"
       ? '<div class="info-bayar">Silakan lakukan pembayaran lalu kirim bukti transfer ke WhatsApp toko.</div>'
       : "";
 
     hasil.innerHTML = `
-      <div style="margin-top:14px;">
+      <div style="margin-top:12px;">
         <div><strong>${escapeHTML(data.order_code)}</strong></div>
         <div class="muted">${new Date(data.created_at).toLocaleString("id-ID")}</div>
         <div class="status-cek">${STATUS_LABEL[data.status] || escapeHTML(data.status)}</div>
-        <div class="muted" style="margin-top:8px;">Metode: ${METODE_LABEL[data.payment_method] || escapeHTML(data.payment_method || "-")}</div>
-        <div style="margin-top:8px;">${items}</div>
+        <div class="muted" style="margin-top:6px;">Metode: ${METODE_LABEL[data.payment_method] || escapeHTML(data.payment_method || "-")}</div>
+        <div style="margin-top:6px;">${items}</div>
         <div class="total">Total: ${rupiah(data.total_amount)}</div>
         ${infoBayar}
       </div>`;
@@ -525,19 +592,14 @@
 
   async function muatInfoToko() {
     const kunci = ["wa_admin", "tentang", "jam_operasional", "kebijakan_pembayaran", "kebijakan_garansi", "kebijakan_pengembalian"];
-    const { data, error } = await supabase
-      .from("store_settings")
-      .select("key, value")
-      .in("key", kunci);
-
+    const { data, error } = await supabase.from("store_settings").select("key, value").in("key", kunci);
     if (error) { console.error(error); return; }
 
     const info = {};
     (data || []).forEach(r => info[r.key] = r.value);
 
     waAdmin = normalisasiWA(info.wa_admin || "");
-    const teksWA = waAdmin ? "https://wa.me/" + waAdmin : "#";
-    document.getElementById("tombol-hubungi").href = teksWA;
+    document.getElementById("tombol-hubungi").href = waAdmin ? "https://wa.me/" + waAdmin : "#";
     document.getElementById("info-kontak").textContent = info.wa_admin || "-";
     document.getElementById("info-jam").textContent = info.jam_operasional || "-";
     document.getElementById("info-tentang").textContent = info.tentang || "-";
@@ -548,11 +610,7 @@
 
   async function muatFaq() {
     const { data, error } = await supabase
-      .from("faqs")
-      .select("pertanyaan, jawaban")
-      .eq("is_active", true)
-      .order("urutan", { ascending: true });
-
+      .from("faqs").select("pertanyaan, jawaban").eq("is_active", true).order("urutan", { ascending: true });
     const wadahF = document.getElementById("daftar-faq");
     if (error || !data || data.length === 0) {
       wadahF.innerHTML = '<p class="muted">Belum ada FAQ.</p>';
@@ -561,7 +619,7 @@
     wadahF.innerHTML = data.map(f => `
       <div class="faq-item">
         <strong>${escapeHTML(f.pertanyaan)}</strong>
-        <div class="muted">${escapeHTML(f.jawaban)}</div>
+        <div>${escapeHTML(f.jawaban)}</div>
       </div>`).join("");
   }
 
@@ -571,9 +629,8 @@
       .select("code, label, account_name, account_number, image_url, sort_order")
       .eq("is_active", true)
       .order("sort_order", { ascending: true });
-
     if (error) {
-      document.getElementById("daftar-metode").innerHTML = '<p class="info">Gagal memuat metode pembayaran.</p>';
+      document.getElementById("daftar-metode").innerHTML = '<p class="muted">Gagal memuat metode pembayaran.</p>';
       console.error(error);
       return;
     }
@@ -583,16 +640,11 @@
 
   async function muatBannerPromo() {
     const { data, error } = await supabase
-      .from("promos")
-      .select("judul, deskripsi")
-      .eq("is_active", true)
-      .order("created_at", { ascending: false });
-
+      .from("promos").select("judul, deskripsi").eq("is_active", true).order("created_at", { ascending: false });
     if (error || !data || data.length === 0) {
       document.getElementById("banner-promo").innerHTML = "";
       return;
     }
-
     document.getElementById("banner-promo").innerHTML = data.map(p => `
       <div class="promo-item">
         <strong>${escapeHTML(p.judul)}</strong>
@@ -600,35 +652,31 @@
       </div>`).join("");
   }
 
-  async function muatProduk() {
-    if (!window.supabase) {
-      wadah.innerHTML = '<p class="info">Gagal: library Supabase tidak termuat</p>';
+  function renderChips() {
+    const kats = ["Semua", ...new Set(semuaProduk.map(p => p.categories ? p.categories.name : "Lainnya"))];
+    document.getElementById("chips").innerHTML = kats.map(k =>
+      '<button class="chip ' + (k === kategoriAktif ? "aktif" : "") + '" data-kat="' + escapeHTML(k) + '">' + escapeHTML(k) + '</button>'
+    ).join("");
+  }
+
+  function renderProduk() {
+    const hasil = semuaProduk.filter(p => {
+      const kat = p.categories ? p.categories.name : "Lainnya";
+      const cocokKat = kategoriAktif === "Semua" || kat === kategoriAktif;
+      const cocokCari = !kataCari || p.name.toLowerCase().includes(kataCari);
+      return cocokKat && cocokCari;
+    });
+
+    if (hasil.length === 0) {
+      wadah.innerHTML = '<p class="muted" style="grid-column:1/-1">Produk tidak ditemukan.</p>';
       return;
     }
 
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    const { data, error } = await supabase
-      .from("products")
-      .select("id, name, image_url, categories(name), product_variants(id, name, price, promo_type, promo_value, promo_label, warranty_days, stock_status, is_active)")
-      .eq("is_active", true);
-
-    if (error) {
-      wadah.innerHTML = '<p class="info">Gagal: ' + escapeHTML(error.message) + '</p>';
-      console.error(error);
-      return;
-    }
-
-    if (!data || data.length === 0) {
-      wadah.innerHTML = '<p class="info">Belum ada produk.</p>';
-      return;
-    }
-
-    wadah.innerHTML = data.map(p => {
+    wadah.innerHTML = hasil.map(p => {
       const kategori = p.categories ? p.categories.name : "";
       const foto = p.image_url
-        ? '<img class="foto-produk" src="' + escapeHTML(p.image_url) + '" alt="' + escapeHTML(p.name) + '">'
-        : "";
+        ? '<img class="foto" src="' + escapeHTML(p.image_url) + '" alt="' + escapeHTML(p.name) + '">'
+        : '<div class="foto-kosong">🐱</div>';
 
       const daftar = (p.product_variants || [])
         .filter(v => v.is_active)
@@ -642,11 +690,9 @@
             ? '<div class="harga-coret">' + rupiah(v.price) + '</div><div class="harga-promo">' + rupiah(hargaAkhir) + '</div>'
             : '<div class="harga">' + rupiah(v.price) + '</div>';
           const badgePromo = adaPromo
-            ? '<span class="badge-promo">' + escapeHTML(v.promo_label || "PROMO") + '</span>'
-            : "";
+            ? '<span class="badge-promo">' + escapeHTML(v.promo_label || "PROMO") + '</span>' : "";
           const garansi = v.warranty_days && v.warranty_days > 0
-            ? '<div class="garansi">Garansi ' + v.warranty_days + ' hari</div>'
-            : "";
+            ? '<div class="garansi">🛡️ Garansi ' + v.warranty_days + ' hari</div>' : "";
 
           return `
             <div class="varian">
@@ -655,22 +701,44 @@
               ${badgePromo}
               ${garansi}
               <span class="badge ${tersedia ? "tersedia" : "habis"}">${tersedia ? "Tersedia" : "Habis"}</span>
-              ${tersedia
-                ? `<button class="tombol" onclick="tambahKeranjang(${v.id})">Tambah ke keranjang</button>`
-                : ""}
+              ${tersedia ? `<button class="tombol" onclick="tambahKeranjang(${v.id})">+ Keranjang</button>` : ""}
             </div>`;
         }).join("");
 
       return `
         <div class="card">
           ${foto}
-          <div class="isi-card">
+          <div class="isi">
             <div class="kategori">${escapeHTML(kategori)}</div>
             <h3>${escapeHTML(p.name)}</h3>
-            ${daftar || '<p>Belum ada varian.</p>'}
+            ${daftar || '<p class="muted">Belum ada varian.</p>'}
           </div>
         </div>`;
     }).join("");
+  }
+
+  async function muatProduk() {
+    if (!window.supabase) {
+      wadah.innerHTML = '<p class="muted">Gagal: library Supabase tidak termuat</p>';
+      return;
+    }
+
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const { data, error } = await supabase
+      .from("products")
+      .select("id, name, image_url, categories(name), product_variants(id, name, price, promo_type, promo_value, promo_label, warranty_days, stock_status, is_active)")
+      .eq("is_active", true);
+
+    if (error) {
+      wadah.innerHTML = '<p class="muted">Gagal: ' + escapeHTML(error.message) + '</p>';
+      console.error(error);
+      return;
+    }
+
+    semuaProduk = data || [];
+    renderChips();
+    renderProduk();
 
     muatInfoToko();
     muatMetode();
@@ -678,9 +746,22 @@
     muatFaq();
   }
 
+  document.getElementById("chips").addEventListener("click", e => {
+    const b = e.target.closest("button[data-kat]");
+    if (!b) return;
+    kategoriAktif = b.dataset.kat;
+    renderChips();
+    renderProduk();
+  });
+
+  document.getElementById("cari").addEventListener("input", e => {
+    kataCari = e.target.value.trim().toLowerCase();
+    renderProduk();
+  });
+
   renderKeranjang();
   muatProduk();
 </script>
 
 </body>
-</html>
+        </html>
