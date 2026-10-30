@@ -13,6 +13,7 @@ h1{color:var(--cream);text-align:center;margin-bottom:6px;font-size:1.4rem}
 .kartu{background:var(--putih);border-radius:14px;padding:16px;max-width:700px;margin:0 auto 14px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
 label{display:block;font-size:.85rem;font-weight:bold;margin-top:10px}
 input,select,textarea{width:100%;padding:9px;margin-top:4px;border:1px solid var(--dusty);border-radius:10px;font-size:.95rem;font-family:inherit}
+input[type="file"]{padding:7px;background:#F4F8FB}
 button{background:var(--navy);color:var(--cream);border:none;border-radius:999px;padding:9px 16px;font-size:.9rem;cursor:pointer;margin-top:10px}
 button.kecil{padding:6px 12px;font-size:.8rem;margin-top:0}
 button.keluar{background:var(--terracotta)}
@@ -34,6 +35,8 @@ button:disabled{opacity:.6}
 .sembunyi{display:none}
 .cb{display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:normal;margin:0}
 .cb input{width:auto;margin:0}
+.thumb{width:64px;height:64px;object-fit:cover;border-radius:10px;margin-top:6px;background:#F4F8FB}
+.preview{width:100%;max-height:220px;object-fit:contain;border-radius:10px;margin-top:8px;background:#F4F8FB}
 </style>
 </head>
 <body>
@@ -84,8 +87,11 @@ button:disabled{opacity:.6}
       <select id="p-kategori"></select>
       <label for="p-deskripsi">Deskripsi</label>
       <textarea id="p-deskripsi" rows="2"></textarea>
+      <label for="p-gambar">Foto produk (maks 2 MB)</label>
+      <input id="p-gambar" type="file" accept="image/*" onchange="previewFile('p-gambar', 'p-preview')">
+      <img id="p-preview" class="preview sembunyi" alt="Pratinjau foto produk">
       <div class="baris">
-        <button onclick="simpanProduk()">Simpan produk</button>
+        <button id="tombol-simpan-produk" onclick="simpanProduk()">Simpan produk</button>
         <button class="kecil" onclick="resetForm()">Batal</button>
       </div>
       <div id="notif-produk"></div>
@@ -105,7 +111,7 @@ button:disabled{opacity:.6}
 
     <div class="kartu">
       <strong>Metode Pembayaran</strong>
-      <p class="muted">Perubahan di sini langsung tampil di website toko.</p>
+      <p class="muted">Perubahan di sini langsung tampil di website toko. Untuk QRIS, unggah gambar QR di kolom Gambar.</p>
       <div id="notif-pengaturan"></div>
       <div id="daftar-metode-admin"></div>
     </div>
@@ -141,7 +147,9 @@ const METODE_LABEL = { transfer_bank: "Transfer Bank", qris: "QRIS", dana: "DANA
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let editProdukId = null;
+let editProdukGambar = null;
 const produkCache = {};
+const metodeCache = {};
 
 function rupiah(a) { return "Rp " + Number(a).toLocaleString("id-ID"); }
 function escapeHTML(t) {
@@ -149,6 +157,25 @@ function escapeHTML(t) {
 }
 function notif(id, jenis, teks) {
   document.getElementById(id).innerHTML = teks ? '<div class="notif ' + jenis + '">' + escapeHTML(teks) + '</div>' : "";
+}
+
+function previewFile(inputId, imgId) {
+  const file = document.getElementById(inputId).files[0];
+  const img = document.getElementById(imgId);
+  if (!file) { img.classList.add("sembunyi"); img.removeAttribute("src"); return; }
+  img.src = URL.createObjectURL(file);
+  img.classList.remove("sembunyi");
+}
+
+async function uploadGambar(file, folder) {
+  if (!file.type.startsWith("image/")) throw new Error("File harus berupa gambar.");
+  if (file.size > 2 * 1024 * 1024) throw new Error("Ukuran gambar maksimal 2 MB.");
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  const path = folder + "/" + Date.now() + "." + ext;
+  const { error } = await supabase.storage.from("gambar").upload(path, file, { contentType: file.type, upsert: false });
+  if (error) throw error;
+  const { data } = supabase.storage.from("gambar").getPublicUrl(path);
+  return data.publicUrl;
 }
 
 function tampilkanSesi(sudahLogin) {
@@ -260,7 +287,7 @@ async function muatProdukAdmin() {
 
   const { data, error } = await supabase
     .from("products")
-    .select("id, name, description, is_active, category_id, categories(name), product_variants(id, name, price, stock_status, is_active)")
+    .select("id, name, description, image_url, is_active, category_id, categories(name), product_variants(id, name, price, stock_status, is_active)")
     .order("id");
 
   if (error) { wadah.innerHTML = ""; notif("notif-produk", "gagal", "Gagal memuat produk: " + error.message); return; }
@@ -288,10 +315,15 @@ async function muatProdukAdmin() {
     return `
       <div class="kartu-produk">
         <div class="baris">
-          <strong>${escapeHTML(p.name)}</strong>
+          <div style="display:flex;gap:10px;align-items:center;">
+            ${p.image_url ? '<img class="thumb" src="' + escapeHTML(p.image_url) + '" alt="">' : ""}
+            <div>
+              <strong>${escapeHTML(p.name)}</strong>
+              <div class="muted">${escapeHTML(p.categories ? p.categories.name : "Tanpa kategori")}</div>
+            </div>
+          </div>
           <span class="status">${p.is_active ? "Aktif" : "Nonaktif"}</span>
         </div>
-        <div class="muted">${escapeHTML(p.categories ? p.categories.name : "Tanpa kategori")}</div>
         <div class="baris" style="margin-top:8px">
           <button class="kecil" onclick="mulaiEdit(${p.id})">Edit produk</button>
           <button class="kecil" onclick="toggleProduk(${p.id}, ${!p.is_active})">${p.is_active ? "Nonaktifkan" : "Aktifkan"}</button>
@@ -313,19 +345,29 @@ function mulaiEdit(id) {
   const p = produkCache[id];
   if (!p) return;
   editProdukId = id;
+  editProdukGambar = p.image_url || null;
   document.getElementById("judul-form").textContent = "Edit Produk";
   document.getElementById("p-nama").value = p.name;
   document.getElementById("p-kategori").value = p.category_id || "";
   document.getElementById("p-deskripsi").value = p.description || "";
+  document.getElementById("p-gambar").value = "";
+  const img = document.getElementById("p-preview");
+  if (p.image_url) { img.src = p.image_url; img.classList.remove("sembunyi"); }
+  else { img.removeAttribute("src"); img.classList.add("sembunyi"); }
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function resetForm() {
   editProdukId = null;
+  editProdukGambar = null;
   document.getElementById("judul-form").textContent = "Tambah Produk Baru";
   document.getElementById("p-nama").value = "";
   document.getElementById("p-kategori").value = "";
   document.getElementById("p-deskripsi").value = "";
+  document.getElementById("p-gambar").value = "";
+  const img = document.getElementById("p-preview");
+  img.removeAttribute("src");
+  img.classList.add("sembunyi");
   notif("notif-produk", "", "");
 }
 
@@ -333,10 +375,30 @@ async function simpanProduk() {
   const nama = document.getElementById("p-nama").value.trim();
   const kategori = document.getElementById("p-kategori").value;
   const deskripsi = document.getElementById("p-deskripsi").value.trim();
+  const fileInput = document.getElementById("p-gambar");
+  const tombol = document.getElementById("tombol-simpan-produk");
 
   if (nama.length < 2) { notif("notif-produk", "gagal", "Nama produk wajib diisi."); return; }
 
-  const payload = { name: nama, category_id: kategori ? Number(kategori) : null, description: deskripsi };
+  tombol.disabled = true;
+  let imageUrl = editProdukGambar;
+
+  if (fileInput.files[0]) {
+    try {
+      imageUrl = await uploadGambar(fileInput.files[0], "produk");
+    } catch (e) {
+      tombol.disabled = false;
+      notif("notif-produk", "gagal", "Gagal mengunggah foto: " + e.message);
+      return;
+    }
+  }
+
+  const payload = {
+    name: nama,
+    category_id: kategori ? Number(kategori) : null,
+    description: deskripsi,
+    image_url: imageUrl || null
+  };
   let error;
 
   if (editProdukId) {
@@ -345,6 +407,7 @@ async function simpanProduk() {
     ({ error } = await supabase.from("products").insert({ ...payload, is_active: true }));
   }
 
+  tombol.disabled = false;
   if (error) { notif("notif-produk", "gagal", "Gagal menyimpan produk: " + error.message); return; }
   notif("notif-produk", "sukses", editProdukId ? "Produk diperbarui." : "Produk baru ditambahkan.");
   resetForm();
@@ -427,11 +490,13 @@ async function muatMetodeAdmin() {
 
   const { data, error } = await supabase
     .from("payment_methods")
-    .select("id, code, label, account_name, account_number, is_active, sort_order")
+    .select("id, code, label, account_name, account_number, image_url, is_active, sort_order")
     .order("sort_order", { ascending: true });
 
   if (error) { wadah.innerHTML = ""; notif("notif-pengaturan", "gagal", "Gagal memuat metode: " + error.message); return; }
   if (!data || data.length === 0) { wadah.innerHTML = '<p class="muted">Belum ada metode.</p>'; return; }
+
+  data.forEach(m => metodeCache[m.id] = m);
 
   wadah.innerHTML = data.map(m => `
     <div class="metode-admin">
@@ -446,9 +511,12 @@ async function muatMetodeAdmin() {
       <input id="mt-an-${m.id}" value="${escapeHTML(m.account_name || "")}">
       <label>Nomor rekening / HP</label>
       <input id="mt-nomor-${m.id}" value="${escapeHTML(m.account_number || "")}">
+      <label>Gambar QRIS (opsional, maks 2 MB)</label>
+      ${m.image_url ? '<img class="preview" src="' + escapeHTML(m.image_url) + '" alt="Gambar QRIS">' : ""}
+      <input id="mt-file-${m.id}" type="file" accept="image/*">
       <div class="baris" style="margin-top:8px">
         <label class="cb"><input type="checkbox" id="mt-aktif-${m.id}"${m.is_active ? " checked" : ""}> Tampilkan di toko</label>
-        <button class="kecil" onclick="simpanMetode(${m.id})">Simpan</button>
+        <button class="kecil" id="mt-tombol-${m.id}" onclick="simpanMetode(${m.id})">Simpan</button>
       </div>
     </div>`).join("");
 }
@@ -458,13 +526,35 @@ async function simpanMetode(id) {
   const an = document.getElementById("mt-an-" + id).value.trim();
   const nomor = document.getElementById("mt-nomor-" + id).value.trim();
   const aktif = document.getElementById("mt-aktif-" + id).checked;
+  const fileInput = document.getElementById("mt-file-" + id);
+  const tombol = document.getElementById("mt-tombol-" + id);
 
   if (label.length < 2) { notif("notif-pengaturan", "gagal", "Nama yang tampil wajib diisi."); return; }
 
+  tombol.disabled = true;
+  let imageUrl = metodeCache[id] ? metodeCache[id].image_url : null;
+
+  if (fileInput.files[0]) {
+    try {
+      imageUrl = await uploadGambar(fileInput.files[0], "qris");
+    } catch (e) {
+      tombol.disabled = false;
+      notif("notif-pengaturan", "gagal", "Gagal mengunggah gambar: " + e.message);
+      return;
+    }
+  }
+
   const { error } = await supabase.from("payment_methods")
-    .update({ label: label, account_name: an || null, account_number: nomor || null, is_active: aktif })
+    .update({
+      label: label,
+      account_name: an || null,
+      account_number: nomor || null,
+      image_url: imageUrl || null,
+      is_active: aktif
+    })
     .eq("id", id);
 
+  tombol.disabled = false;
   if (error) { notif("notif-pengaturan", "gagal", "Gagal menyimpan: " + error.message); return; }
   notif("notif-pengaturan", "sukses", "Metode \"" + label + "\" tersimpan.");
   muatMetodeAdmin();
@@ -486,7 +576,7 @@ async function tambahMetode() {
   if (error) { notif("notif-tambah-metode", "gagal", "Gagal menambah metode: " + error.message); return; }
 
   ["m-kode", "m-label", "m-an", "m-nomor"].forEach(id => document.getElementById(id).value = "");
-  notif("notif-tambah-metode", "sukses", "Metode baru ditambahkan.");
+  notif("notif-tambah-metode", "sukses", "Metode baru ditambahkan. Unggah gambar QRIS di kolom Gambar jika ada.");
   muatMetodeAdmin();
 }
 
