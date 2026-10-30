@@ -14,15 +14,26 @@
       --putih: #FFFFFF;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 70px; }
     body {
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       background: var(--navy);
       color: var(--navy);
       min-height: 100vh;
     }
-    header { background: var(--navy); color: var(--cream); padding: 20px 16px; text-align: center; }
+    header { background: var(--navy); color: var(--cream); padding: 20px 16px 12px; text-align: center; }
     header h1 { font-size: 1.6rem; letter-spacing: 1px; }
     header p { font-size: 0.9rem; opacity: 0.85; margin-top: 4px; }
+    nav.menu {
+      position: sticky; top: 0; z-index: 10; background: var(--navy);
+      display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;
+      padding: 10px 12px; border-bottom: 1px solid rgba(247,233,184,0.2);
+    }
+    nav.menu a {
+      color: var(--cream); text-decoration: none; font-size: 0.85rem;
+      padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(247,233,184,0.4);
+    }
+    nav.menu a.penting { background: var(--mustard); color: var(--navy); border-color: var(--mustard); font-weight: bold; }
     .tombol-keranjang-atas {
       display: inline-block; margin-top: 10px; background: var(--mustard); color: var(--navy);
       padding: 6px 14px; border-radius: 999px; text-decoration: none; font-weight: bold; font-size: 0.85rem;
@@ -44,11 +55,11 @@
       display: inline-block; margin-top: 8px; background: var(--navy); color: var(--cream);
       padding: 7px 16px; border: none; border-radius: 999px; font-size: 0.85rem; cursor: pointer;
     }
-    .kotak-keranjang {
+    .kotak-keranjang, .kotak-cek {
       background: var(--putih); color: var(--navy); border-radius: 14px;
       padding: 14px; margin-top: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
-    .kotak-keranjang h2 { color: var(--navy); margin-top: 0; }
+    .kotak-keranjang h2, .kotak-cek h2 { color: var(--navy); margin-top: 0; }
     .item-keranjang { border-top: 1px dashed var(--dusty); padding: 10px 0; }
     .kontrol { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
     .kontrol button {
@@ -60,10 +71,11 @@
     .total { border-top: 2px solid var(--navy); margin-top: 10px; padding-top: 10px; text-align: right; font-size: 1.05rem; }
     .formulir { margin-top: 16px; border-top: 2px dashed var(--dusty); padding-top: 14px; }
     .formulir label.judul { display: block; font-size: 0.85rem; margin-top: 12px; font-weight: bold; }
-    .formulir input[type="text"], .formulir input[type="tel"], .formulir textarea {
+    .formulir input[type="text"], .formulir input[type="tel"], .formulir textarea, .kotak-cek input {
       width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--dusty);
       border-radius: 10px; font-size: 1rem; font-family: inherit;
     }
+    .kotak-cek input { text-transform: uppercase; }
     .metode { border: 1px solid var(--dusty); border-radius: 12px; padding: 12px; margin-top: 8px; }
     .metode-pilih { display: flex; align-items: center; gap: 8px; font-weight: bold; cursor: pointer; }
     .metode-pilih input { width: auto; }
@@ -73,27 +85,39 @@
       margin-top: 8px; background: var(--dusty); color: var(--putih); border: none;
       border-radius: 999px; padding: 6px 14px; font-size: 0.85rem; cursor: pointer;
     }
-    .tombol-checkout {
+    .tombol-checkout, .tombol-cek-status {
       width: 100%; margin-top: 16px; background: var(--mustard); color: var(--navy);
       border: none; border-radius: 999px; padding: 12px; font-weight: bold; font-size: 1rem; cursor: pointer;
     }
-    .tombol-checkout:disabled { opacity: 0.6; cursor: not-allowed; }
+    .tombol-checkout:disabled, .tombol-cek-status:disabled { opacity: 0.6; cursor: not-allowed; }
     .notif { margin-top: 12px; padding: 10px; border-radius: 10px; font-size: 0.9rem; }
     .notif.sukses { background: #DFF3E4; color: #1E6B35; }
     .notif.gagal { background: #F6D5D0; color: #8A2A1A; }
+    .status-cek {
+      display: inline-block; font-size: 0.85rem; font-weight: bold; padding: 4px 12px;
+      border-radius: 999px; background: #E8EEF3; margin-top: 8px;
+    }
+    .muted { color: var(--dusty); font-size: 0.85rem; }
+    .info-bayar { background: #F4F8FB; border-radius: 10px; padding: 10px; margin-top: 12px; font-size: 0.9rem; }
     .pesan { color: var(--cream); text-align: center; margin-top: 24px; font-size: 0.85rem; }
   </style>
 </head>
 <body>
 
-<header>
+<header id="beranda">
   <h1>KIMMY STORE</h1>
   <p>Digital products & app services</p>
   <a class="tombol-keranjang-atas" href="#keranjang">Keranjang (<span id="jumlah-keranjang">0</span>)</a>
 </header>
 
+<nav class="menu">
+  <a href="#produk">Produk</a>
+  <a href="#keranjang">Keranjang</a>
+  <a href="#cek-status" class="penting">Cek Status Pesanan</a>
+</nav>
+
 <main>
-  <h2>Produk Kami</h2>
+  <h2 id="produk">Produk Kami</h2>
   <div class="grid" id="daftar-produk">
     <p class="info">Memuat produk...</p>
   </div>
@@ -121,6 +145,15 @@
     <div id="notif-checkout"></div>
   </section>
 
+  <section class="kotak-cek" id="cek-status">
+    <h2>Cek Status Pesanan</h2>
+    <p class="muted">Masukkan kode pesanan yang kamu terima setelah checkout, contoh: KS-261030-AB12C</p>
+    <label class="judul" for="kode-cek" style="display:block;font-size:0.85rem;margin-top:12px;font-weight:bold;">Kode pesanan</label>
+    <input id="kode-cek" type="text" placeholder="KS-XXXXXX-XXXXX" autocomplete="off">
+    <button class="tombol-cek-status" id="tombol-cek-status" onclick="cekStatus()">Cek Status</button>
+    <div id="hasil-cek"></div>
+  </section>
+
   <p class="pesan">Trusted & cute since 2022</p>
 </main>
 
@@ -131,6 +164,14 @@
 
   const MAKS_QTY = 10;
   const KUNCI_KERANJANG = "kimmy_keranjang";
+  const METODE_LABEL = { transfer_bank: "Transfer Bank", qris: "QRIS", dana: "DANA", bca: "Transfer BCA" };
+  const STATUS_LABEL = {
+    menunggu_pembayaran: "Menunggu pembayaran",
+    menunggu_verifikasi: "Pembayaran sedang diverifikasi",
+    diproses: "Pesanan diproses",
+    selesai: "Pesanan selesai",
+    dibatalkan: "Pesanan dibatalkan"
+  };
 
   const wadah = document.getElementById("daftar-produk");
   const daftarVarian = {};
@@ -155,7 +196,6 @@
     }[c]));
   }
 
-  // Ubah 0857-2299-4977 atau 081234567890 menjadi 6285722994977 / 6281234567890
   function normalisasiWA(nomor) {
     let n = String(nomor || "").replace(/[^0-9]/g, "");
     if (n.startsWith("0")) n = "62" + n.slice(1);
@@ -284,26 +324,11 @@
     const catatan = document.getElementById("catatan").value.trim();
     const pilihan = document.querySelector('input[name="metode"]:checked');
 
-    if (nama.length < 2) {
-      tampilkanNotif("gagal", "Nama wajib diisi.");
-      return;
-    }
-    if (!/^[0-9]{9,15}$/.test(wa)) {
-      tampilkanNotif("gagal", "Nomor WhatsApp tidak valid.");
-      return;
-    }
-    if (!pilihan) {
-      tampilkanNotif("gagal", "Pilih metode pembayaran.");
-      return;
-    }
-    if (keranjang.length === 0) {
-      tampilkanNotif("gagal", "Keranjang masih kosong.");
-      return;
-    }
-    if (!waAdmin) {
-      tampilkanNotif("gagal", "Nomor WhatsApp toko belum diatur. Coba lagi nanti.");
-      return;
-    }
+    if (nama.length < 2) { tampilkanNotif("gagal", "Nama wajib diisi."); return; }
+    if (!/^[0-9]{9,15}$/.test(wa)) { tampilkanNotif("gagal", "Nomor WhatsApp tidak valid."); return; }
+    if (!pilihan) { tampilkanNotif("gagal", "Pilih metode pembayaran."); return; }
+    if (keranjang.length === 0) { tampilkanNotif("gagal", "Keranjang masih kosong."); return; }
+    if (!waAdmin) { tampilkanNotif("gagal", "Nomor WhatsApp toko belum diatur. Coba lagi nanti."); return; }
 
     const metode = pilihan.value;
     const metodeInfo = metodeList.find(m => m.code === metode);
@@ -348,9 +373,58 @@
     simpanKeranjang();
     document.getElementById("catatan").value = "";
     renderKeranjang();
-    tampilkanNotif("sukses", "Pesanan " + kodePesanan + " tersimpan. Silakan bayar lalu kirim bukti transfer ke WhatsApp kami.");
+    tampilkanNotif("sukses", "Pesanan " + kodePesanan + " tersimpan. Simpan kode ini untuk cek status. Silakan bayar lalu kirim bukti transfer ke WhatsApp kami.");
 
     window.open("https://wa.me/" + waAdmin + "?text=" + encodeURIComponent(teksWA), "_blank");
+  }
+
+  async function cekStatus() {
+    const kode = document.getElementById("kode-cek").value.trim().toUpperCase();
+    const tombol = document.getElementById("tombol-cek-status");
+    const hasil = document.getElementById("hasil-cek");
+
+    if (kode.length < 6) {
+      hasil.innerHTML = '<div class="notif gagal">Masukkan kode pesanan dengan lengkap.</div>';
+      return;
+    }
+    if (!supabase) {
+      hasil.innerHTML = '<div class="notif gagal">Koneksi belum siap. Coba lagi sebentar.</div>';
+      return;
+    }
+
+    tombol.disabled = true;
+    tombol.textContent = "Mencari...";
+    const { data, error } = await supabase.rpc("cek_status_pesanan", { p_kode: kode });
+    tombol.disabled = false;
+    tombol.textContent = "Cek Status";
+
+    if (error) {
+      hasil.innerHTML = '<div class="notif gagal">Gagal mengecek: ' + escapeHTML(error.message) + '</div>';
+      return;
+    }
+    if (!data) {
+      hasil.innerHTML = '<div class="notif gagal">Kode pesanan tidak ditemukan. Periksa lagi penulisannya.</div>';
+      return;
+    }
+
+    const items = (data.items || []).map(i =>
+      '<div>' + escapeHTML(i.product_name) + " (" + escapeHTML(i.variant_name) + ") x" + i.quantity + " = " + rupiah(i.subtotal) + "</div>"
+    ).join("");
+
+    const infoBayar = data.status === "menunggu_pembayaran"
+      ? '<div class="info-bayar">Silakan lakukan pembayaran lalu kirim bukti transfer ke WhatsApp toko.</div>'
+      : "";
+
+    hasil.innerHTML = `
+      <div style="margin-top:14px;">
+        <div><strong>${escapeHTML(data.order_code)}</strong></div>
+        <div class="muted">${new Date(data.created_at).toLocaleString("id-ID")}</div>
+        <div class="status-cek">${STATUS_LABEL[data.status] || escapeHTML(data.status)}</div>
+        <div class="muted" style="margin-top:8px;">Metode: ${METODE_LABEL[data.payment_method] || escapeHTML(data.payment_method || "-")}</div>
+        <div style="margin-top:8px;">${items}</div>
+        <div class="total">Total: ${rupiah(data.total_amount)}</div>
+        ${infoBayar}
+      </div>`;
   }
 
   async function muatPengaturan() {
@@ -359,11 +433,7 @@
       .select("value")
       .eq("key", "wa_admin")
       .maybeSingle();
-
-    if (error) {
-      console.error(error);
-      return;
-    }
+    if (error) { console.error(error); return; }
     waAdmin = normalisasiWA(data ? data.value : "");
   }
 
@@ -379,7 +449,6 @@
       console.error(error);
       return;
     }
-
     metodeList = data || [];
     renderMetode();
   }
@@ -433,15 +502,13 @@
           ${daftar || '<p>Belum ada varian.</p>'}
         </div>`;
     }).join("");
+
+    muatPengaturan();
+    muatMetode();
   }
 
   renderKeranjang();
   muatProduk();
-  muatMetode();
-  if (window.supabase) {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    muatPengaturan();
-  }
 </script>
 
 </body>
