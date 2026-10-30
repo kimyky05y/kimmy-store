@@ -47,6 +47,24 @@
     .trust div { background: var(--cream); color: var(--navy); border-radius: 16px; padding: 12px 8px; text-align: center; font-size: 0.84rem; font-weight: 600; box-shadow: var(--bayangan); }
     .trust b { display: block; font-size: 1.35rem; margin-bottom: 2px; }
 
+    .blok-home { margin-top: 24px; }
+    .blok-home h2 { color: var(--cream); font-size: 1.2rem; margin-bottom: 12px; }
+    .kat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .kat-kartu { background: var(--cream); color: var(--navy); border: none; border-radius: 16px; padding: 14px; text-align: left; cursor: pointer; font-family: inherit; box-shadow: var(--bayangan); }
+    .kat-kartu b { display: block; font-size: 0.98rem; }
+    .kat-kartu span { font-size: 0.78rem; color: var(--dusty); font-weight: 600; }
+    .kat-kartu:hover { background: #FBF3D2; }
+    .promo-list { display: grid; gap: 10px; }
+    .promo-baris { background: var(--cream); color: var(--navy); border-radius: 16px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; box-shadow: var(--bayangan); }
+    .promo-baris .info-promo { flex: 1; min-width: 160px; }
+    .promo-baris .info-promo b { display: block; font-size: 0.95rem; }
+    .promo-baris .info-promo small { color: var(--dusty); font-size: 0.8rem; }
+    .promo-harga-wrap { text-align: right; }
+    .promo-harga-wrap .coret { color: #7A7A7A; text-decoration: line-through; font-size: 0.8rem; display: block; }
+    .promo-harga-wrap .akhir { color: var(--terracotta); font-weight: 800; }
+    .tombol-kecil { background: var(--navy); color: var(--cream); border: none; padding: 7px 14px; border-radius: 999px; font-size: 0.8rem; cursor: pointer; font-family: inherit; font-weight: 600; white-space: nowrap; }
+    .tombol-kecil:disabled { opacity: 0.5; cursor: not-allowed; }
+
     .shop { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
     h2.judul-bagian { color: var(--cream); font-size: 1.2rem; margin: 4px 0 12px; }
     .cari { width: 100%; padding: 11px 14px; border-radius: 999px; border: none; font-size: 0.95rem; margin-bottom: 10px; font-family: inherit; box-shadow: var(--bayangan); }
@@ -122,7 +140,6 @@
     .tombol-cek { width: 100%; margin-top: 12px; background: var(--mustard); color: var(--navy); border: none; border-radius: 999px; padding: 11px; font-weight: 800; font-size: 0.98rem; cursor: pointer; font-family: inherit; }
     .tombol-cek:disabled { opacity: 0.6; }
 
-    /* MODAL DETAIL PRODUK */
     .modal { position: fixed; inset: 0; background: rgba(20,30,40,0.55); display: flex; align-items: flex-end; justify-content: center; z-index: 50; }
     .modal.sembunyi { display: none; }
     .modal-isi { background: var(--putih); color: var(--navy); width: 100%; max-width: 520px; border-radius: 20px 20px 0 0; padding: 16px; max-height: 90vh; overflow-y: auto; position: relative; }
@@ -135,7 +152,6 @@
     .opsi-varian { display: flex; align-items: center; gap: 10px; border: 1px solid var(--dusty); border-radius: 14px; padding: 10px 12px; cursor: pointer; font-size: 0.92rem; }
     .opsi-varian.nonaktif { opacity: 0.5; cursor: not-allowed; }
     .opsi-varian input { width: auto; }
-    .opsi-varian.terpilih { background: #F4F8FB; border-color: var(--navy); }
     .opsi-varian .teks { flex: 1; }
     .opsi-varian .teks b { display: block; }
     .detail-harga { margin-top: 12px; font-size: 1.05rem; font-weight: 800; }
@@ -154,6 +170,7 @@
 
     @media (min-width: 640px) {
       .trust { grid-template-columns: repeat(4, 1fr); }
+      .kat-grid { grid-template-columns: repeat(4, 1fr); }
       .grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
       .panel-bawah { grid-template-columns: 1fr 1fr; }
       .modal { align-items: center; }
@@ -206,7 +223,22 @@
     <div><b>💬</b>Customer Support</div>
   </div>
 
-  <div class="shop">
+  <section class="blok-home" id="kategori-home">
+    <h2>Kategori</h2>
+    <div class="kat-grid" id="kat-grid"><p class="muted">Memuat kategori...</p></div>
+  </section>
+
+  <section class="blok-home" id="unggulan">
+    <h2>Produk Unggulan</h2>
+    <div class="grid" id="grid-unggulan"><p class="muted">Memuat...</p></div>
+  </section>
+
+  <section class="blok-home" id="promo-home">
+    <h2>Sedang Promo</h2>
+    <div class="promo-list" id="list-promo"><p class="muted">Memuat...</p></div>
+  </section>
+
+  <div class="shop" style="margin-top:24px">
 
     <section id="produk">
       <h2 class="judul-bagian">Katalog Produk</h2>
@@ -279,7 +311,6 @@
 
 </main>
 
-<!-- MODAL DETAIL PRODUK -->
 <div id="modal-detail" class="modal sembunyi" onclick="if(event.target===this)tutupDetail()">
   <div class="modal-isi">
     <button class="modal-tutup" onclick="tutupDetail()" aria-label="Tutup">✕</button>
@@ -361,7 +392,6 @@
     return v.price;
   }
 
-  // Batas jumlah yang boleh dibeli: mengikuti stok jika ada, kalau tidak pakai MAKS_QTY
   function batasQty(id) {
     const v = daftarVarian[id];
     if (!v) return 0;
@@ -414,7 +444,6 @@
     });
   }
 
-  // Menambah sejumlah tertentu, dibatasi stok dan batas maksimal per item
   function tambahKeranjangQty(id, jumlah) {
     const v = daftarVarian[id];
     if (!v) return false;
@@ -440,6 +469,7 @@
     simpanKeranjang();
     renderKeranjang();
     renderProduk();
+    renderPromoHome();
     toast("Ditambahkan " + tambah + " × " + v.varian);
     return true;
   }
@@ -508,15 +538,14 @@
       <div class="pilih-varian">${pilihan || '<p class="muted">Belum ada varian.</p>'}</div>
       <div class="detail-harga" id="detail-harga"></div>
       <div class="detail-sisa" id="detail-sisa"></div>
-      <label class="kontrol" style="margin-top:12px">
+      <div class="kontrol" style="margin-top:12px">
         <span style="font-weight:700">Jumlah</span>
         <button type="button" onclick="ubahQtyDetail(-1)">−</button>
         <span id="qty-detail">1</span>
         <button type="button" onclick="ubahQtyDetail(1)">+</button>
-      </label>
+      </div>
       <button class="tombol-utama-modal" id="tombol-detail" onclick="tambahDariDetail()">Tambah ke keranjang</button>`;
 
-    // Pilih varian pertama yang masih tersedia
     const pertamaTersedia = vars.find(v => !stokHabis(v));
     if (pertamaTersedia) {
       detailVarianId = pertamaTersedia.id;
@@ -597,13 +626,9 @@
 
   function tambahDariDetail() {
     if (!detailVarianId) return;
-    const ok = tambahKeranjangQty(detailVarianId, detailQty);
-    if (ok) {
-      detailQty = 1;
-      updateDetail();
-    } else {
-      updateDetail();
-    }
+    tambahKeranjangQty(detailVarianId, detailQty);
+    detailQty = 1;
+    updateDetail();
   }
 
   document.addEventListener("keydown", e => {
@@ -799,6 +824,102 @@
       </div>`;
   }
 
+  /* ---------- BAGIAN BERANDA ---------- */
+
+  function renderKategoriHome() {
+    const wadahK = document.getElementById("kat-grid");
+    const hitung = {};
+    semuaProduk.forEach(p => {
+      const nama = p.categories ? p.categories.name : "Lainnya";
+      hitung[nama] = (hitung[nama] || 0) + 1;
+    });
+    const daftar = Object.keys(hitung);
+    if (daftar.length === 0) {
+      wadahK.innerHTML = '<p class="muted">Belum ada kategori.</p>';
+      return;
+    }
+    wadahK.innerHTML = daftar.map(nama => `
+      <button class="kat-kartu" onclick="pilihKategori('${escapeHTML(nama).replace(/'/g, "\\'")}')">
+        <b>${escapeHTML(nama)}</b>
+        <span>${hitung[nama]} produk</span>
+      </button>`).join("");
+  }
+
+  function pilihKategori(nama) {
+    kategoriAktif = nama;
+    renderChips();
+    renderProduk();
+    location.hash = "#produk";
+  }
+
+  function renderUnggulan() {
+    const wadahU = document.getElementById("grid-unggulan");
+    let pilihan = semuaProduk.filter(p => p.is_featured === true);
+    if (pilihan.length === 0) pilihan = semuaProduk.slice(0, 4);
+    pilihan = pilihan.slice(0, 4);
+
+    if (pilihan.length === 0) {
+      wadahU.innerHTML = '<p class="muted">Belum ada produk unggulan.</p>';
+      return;
+    }
+
+    wadahU.innerHTML = pilihan.map(p => {
+      const aktif = (p.product_variants || []).filter(v => v.is_active);
+      const termurah = aktif.map(v => hitungHargaAkhir(v)).sort((a, b) => a - b)[0];
+      const foto = p.image_url
+        ? '<img class="foto" src="' + escapeHTML(p.image_url) + '" alt="' + escapeHTML(p.name) + '">'
+        : '<div class="foto-kosong">🐱</div>';
+      return `
+        <div class="card">
+          ${foto}
+          <div class="isi">
+            <div class="kategori">${escapeHTML(p.categories ? p.categories.name : "")}</div>
+            <h3>${escapeHTML(p.name)}</h3>
+            <div class="harga">mulai ${termurah !== undefined ? rupiah(termurah) : "-"}</div>
+            <button class="tombol-detail" onclick="bukaDetail(${p.id})">Lihat detail</button>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  function renderPromoHome() {
+    const wadahP = document.getElementById("list-promo");
+    const daftarPromo = [];
+    semuaProduk.forEach(p => {
+      (p.product_variants || []).forEach(v => {
+        if (!v.is_active) return;
+        const akhir = hitungHargaAkhir(v);
+        if (akhir < v.price) daftarPromo.push({ p: p, v: v, akhir: akhir });
+      });
+    });
+
+    if (daftarPromo.length === 0) {
+      document.getElementById("promo-home").style.display = "none";
+      return;
+    }
+    document.getElementById("promo-home").style.display = "";
+
+    wadahP.innerHTML = daftarPromo.slice(0, 6).map(x => {
+      const habis = stokHabis(x.v);
+      const sudah = keranjang.find(i => i.id === x.v.id);
+      const penuh = sudah && sudah.qty >= batasQty(x.v.id);
+      const nonaktif = habis || penuh;
+      const teksTombol = habis ? "Habis" : (penuh ? "Maks. di keranjang" : "+ Keranjang");
+      return `
+        <div class="promo-baris">
+          <div class="info-promo">
+            <b>${escapeHTML(x.p.name)} · ${escapeHTML(x.v.name)}</b>
+            <small>${escapeHTML(x.v.promo_label || "PROMO")}${x.v.warranty_days ? " · garansi " + x.v.warranty_days + " hari" : ""}</small>
+          </div>
+          <div class="promo-harga-wrap">
+            <span class="coret">${rupiah(x.v.price)}</span>
+            <span class="akhir">${rupiah(x.akhir)}</span>
+          </div>
+          <button class="tombol-kecil" ${nonaktif ? "disabled" : ""} onclick="tambahKeranjang(${x.v.id})">${teksTombol}</button>
+        </div>`;
+    }).join("");
+  }
+
   /* ---------- MUAT DATA ---------- */
 
   async function muatInfoToko() {
@@ -947,7 +1068,7 @@
 
     const { data, error } = await supabase
       .from("products")
-      .select("id, name, description, image_url, categories(name), product_variants(id, name, price, promo_type, promo_value, promo_label, warranty_days, stock_status, stok, is_active)")
+      .select("id, name, description, image_url, is_featured, categories(name), product_variants(id, name, price, promo_type, promo_value, promo_label, warranty_days, stock_status, stok, is_active)")
       .eq("is_active", true);
 
     if (error) {
@@ -958,11 +1079,13 @@
 
     semuaProduk = data || [];
     indeksVarian();
+    renderKategoriHome();
+    renderUnggulan();
+    renderPromoHome();
     renderChips();
     renderProduk();
     renderKeranjang();
 
-    // Jika jendela detail sedang terbuka, segarkan datanya
     if (detailPid && !document.getElementById("modal-detail").classList.contains("sembunyi")) {
       bukaDetail(detailPid);
     }
