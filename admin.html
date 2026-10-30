@@ -29,6 +29,7 @@ button:disabled{opacity:.6}
 .muted{color:var(--dusty)}
 .varian-box{background:#F4F8FB;border-radius:10px;padding:10px;margin-top:10px}
 .varian-box .baris input{margin-top:0}
+.promo-box{background:#FFF6E5;border-radius:10px;padding:8px;margin-top:8px;border:1px dashed var(--mustard)}
 .notif{padding:10px;border-radius:10px;margin-top:10px;font-size:.9rem}
 .gagal{background:#F6D5D0;color:#8A2A1A}
 .sukses{background:#DFF3E4;color:#1E6B35}
@@ -287,7 +288,7 @@ async function muatProdukAdmin() {
 
   const { data, error } = await supabase
     .from("products")
-    .select("id, name, description, image_url, is_active, category_id, categories(name), product_variants(id, name, price, stock_status, is_active)")
+    .select("id, name, description, image_url, is_active, category_id, categories(name), product_variants(id, name, price, promo_price, promo_label, stock_status, is_active)")
     .order("id");
 
   if (error) { wadah.innerHTML = ""; notif("notif-produk", "gagal", "Gagal memuat produk: " + error.message); return; }
@@ -300,11 +301,17 @@ async function muatProdukAdmin() {
       <div class="varian-box">
         <input id="v-nama-${v.id}" value="${escapeHTML(v.name)}" placeholder="Nama varian">
         <div class="baris" style="margin-top:6px">
-          <input id="v-harga-${v.id}" type="number" min="0" value="${v.price}" style="width:48%" placeholder="Harga">
+          <input id="v-harga-${v.id}" type="number" min="0" value="${v.price}" style="width:48%" placeholder="Harga normal">
           <select id="v-stok-${v.id}" style="width:48%">
             <option value="tersedia"${v.stock_status === "tersedia" ? " selected" : ""}>Tersedia</option>
             <option value="habis"${v.stock_status === "habis" ? " selected" : ""}>Habis</option>
           </select>
+        </div>
+        <div class="promo-box">
+          <div class="baris">
+            <input id="v-promo-${v.id}" type="number" min="0" value="${v.promo_price ?? ""}" style="width:48%" placeholder="Harga promo (kosongkan jika tidak)">
+            <input id="v-label-${v.id}" value="${escapeHTML(v.promo_label || "")}" style="width:48%" placeholder="Label, contoh: HEMAT 20%">
+          </div>
         </div>
         <div class="baris" style="margin-top:6px">
           <label class="cb"><input type="checkbox" id="v-aktif-${v.id}"${v.is_active ? " checked" : ""}> Aktif</label>
@@ -425,12 +432,28 @@ async function simpanVarian(vid) {
   const harga = parseInt(document.getElementById("v-harga-" + vid).value, 10);
   const stok = document.getElementById("v-stok-" + vid).value;
   const aktif = document.getElementById("v-aktif-" + vid).checked;
+  const promoRaw = document.getElementById("v-promo-" + vid).value.trim();
+  const labelPromo = document.getElementById("v-label-" + vid).value.trim();
 
   if (nama.length < 1) { notif("notif-produk", "gagal", "Nama varian wajib diisi."); return; }
   if (isNaN(harga) || harga < 0) { notif("notif-produk", "gagal", "Harga harus angka, minimal 0."); return; }
 
+  let promo = null;
+  if (promoRaw !== "") {
+    promo = parseInt(promoRaw, 10);
+    if (isNaN(promo) || promo < 0) { notif("notif-produk", "gagal", "Harga promo harus angka, minimal 0."); return; }
+    if (promo >= harga) { notif("notif-produk", "gagal", "Harga promo harus lebih kecil dari harga normal."); return; }
+  }
+
   const { error } = await supabase.from("product_variants")
-    .update({ name: nama, price: harga, stock_status: stok, is_active: aktif })
+    .update({
+      name: nama,
+      price: harga,
+      stock_status: stok,
+      is_active: aktif,
+      promo_price: promo,
+      promo_label: promo !== null && labelPromo ? labelPromo : null
+    })
     .eq("id", vid);
 
   if (error) { notif("notif-produk", "gagal", "Gagal menyimpan varian: " + error.message); return; }
