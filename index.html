@@ -19,18 +19,11 @@
     html { scroll-behavior: smooth; scroll-padding-top: 80px; }
     body {
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      background: var(--navy);
-      color: var(--navy);
-      min-height: 100vh;
-      line-height: 1.4;
+      background: var(--navy); color: var(--navy); min-height: 100vh; line-height: 1.4;
     }
     .wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
 
-    header.top {
-      background: var(--navy); color: var(--cream);
-      position: sticky; top: 0; z-index: 20;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-    }
+    header.top { background: var(--navy); color: var(--cream); position: sticky; top: 0; z-index: 20; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
     .top-inner { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; }
     .logo { font-weight: 800; letter-spacing: 1px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--cream); white-space: nowrap; }
     .logo-ikon { width: 34px; height: 34px; border-radius: 50%; background: var(--cream); display: grid; place-items: center; font-size: 1.05rem; }
@@ -38,55 +31,32 @@
     nav.menu::-webkit-scrollbar { display: none; }
     nav.menu a { color: var(--cream); text-decoration: none; font-size: 0.85rem; padding: 6px 10px; border-radius: 999px; white-space: nowrap; }
     nav.menu a:hover { background: rgba(247,233,184,0.15); }
-    .tombol-keranjang {
-      background: var(--mustard); color: var(--navy); text-decoration: none; font-weight: 700;
-      padding: 7px 14px; border-radius: 999px; font-size: 0.88rem; white-space: nowrap;
-    }
+    .tombol-keranjang { background: var(--mustard); color: var(--navy); text-decoration: none; font-weight: 700; padding: 7px 14px; border-radius: 999px; font-size: 0.88rem; white-space: nowrap; }
 
-    .hero {
-      background: linear-gradient(135deg, var(--dusty) 0%, var(--navy) 100%);
-      color: var(--cream); border-radius: 22px; padding: 24px 20px; margin: 16px 0 14px;
-      position: relative; overflow: hidden; box-shadow: var(--bayangan);
-    }
+    .hero { background: linear-gradient(135deg, var(--dusty) 0%, var(--navy) 100%); color: var(--cream); border-radius: 22px; padding: 24px 20px; margin: 16px 0 14px; position: relative; overflow: hidden; box-shadow: var(--bayangan); }
     .hero::after { content: "✦"; position: absolute; right: 18px; top: 10px; color: var(--mustard); font-size: 1.6rem; }
     .hero h1 { font-size: clamp(1.35rem, 4vw, 2rem); line-height: 1.25; }
     .hero p { margin-top: 8px; opacity: 0.92; font-size: 0.95rem; max-width: 560px; }
-    .hero .tombol-utama {
-      display: inline-block; margin-top: 14px; background: var(--mustard); color: var(--navy);
-      padding: 10px 20px; border-radius: 999px; text-decoration: none; font-weight: 700;
-    }
+    .hero .tombol-utama { display: inline-block; margin-top: 14px; background: var(--mustard); color: var(--navy); padding: 10px 20px; border-radius: 999px; text-decoration: none; font-weight: 700; }
     .banner-promo { display: grid; gap: 8px; margin-top: 16px; }
     .banner-promo:empty { display: none; }
     .promo-item { background: var(--pink); color: var(--navy); border-radius: 14px; padding: 10px 14px; font-size: 0.92rem; }
     .promo-item span { font-size: 0.82rem; opacity: 0.85; }
 
     .trust { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-    .trust div {
-      background: var(--cream); color: var(--navy); border-radius: 16px; padding: 12px 8px;
-      text-align: center; font-size: 0.84rem; font-weight: 600; box-shadow: var(--bayangan);
-    }
+    .trust div { background: var(--cream); color: var(--navy); border-radius: 16px; padding: 12px 8px; text-align: center; font-size: 0.84rem; font-weight: 600; box-shadow: var(--bayangan); }
     .trust b { display: block; font-size: 1.35rem; margin-bottom: 2px; }
 
     .shop { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
     h2.judul-bagian { color: var(--cream); font-size: 1.2rem; margin: 4px 0 12px; }
-
-    .cari {
-      width: 100%; padding: 11px 14px; border-radius: 999px; border: none; font-size: 0.95rem;
-      margin-bottom: 10px; font-family: inherit; box-shadow: var(--bayangan);
-    }
+    .cari { width: 100%; padding: 11px 14px; border-radius: 999px; border: none; font-size: 0.95rem; margin-bottom: 10px; font-family: inherit; box-shadow: var(--bayangan); }
     .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
     .chips::-webkit-scrollbar { display: none; }
-    .chip {
-      border: 1px solid rgba(247,233,184,0.5); background: transparent; color: var(--cream);
-      padding: 6px 14px; border-radius: 999px; font-size: 0.85rem; cursor: pointer; white-space: nowrap; font-family: inherit;
-    }
+    .chip { border: 1px solid rgba(247,233,184,0.5); background: transparent; color: var(--cream); padding: 6px 14px; border-radius: 999px; font-size: 0.85rem; cursor: pointer; white-space: nowrap; font-family: inherit; }
     .chip.aktif { background: var(--cream); color: var(--navy); border-color: var(--cream); font-weight: 700; }
 
     .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
-    .card {
-      background: var(--cream); color: var(--navy); border-radius: 18px; overflow: hidden;
-      box-shadow: var(--bayangan); display: flex; flex-direction: column;
-    }
+    .card { background: var(--cream); color: var(--navy); border-radius: 18px; overflow: hidden; box-shadow: var(--bayangan); display: flex; flex-direction: column; }
     .foto { width: 100%; height: 120px; object-fit: cover; display: block; background: #E8EEF3; }
     .foto-kosong { height: 120px; display: grid; place-items: center; background: var(--dusty); color: var(--cream); font-size: 2rem; }
     .isi { padding: 12px; display: flex; flex-direction: column; flex: 1; }
@@ -103,17 +73,13 @@
     .habis { background: #F6D5D0; color: #8A2A1A; }
     .sisa { font-size: 0.74rem; color: var(--dusty); margin-top: 3px; font-weight: 600; }
     .garansi { font-size: 0.75rem; color: var(--dusty); margin-top: 3px; }
-    .tombol {
-      margin-top: 6px; width: 100%; background: var(--navy); color: var(--cream); border: none;
-      padding: 8px 10px; border-radius: 999px; font-size: 0.82rem; cursor: pointer; font-family: inherit; font-weight: 600;
-    }
+    .tombol { margin-top: 6px; width: 100%; background: var(--navy); color: var(--cream); border: none; padding: 8px 10px; border-radius: 999px; font-size: 0.82rem; cursor: pointer; font-family: inherit; font-weight: 600; }
     .tombol:hover { background: var(--dusty); }
     .tombol:disabled { opacity: 0.5; cursor: not-allowed; background: var(--navy); }
+    .tombol-detail { margin-top: auto; width: 100%; background: transparent; color: var(--navy); border: 1px solid var(--dusty); padding: 7px 10px; border-radius: 999px; font-size: 0.8rem; cursor: pointer; font-family: inherit; font-weight: 600; }
+    .tombol-detail:hover { background: #E8EEF3; }
 
-    .cart {
-      background: var(--cream); color: var(--navy); border-radius: 20px; padding: 16px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.2);
-    }
+    .cart { background: var(--cream); color: var(--navy); border-radius: 20px; padding: 16px; box-shadow: 0 3px 12px rgba(0,0,0,0.2); }
     .cart h2 { font-size: 1.12rem; margin-bottom: 4px; }
     .item-keranjang { border-top: 1px dashed var(--dusty); padding: 10px 0; }
     .kontrol { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
@@ -124,10 +90,7 @@
     .formulir { margin-top: 12px; border-top: 2px dashed var(--dusty); padding-top: 12px; }
     .formulir label { display: block; font-size: 0.85rem; margin-top: 10px; font-weight: 700; }
     .formulir label:first-child { margin-top: 0; }
-    .formulir input[type="text"], .formulir input[type="tel"], .formulir textarea {
-      width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--dusty); border-radius: 12px;
-      font-size: 0.95rem; font-family: inherit; background: var(--putih);
-    }
+    .formulir input[type="text"], .formulir input[type="tel"], .formulir textarea { width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--dusty); border-radius: 12px; font-size: 0.95rem; font-family: inherit; background: var(--putih); }
     .metode { border: 1px solid var(--dusty); border-radius: 14px; padding: 10px; margin-top: 8px; background: var(--putih); }
     .metode-pilih { display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer; margin: 0; }
     .metode-pilih input { width: auto; }
@@ -135,10 +98,7 @@
     .rekening .nomor { font-size: 1.05rem; font-weight: 800; letter-spacing: 1px; margin-top: 4px; word-break: break-all; }
     .tombol-salin { margin-top: 6px; background: var(--dusty); color: var(--putih); border: none; border-radius: 999px; padding: 6px 14px; font-size: 0.82rem; cursor: pointer; font-family: inherit; }
     .qris-img { display: block; width: 100%; max-width: 240px; margin: 8px auto 0; border-radius: 10px; background: #fff; }
-    .tombol-checkout {
-      width: 100%; margin-top: 14px; background: var(--mustard); color: var(--navy); border: none;
-      border-radius: 999px; padding: 12px; font-weight: 800; font-size: 1rem; cursor: pointer; font-family: inherit;
-    }
+    .tombol-checkout { width: 100%; margin-top: 14px; background: var(--mustard); color: var(--navy); border: none; border-radius: 999px; padding: 12px; font-weight: 800; font-size: 1rem; cursor: pointer; font-family: inherit; }
     .tombol-checkout:disabled { opacity: 0.6; cursor: not-allowed; }
 
     .notif { margin-top: 10px; padding: 10px; border-radius: 12px; font-size: 0.9rem; }
@@ -149,35 +109,43 @@
     .status-cek { display: inline-block; font-size: 0.85rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: #E8EEF3; margin-top: 6px; }
 
     .panel-bawah { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
-    .kotak {
-      background: var(--cream); color: var(--navy); border-radius: 20px; padding: 18px;
-      box-shadow: var(--bayangan);
-    }
+    .kotak { background: var(--cream); color: var(--navy); border-radius: 20px; padding: 18px; box-shadow: var(--bayangan); }
     .kotak h2 { font-size: 1.08rem; margin-bottom: 8px; }
     .kotak h2 + h2 { margin-top: 16px; }
     .kotak p { font-size: 0.92rem; line-height: 1.55; margin-bottom: 8px; }
-    .kotak input {
-      width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--dusty); border-radius: 12px;
-      font-size: 0.95rem; font-family: inherit; background: #fff; text-transform: uppercase;
-    }
+    .kotak input { width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--dusty); border-radius: 12px; font-size: 0.95rem; font-family: inherit; background: #fff; text-transform: uppercase; }
     .kotak label { display: block; font-size: 0.85rem; font-weight: 700; margin-top: 8px; }
     .faq-item { border-top: 1px dashed var(--dusty); padding: 10px 0; }
     .faq-item strong { display: block; margin-bottom: 3px; font-size: 0.95rem; }
     .faq-item div { font-size: 0.88rem; color: #3A4D5E; line-height: 1.5; }
-    .tombol-wa {
-      display: inline-block; margin-top: 6px; background: #1E6B35; color: var(--putih);
-      padding: 10px 18px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 0.92rem;
-    }
-    .tombol-cek {
-      width: 100%; margin-top: 12px; background: var(--mustard); color: var(--navy); border: none;
-      border-radius: 999px; padding: 11px; font-weight: 800; font-size: 0.98rem; cursor: pointer; font-family: inherit;
-    }
+    .tombol-wa { display: inline-block; margin-top: 6px; background: #1E6B35; color: var(--putih); padding: 10px 18px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 0.92rem; }
+    .tombol-cek { width: 100%; margin-top: 12px; background: var(--mustard); color: var(--navy); border: none; border-radius: 999px; padding: 11px; font-weight: 800; font-size: 0.98rem; cursor: pointer; font-family: inherit; }
     .tombol-cek:disabled { opacity: 0.6; }
 
-    footer {
-      margin-top: 28px; padding: 22px 0 30px; color: var(--cream); text-align: center;
-      border-top: 1px solid rgba(247,233,184,0.2);
-    }
+    /* MODAL DETAIL PRODUK */
+    .modal { position: fixed; inset: 0; background: rgba(20,30,40,0.55); display: flex; align-items: flex-end; justify-content: center; z-index: 50; }
+    .modal.sembunyi { display: none; }
+    .modal-isi { background: var(--putih); color: var(--navy); width: 100%; max-width: 520px; border-radius: 20px 20px 0 0; padding: 16px; max-height: 90vh; overflow-y: auto; position: relative; }
+    .modal-tutup { position: absolute; top: 10px; right: 12px; background: var(--navy); color: var(--cream); border: none; border-radius: 999px; width: 32px; height: 32px; font-size: 1rem; cursor: pointer; }
+    .modal-foto { width: 100%; height: 200px; object-fit: cover; border-radius: 14px; background: #E8EEF3; display: block; }
+    .modal-foto-kosong { height: 200px; border-radius: 14px; display: grid; place-items: center; background: var(--dusty); color: var(--cream); font-size: 3rem; }
+    .modal-judul { font-size: 1.2rem; margin: 6px 0 4px; }
+    .modal-deskripsi { font-size: 0.92rem; line-height: 1.55; color: #3A4D5E; margin-top: 6px; }
+    .pilih-varian { margin-top: 12px; display: grid; gap: 8px; }
+    .opsi-varian { display: flex; align-items: center; gap: 10px; border: 1px solid var(--dusty); border-radius: 14px; padding: 10px 12px; cursor: pointer; font-size: 0.92rem; }
+    .opsi-varian.nonaktif { opacity: 0.5; cursor: not-allowed; }
+    .opsi-varian input { width: auto; }
+    .opsi-varian.terpilih { background: #F4F8FB; border-color: var(--navy); }
+    .opsi-varian .teks { flex: 1; }
+    .opsi-varian .teks b { display: block; }
+    .detail-harga { margin-top: 12px; font-size: 1.05rem; font-weight: 800; }
+    .detail-sisa { font-size: 0.8rem; color: var(--dusty); margin-top: 2px; }
+    .tombol-utama-modal { width: 100%; margin-top: 12px; background: var(--mustard); color: var(--navy); border: none; border-radius: 999px; padding: 12px; font-weight: 800; font-size: 1rem; cursor: pointer; font-family: inherit; }
+    .tombol-utama-modal:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    #toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--navy); color: var(--cream); padding: 10px 16px; border-radius: 999px; font-size: 0.88rem; z-index: 60; display: none; box-shadow: var(--bayangan); max-width: 90vw; text-align: center; }
+
+    footer { margin-top: 28px; padding: 22px 0 30px; color: var(--cream); text-align: center; border-top: 1px solid rgba(247,233,184,0.2); }
     footer strong { font-size: 1.05rem; letter-spacing: 0.5px; }
     footer .sub { opacity: 0.75; margin-top: 4px; font-size: 0.86rem; }
     footer nav { margin-top: 12px; display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 14px; }
@@ -188,6 +156,8 @@
       .trust { grid-template-columns: repeat(4, 1fr); }
       .grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
       .panel-bawah { grid-template-columns: 1fr 1fr; }
+      .modal { align-items: center; }
+      .modal-isi { border-radius: 20px; }
     }
     @media (min-width: 900px) {
       .shop { grid-template-columns: minmax(0, 1fr) 360px; gap: 24px; }
@@ -309,6 +279,16 @@
 
 </main>
 
+<!-- MODAL DETAIL PRODUK -->
+<div id="modal-detail" class="modal sembunyi" onclick="if(event.target===this)tutupDetail()">
+  <div class="modal-isi">
+    <button class="modal-tutup" onclick="tutupDetail()" aria-label="Tutup">✕</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
 <footer>
   <div class="wrap">
     <strong>🐱 KIMMY STORE</strong>
@@ -349,6 +329,9 @@
   let keranjang = [];
   let supabase = null;
   let waAdmin = "";
+  let detailPid = null;
+  let detailVarianId = null;
+  let detailQty = 1;
 
   try {
     keranjang = JSON.parse(localStorage.getItem(KUNCI_KERANJANG)) || [];
@@ -370,6 +353,7 @@
     return n;
   }
 
+  // Rumus ini sama dengan yang ada di database
   function hitungHargaAkhir(v) {
     if (!v.promo_type || !v.promo_value) return v.price;
     if (v.promo_type === "nominal") return Math.max(v.price - v.promo_value, 0);
@@ -385,6 +369,10 @@
     return Math.min(v.stok, MAKS_QTY);
   }
 
+  function stokHabis(v) {
+    return v.stock_status !== "tersedia" || v.stok === 0;
+  }
+
   function hitungTotal() {
     return keranjang.reduce((s, i) => s + i.harga * i.qty, 0);
   }
@@ -398,26 +386,66 @@
       teks ? '<div class="notif ' + jenis + '">' + escapeHTML(teks) + '</div>' : "";
   }
 
-  function tambahKeranjang(id) {
+  let timerToast = null;
+  function toast(teks) {
+    const el = document.getElementById("toast");
+    el.textContent = teks;
+    el.style.display = "block";
+    if (timerToast) clearTimeout(timerToast);
+    timerToast = setTimeout(() => { el.style.display = "none"; }, 2200);
+  }
+
+  function indeksVarian() {
+    semuaProduk.forEach(p => {
+      (p.product_variants || []).forEach(v => {
+        daftarVarian[v.id] = {
+          produk: p.name,
+          varian: v.name,
+          harga: hitungHargaAkhir(v),
+          normal: v.price,
+          stok: v.stok,
+          stock_status: v.stock_status,
+          warranty_days: v.warranty_days,
+          promo_label: v.promo_label,
+          promo_type: v.promo_type,
+          promo_value: v.promo_value
+        };
+      });
+    });
+  }
+
+  // Menambah sejumlah tertentu, dibatasi stok dan batas maksimal per item
+  function tambahKeranjangQty(id, jumlah) {
     const v = daftarVarian[id];
-    if (!v) return;
+    if (!v) return false;
     const batas = batasQty(id);
     const item = keranjang.find(i => i.id === id);
-    const qtySekarang = item ? item.qty : 0;
+    const sudah = item ? item.qty : 0;
 
-    if (batas < 1 || qtySekarang >= batas) {
-      tampilkanNotif("gagal", "Stok " + v.varian + " tidak mencukupi untuk ditambah lagi.");
-      return;
+    if (batas < 1) {
+      toast("Stok " + v.varian + " habis.");
+      return false;
+    }
+    if (sudah >= batas) {
+      toast("Jumlah " + v.varian + " sudah mencapai batas stok.");
+      return false;
     }
 
+    const tambah = Math.min(jumlah, batas - sudah);
     if (item) {
-      item.qty++;
+      item.qty += tambah;
     } else {
-      keranjang.push({ id: id, produk: v.produk, varian: v.varian, harga: v.harga, qty: 1 });
+      keranjang.push({ id: id, produk: v.produk, varian: v.varian, harga: v.harga, qty: tambah });
     }
     simpanKeranjang();
     renderKeranjang();
     renderProduk();
+    toast("Ditambahkan " + tambah + " × " + v.varian);
+    return true;
+  }
+
+  function tambahKeranjang(id) {
+    tambahKeranjangQty(id, 1);
   }
 
   function ubahQty(id, selisih) {
@@ -442,6 +470,147 @@
     renderKeranjang();
     renderProduk();
   }
+
+  /* ---------- DETAIL PRODUK ---------- */
+
+  function bukaDetail(pid) {
+    const p = semuaProduk.find(x => x.id === pid);
+    if (!p) return;
+    detailPid = pid;
+
+    const vars = (p.product_variants || []).filter(v => v.is_active);
+    const kategori = p.categories ? p.categories.name : "";
+    const foto = p.image_url
+      ? '<img class="modal-foto" src="' + escapeHTML(p.image_url) + '" alt="' + escapeHTML(p.name) + '">'
+      : '<div class="modal-foto-kosong">🐱</div>';
+
+    const pilihan = vars.map(v => {
+      const habis = stokHabis(v);
+      const d = daftarVarian[v.id];
+      const sisa = (v.stok !== null && v.stok !== undefined && !habis) ? " · sisa " + v.stok : "";
+      const garansi = v.warranty_days && v.warranty_days > 0 ? " · garansi " + v.warranty_days + " hari" : "";
+      return `
+        <label class="opsi-varian ${habis ? "nonaktif" : ""}" id="opsi-${v.id}">
+          <input type="radio" name="varian-detail" value="${v.id}" ${habis ? "disabled" : ""}>
+          <span class="teks">
+            <b>${escapeHTML(v.name)}</b>
+            <span class="muted">${habis ? "Habis" : "Tersedia" + sisa + garansi}</span>
+          </span>
+          <span>${rupiah(d ? d.harga : v.price)}</span>
+        </label>`;
+    }).join("");
+
+    document.getElementById("modal-body").innerHTML = `
+      ${foto}
+      <div class="kategori" style="margin-top:12px">${escapeHTML(kategori)}</div>
+      <h3 class="modal-judul">${escapeHTML(p.name)}</h3>
+      ${p.description ? '<p class="modal-deskripsi">' + escapeHTML(p.description) + '</p>' : ""}
+      <div class="pilih-varian">${pilihan || '<p class="muted">Belum ada varian.</p>'}</div>
+      <div class="detail-harga" id="detail-harga"></div>
+      <div class="detail-sisa" id="detail-sisa"></div>
+      <label class="kontrol" style="margin-top:12px">
+        <span style="font-weight:700">Jumlah</span>
+        <button type="button" onclick="ubahQtyDetail(-1)">−</button>
+        <span id="qty-detail">1</span>
+        <button type="button" onclick="ubahQtyDetail(1)">+</button>
+      </label>
+      <button class="tombol-utama-modal" id="tombol-detail" onclick="tambahDariDetail()">Tambah ke keranjang</button>`;
+
+    // Pilih varian pertama yang masih tersedia
+    const pertamaTersedia = vars.find(v => !stokHabis(v));
+    if (pertamaTersedia) {
+      detailVarianId = pertamaTersedia.id;
+      document.querySelector('input[name="varian-detail"][value="' + pertamaTersedia.id + '"]').checked = true;
+    } else {
+      detailVarianId = null;
+    }
+
+    document.querySelectorAll('input[name="varian-detail"]').forEach(r => {
+      r.addEventListener("change", () => {
+        detailVarianId = Number(r.value);
+        detailQty = 1;
+        updateDetail();
+      });
+    });
+
+    detailQty = 1;
+    updateDetail();
+    document.getElementById("modal-detail").classList.remove("sembunyi");
+    document.body.style.overflow = "hidden";
+  }
+
+  function tutupDetail() {
+    document.getElementById("modal-detail").classList.add("sembunyi");
+    document.body.style.overflow = "";
+    detailPid = null;
+    detailVarianId = null;
+  }
+
+  function ubahQtyDetail(selisih) {
+    if (!detailVarianId) return;
+    const batas = Math.max(batasQty(detailVarianId), 1);
+    detailQty = Math.min(Math.max(detailQty + selisih, 1), batas);
+    updateDetail();
+  }
+
+  function updateDetail() {
+    const hargaEl = document.getElementById("detail-harga");
+    const sisaEl = document.getElementById("detail-sisa");
+    const qtyEl = document.getElementById("qty-detail");
+    const tombol = document.getElementById("tombol-detail");
+    if (!hargaEl || !tombol) return;
+
+    if (!detailVarianId || !daftarVarian[detailVarianId]) {
+      hargaEl.innerHTML = "";
+      sisaEl.textContent = "";
+      qtyEl.textContent = "0";
+      tombol.disabled = true;
+      tombol.textContent = "Tidak tersedia";
+      return;
+    }
+
+    const d = daftarVarian[detailVarianId];
+    const batas = batasQty(detailVarianId);
+    const sudah = (keranjang.find(i => i.id === detailVarianId) || { qty: 0 }).qty;
+    const sisaBisaDitambah = Math.max(batas - sudah, 0);
+
+    if (detailQty > Math.max(sisaBisaDitambah, 1)) detailQty = Math.max(sisaBisaDitambah, 1);
+    qtyEl.textContent = detailQty;
+
+    const adaPromo = d.harga < d.normal;
+    hargaEl.innerHTML = adaPromo
+      ? '<span class="harga-coret">' + rupiah(d.normal) + '</span> <span class="harga-promo">' + rupiah(d.harga) + '</span> <span class="badge-promo">' + escapeHTML(d.promo_label || "PROMO") + '</span>'
+      : rupiah(d.harga);
+
+    sisaEl.textContent = d.stok !== null && d.stok !== undefined
+      ? "Sisa stok: " + d.stok + " · sudah di keranjang: " + sudah
+      : "";
+
+    if (sisaBisaDitambah < 1) {
+      tombol.disabled = true;
+      tombol.textContent = batas < 1 ? "Habis" : "Sudah maksimal di keranjang";
+    } else {
+      tombol.disabled = false;
+      tombol.textContent = "Tambah " + detailQty + " ke keranjang";
+    }
+  }
+
+  function tambahDariDetail() {
+    if (!detailVarianId) return;
+    const ok = tambahKeranjangQty(detailVarianId, detailQty);
+    if (ok) {
+      detailQty = 1;
+      updateDetail();
+    } else {
+      updateDetail();
+    }
+  }
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") tutupDetail();
+  });
+
+  /* ---------- KERANJANG & CHECKOUT ---------- */
 
   async function salinNomor(nomor, tombol) {
     try {
@@ -630,6 +799,8 @@
       </div>`;
   }
 
+  /* ---------- MUAT DATA ---------- */
+
   async function muatInfoToko() {
     const kunci = ["wa_admin", "tentang", "jam_operasional", "kebijakan_pembayaran", "kebijakan_garansi", "kebijakan_pengembalian"];
     const { data, error } = await supabase.from("store_settings").select("key, value").in("key", kunci);
@@ -721,25 +892,23 @@
       const daftar = (p.product_variants || [])
         .filter(v => v.is_active)
         .map(v => {
-          const hargaAkhir = hitungHargaAkhir(v);
-          const adaPromo = hargaAkhir < v.price;
-          daftarVarian[v.id] = { produk: p.name, varian: v.name, harga: hargaAkhir, stok: v.stok };
-
-          const stokHabis = v.stock_status !== "tersedia" || v.stok === 0;
+          const d = daftarVarian[v.id];
+          const habis = stokHabis(v);
+          const adaPromo = d && d.harga < d.normal;
           const hargaHTML = adaPromo
-            ? '<div class="harga-coret">' + rupiah(v.price) + '</div><div class="harga-promo">' + rupiah(hargaAkhir) + '</div>'
-            : '<div class="harga">' + rupiah(v.price) + '</div>';
+            ? '<div class="harga-coret">' + rupiah(d.normal) + '</div><div class="harga-promo">' + rupiah(d.harga) + '</div>'
+            : '<div class="harga">' + rupiah(d ? d.harga : v.price) + '</div>';
           const badgePromo = adaPromo
             ? '<span class="badge-promo">' + escapeHTML(v.promo_label || "PROMO") + '</span>' : "";
           const garansi = v.warranty_days && v.warranty_days > 0
             ? '<div class="garansi">🛡️ Garansi ' + v.warranty_days + ' hari</div>' : "";
-          const sisa = v.stok !== null && v.stok !== undefined && !stokHabis
+          const sisa = v.stok !== null && v.stok !== undefined && !habis
             ? '<div class="sisa">Sisa ' + v.stok + ' akun</div>' : "";
 
           const sudahDiKeranjang = keranjang.find(i => i.id === v.id);
           const batas = batasQty(v.id);
           const penuh = sudahDiKeranjang && sudahDiKeranjang.qty >= batas;
-          const tombolNonaktif = stokHabis || penuh;
+          const tombolNonaktif = habis || penuh;
 
           return `
             <div class="varian">
@@ -747,10 +916,10 @@
               ${hargaHTML}
               ${badgePromo}
               ${garansi}
-              <span class="badge ${stokHabis ? "habis" : "tersedia"}">${stokHabis ? "Habis" : "Tersedia"}</span>
+              <span class="badge ${habis ? "habis" : "tersedia"}">${habis ? "Habis" : "Tersedia"}</span>
               ${sisa}
               <button class="tombol" ${tombolNonaktif ? "disabled" : ""} onclick="tambahKeranjang(${v.id})">
-                ${stokHabis ? "Habis" : (penuh ? "Maks. di keranjang" : "+ Keranjang")}
+                ${habis ? "Habis" : (penuh ? "Maks. di keranjang" : "+ Keranjang")}
               </button>
             </div>`;
         }).join("");
@@ -762,6 +931,7 @@
             <div class="kategori">${escapeHTML(kategori)}</div>
             <h3>${escapeHTML(p.name)}</h3>
             ${daftar || '<p class="muted">Belum ada varian.</p>'}
+            <button class="tombol-detail" onclick="bukaDetail(${p.id})">Lihat detail</button>
           </div>
         </div>`;
     }).join("");
@@ -777,7 +947,7 @@
 
     const { data, error } = await supabase
       .from("products")
-      .select("id, name, image_url, categories(name), product_variants(id, name, price, promo_type, promo_value, promo_label, warranty_days, stock_status, stok, is_active)")
+      .select("id, name, description, image_url, categories(name), product_variants(id, name, price, promo_type, promo_value, promo_label, warranty_days, stock_status, stok, is_active)")
       .eq("is_active", true);
 
     if (error) {
@@ -787,9 +957,15 @@
     }
 
     semuaProduk = data || [];
+    indeksVarian();
     renderChips();
     renderProduk();
     renderKeranjang();
+
+    // Jika jendela detail sedang terbuka, segarkan datanya
+    if (detailPid && !document.getElementById("modal-detail").classList.contains("sembunyi")) {
+      bukaDetail(detailPid);
+    }
   }
 
   document.getElementById("chips").addEventListener("click", e => {
@@ -814,4 +990,4 @@
 </script>
 
 </body>
-</html>
+  </html>
