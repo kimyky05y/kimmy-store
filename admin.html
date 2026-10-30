@@ -382,7 +382,7 @@ async function muatPesanan(){
   notif("notif-pesanan","","");
   wadah.innerHTML='<p class="muted">Memuat pesanan...</p>';
   let q=supabase.from("orders")
-    .select("id,order_code,customer_name,customer_whatsapp,total_amount,status,payment_method,notes,created_at,order_items(product_name,variant_name,quantity,subtotal)")
+    .select("id,order_code,customer_name,customer_whatsapp,total_amount,status,payment_method,notes,catatan_admin,created_at,order_items(product_name,variant_name,quantity,subtotal)")
     .order("created_at",{ascending:false}).limit(50);
   if(filter)q=q.eq("status",filter);
   const {data,error}=await q;
@@ -399,12 +399,15 @@ async function muatPesanan(){
         <div><strong>${esc(o.customer_name)}</strong> · ${esc(o.customer_whatsapp)}</div>
         ${items}
         <div class="muted">Metode: ${METODE_LABEL[o.payment_method]||esc(o.payment_method||"-")}</div>
-        ${o.notes?'<div class="muted">Catatan: '+esc(o.notes)+"</div>":""}
+        ${o.notes?'<div class="muted">Catatan pembeli: '+esc(o.notes)+"</div>":""}
         <div><strong>Total: ${rupiah(o.total_amount)}</strong></div>
         <div class="baris" style="margin-top:8px">
           <select style="width:auto;flex:1" onchange="ubahStatus(${o.id},this.value)">${opsi}</select>
           <a href="https://wa.me/${esc(o.customer_whatsapp)}" target="_blank"><button class="kecil" type="button">WhatsApp</button></a>
         </div>
+        <label>Catatan internal (hanya admin)</label>
+        <textarea id="ca-${o.id}" rows="2" placeholder="Contoh: sudah transfer, menunggu konfirmasi mutasi">${esc(o.catatan_admin||"")}</textarea>
+        <button class="kecil" onclick="simpanCatatan(${o.id})">Simpan catatan</button>
       </div>`;
   }).join("");
 }
@@ -412,7 +415,15 @@ async function muatPesanan(){
 async function ubahStatus(id,baru){
   const {error}=await supabase.from("orders").update({status:baru}).eq("id",id);
   if(error){notif("notif-pesanan","gagal","Gagal mengubah status: "+error.message);muatPesanan();return;}
-  notif("notif-pesanan","sukses","Status pesanan diperbarui.");muatPesanan();
+  notif("notif-pesanan","sukses","Status pesanan diperbarui. Jika dibatalkan, stok produk dikembalikan otomatis.");
+  muatPesanan();
+}
+
+async function simpanCatatan(id){
+  const teks=val("ca-"+id);
+  const {error}=await supabase.from("orders").update({catatan_admin:teks||null}).eq("id",id);
+  if(error){notif("notif-pesanan","gagal","Gagal menyimpan catatan: "+error.message);return;}
+  notif("notif-pesanan","sukses","Catatan internal tersimpan.");
 }
 
 /* ---------- KATEGORI ---------- */
@@ -444,7 +455,7 @@ async function tambahKategori(){
   if(nama.length<2){notif("notif-kategori","gagal","Nama kategori minimal 2 huruf.");return;}
   const {error}=await supabase.from("categories").insert({name:nama});
   if(error){notif("notif-kategori","gagal",error.message.includes("duplicate")?"Kategori dengan nama itu sudah ada.":"Gagal menambah: "+error.message);return;}
-  setVal("kat-baru","");notif("notif-kategori","sukses","Kategori \""+nama+"\" ditambahkan.");
+  setVal("kat-baru","");notif("notif-kategori","sukses",'Kategori "'+nama+'" ditambahkan.');
   muatKategoriAdmin();muatKategori();
 }
 
@@ -480,7 +491,7 @@ async function muatProdukAdmin(){
   const wadah=document.getElementById("daftar-produk-admin");
   wadah.innerHTML='<p class="muted">Memuat produk...</p>';
   const {data,error}=await supabase.from("products")
-    .select("id,name,description,image_url,is_active,category_id,categories(name),product_variants(id,name,price,promo_type,promo_value,promo_label,stock_status,is_active)")
+    .select("id,name,description,image_url,is_active,category_id,categories(name),product_variants(id,name,price,promo_type,promo_value,promo_label,stock_status,stok,is_active)")
     .order("id");
   if(error){wadah.innerHTML="";notif("notif-produk","gagal","Gagal memuat produk: "+error.message);return;}
   if(!data||data.length===0){wadah.innerHTML='<p class="muted">Belum ada produk.</p>';return;}
@@ -497,6 +508,8 @@ async function muatProdukAdmin(){
             <option value="habis"${v.stock_status==="habis"?" selected":""}>Habis</option>
           </select>
         </div>
+        <label>Jumlah stok (kosongkan jika tidak dibatasi)</label>
+        <input id="v-qty-${v.id}" type="number" min="0" value="${v.stok??""}" placeholder="Contoh: 10">
         <div class="promo-box">
           <label>Jenis promo</label>
           <select id="v-tipe-${v.id}" onchange="hitungPreview(${v.id})">
@@ -592,10 +605,16 @@ async function toggleProduk(id,aktifBaru){
 
 async function simpanVarian(vid){
   const nama=val("v-nama-"+vid),harga=parseInt(val("v-harga-"+vid),10),stok=val("v-stok-"+vid);
+  const qtyRaw=val("v-qty-"+vid);
   const aktif=document.getElementById("v-aktif-"+vid).checked;
   const tipe=val("v-tipe-"+vid),nilai=parseInt(val("v-nilai-"+vid),10),labelPromo=val("v-label-"+vid);
   if(nama.length<1){notif("notif-produk","gagal","Nama varian wajib diisi.");return;}
   if(isNaN(harga)||harga<0){notif("notif-produk","gagal","Harga normal harus angka, minimal 0.");return;}
+  let qty=null;
+  if(qtyRaw!==""){
+    qty=parseInt(qtyRaw,10);
+    if(isNaN(qty)||qty<0){notif("notif-produk","gagal","Jumlah stok harus angka, minimal 0.");return;}
+  }
   let promoTipe=null,promoNilai=null;
   if(tipe){
     promoNilai=nilai;
@@ -605,7 +624,7 @@ async function simpanVarian(vid){
     promoTipe=tipe;
   }
   const {error}=await supabase.from("product_variants").update({
-    name:nama,price:harga,stock_status:stok,is_active:aktif,
+    name:nama,price:harga,stok:qty,stock_status:stok,is_active:aktif,
     promo_type:promoTipe,promo_value:promoNilai,promo_label:promoTipe&&labelPromo?labelPromo:null
   }).eq("id",vid);
   if(error){notif("notif-produk","gagal","Gagal menyimpan varian: "+error.message);return;}
@@ -914,4 +933,4 @@ if(window.supabase){
 }
 </script>
 </body>
-</html>
+  </html>
