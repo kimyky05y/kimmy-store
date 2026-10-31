@@ -17,12 +17,13 @@ input[type=file]{padding:7px;background:#F4F8FB}
 button{background:var(--navy);color:var(--cream);border:none;border-radius:999px;padding:9px 16px;font-size:.9rem;cursor:pointer;margin-top:10px}
 button.kecil{padding:6px 12px;font-size:.8rem;margin-top:0}
 button.keluar{background:var(--terracotta)}
+button.unggulan-on{background:var(--mustard);color:var(--navy);font-weight:bold}
 button:disabled{opacity:.6}
 .tabs{display:flex;gap:8px;max-width:700px;margin:0 auto 14px;flex-wrap:wrap}
 .tabs button{flex:1;margin-top:0;background:var(--dusty);min-width:90px}
 .tabs button.aktif{background:var(--cream);color:var(--navy)}
 .badge-notif{display:inline-block;background:var(--terracotta);color:var(--putih);border-radius:999px;padding:1px 7px;font-size:.7rem;margin-left:4px;font-weight:bold}
-.banner-baru{max-width:700px;margin:0 auto 14px;background:var(--mustard);color:var(--navy);border-radius:14px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.banner-baru{max-width:700px;margin:0 auto 14px;background:var(--mustard);color:var(--navy);border-radius:14px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .banner-baru button{margin-top:0;background:var(--navy);color:var(--cream)}
 .blok{border-top:1px dashed var(--dusty);padding-top:12px;margin-top:12px}
 .baris{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}
@@ -52,7 +53,7 @@ button:disabled{opacity:.6}
 .kolom{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;min-width:0}
 .nilai{font-size:.68rem;color:var(--dusty);height:18px;white-space:nowrap;font-weight:bold}
 .batang-wrap{flex:1;width:100%;display:flex;align-items:flex-end;background:#F4F8FB;border-radius:10px;overflow:hidden}
-.batang{width:100%;background:var(--mustard);border-radius:10px 10px 0 0;transition:height .3s}
+.batang{width:100%;background:var(--mustard);border-radius:10px 10px 0 0}
 .hari{font-size:.72rem;margin-top:5px;color:var(--navy);font-weight:bold}
 </style>
 </head>
@@ -114,14 +115,8 @@ button:disabled{opacity:.6}
       <strong>Laporan Penjualan</strong>
       <p class="muted">Pilih rentang tanggal. Pendapatan hanya dihitung dari pesanan Diproses dan Selesai.</p>
       <div class="baris-tanggal">
-        <div>
-          <label for="lap-dari">Dari tanggal</label>
-          <input id="lap-dari" type="date">
-        </div>
-        <div>
-          <label for="lap-sampai">Sampai tanggal</label>
-          <input id="lap-sampai" type="date">
-        </div>
+        <div><label for="lap-dari">Dari tanggal</label><input id="lap-dari" type="date"></div>
+        <div><label for="lap-sampai">Sampai tanggal</label><input id="lap-sampai" type="date"></div>
       </div>
       <div class="baris" style="margin-top:10px">
         <button onclick="muatLaporan()">Tampilkan laporan</button>
@@ -171,7 +166,7 @@ button:disabled{opacity:.6}
   <div id="bagian-kategori" class="sembunyi">
     <div class="kartu">
       <strong>Tambah Kategori</strong>
-      <p class="muted">Kategori dipakai untuk memilah produk di katalog. Kalau kategori dihapus, produk di dalamnya menjadi tanpa kategori.</p>
+      <p class="muted">Kalau kategori dihapus, produk di dalamnya menjadi tanpa kategori.</p>
       <label for="kat-baru">Nama kategori</label>
       <input id="kat-baru" type="text" placeholder="Contoh: Aplikasi Premium">
       <button onclick="tambahKategori()">Tambah kategori</button>
@@ -183,7 +178,7 @@ button:disabled{opacity:.6}
   <div id="bagian-promo" class="sembunyi">
     <div class="kartu">
       <strong>Tambah Promo Teks (Banner)</strong>
-      <p class="muted">Untuk promo berupa kata-kata, seperti "Beli 2 gratis 1". Promo ini tidak mengubah harga.</p>
+      <p class="muted">Untuk promo kata-kata, seperti "Beli 2 gratis 1". Tidak mengubah harga.</p>
       <label for="pr-judul">Judul promo</label>
       <input id="pr-judul" type="text" placeholder="Contoh: Beli 2 gratis 1">
       <label for="pr-deskripsi">Keterangan (opsional)</label>
@@ -223,7 +218,7 @@ button:disabled{opacity:.6}
   <div id="bagian-garansi" class="sembunyi">
     <div class="kartu">
       <strong>Catat Klaim Garansi</strong>
-      <p class="muted">Masukkan kode pesanan. Data pelanggan diambil otomatis dari pesanan itu.</p>
+      <p class="muted">Masukkan kode pesanan. Data pelanggan diambil otomatis.</p>
       <label for="k-kode">Kode pesanan</label>
       <input id="k-kode" type="text" placeholder="KS-XXXXXX-XXXXX" style="text-transform:uppercase">
       <label for="k-produk-klaim">Produk (opsional)</label>
@@ -263,7 +258,7 @@ button:disabled{opacity:.6}
       <div id="notif-toko"></div>
     </div>
     <div class="kartu">
-      <strong>FAQ (Pertanyaan yang Sering Ditanyakan)</strong>
+      <strong>FAQ</strong>
       <label for="f-tanya">Pertanyaan</label>
       <input id="f-tanya" type="text" placeholder="Contoh: Berapa lama produk dikirim?">
       <label for="f-jawab">Jawaban</label>
@@ -312,7 +307,7 @@ const KUNCI_ID_TERAKHIR="kimmy_admin_last_order_id";
 const JEDA_CEK_MS=60000;
 
 const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let editProdukId=null,editProdukGambar=null,keuanganCache=[],laporanCache=[],timerPesanan=null,idPesananTerakhir=0;
+let editProdukId=null,editProdukGambar=null,keuanganCache=[],timerPesanan=null,idPesananTerakhir=0;
 const produkCache={},metodeCache={};
 
 function rupiah(a){return "Rp "+Number(a||0).toLocaleString("id-ID");}
@@ -385,27 +380,20 @@ function mulaiCekPesanan(){
 }
 
 async function cekPesananBaru(){
-  const {count,error:errCount}=await supabase.from("orders")
-    .select("id",{count:"exact",head:true})
-    .in("status",["menunggu_pembayaran","menunggu_verifikasi"]);
+  const {count,error:errCount}=await supabase.from("orders").select("id",{count:"exact",head:true}).in("status",["menunggu_pembayaran","menunggu_verifikasi"]);
   if(!errCount){
     const badge=document.getElementById("badge-pesanan");
     badge.textContent=count||0;
     badge.classList.toggle("sembunyi",!count);
   }
-
-  const {data,error}=await supabase.from("orders")
-    .select("id,order_code,customer_name,total_amount")
-    .order("id",{ascending:false}).limit(10);
+  const {data,error}=await supabase.from("orders").select("id,order_code,customer_name,total_amount").order("id",{ascending:false}).limit(10);
   if(error||!data||data.length===0)return;
-
   const idTertinggi=data[0].id;
   if(idPesananTerakhir===0){
     idPesananTerakhir=idTertinggi;
     localStorage.setItem(KUNCI_ID_TERAKHIR,String(idPesananTerakhir));
     return;
   }
-
   const baru=data.filter(o=>o.id>idPesananTerakhir);
   if(baru.length>0){
     idPesananTerakhir=idTertinggi;
@@ -416,7 +404,7 @@ async function cekPesananBaru(){
     document.getElementById("teks-banner").textContent=teks;
     document.getElementById("banner-baru").classList.remove("sembunyi");
     if(navigator.vibrate)navigator.vibrate([200,100,200]);
-    if(document.getElementById("bagian-pesanan").classList.contains("sembunyi")===false)muatPesanan();
+    if(!document.getElementById("bagian-pesanan").classList.contains("sembunyi"))muatPesanan();
   }
 }
 
@@ -479,43 +467,26 @@ async function muatRingkasan(){
 async function muatGrafik(){
   const wadah=document.getElementById("grafik-7hari");
   wadah.innerHTML='<p class="muted">Memuat grafik...</p>';
-
-  const hariIni=new Date();
-  hariIni.setHours(0,0,0,0);
+  const hariIni=new Date();hariIni.setHours(0,0,0,0);
   const awal=new Date(hariIni.getTime()-6*24*3600*1000);
-
-  const {data,error}=await supabase.from("orders")
-    .select("status,total_amount,created_at")
-    .gte("created_at",awal.toISOString())
-    .in("status",["diproses","selesai"]);
+  const {data,error}=await supabase.from("orders").select("status,total_amount,created_at").gte("created_at",awal.toISOString()).in("status",["diproses","selesai"]);
   if(error){wadah.innerHTML='<p class="muted">Gagal memuat grafik: '+esc(error.message)+'</p>';return;}
-
   const hari=[];
   for(let i=0;i<7;i++){
     const d=new Date(awal.getTime()+i*24*3600*1000);
     hari.push({tgl:tglLokal(d),label:d.toLocaleDateString("id-ID",{weekday:"short"}),total:0});
   }
   (data||[]).forEach(o=>{
-    const kunci=tglLokal(new Date(o.created_at));
-    const h=hari.find(x=>x.tgl===kunci);
+    const h=hari.find(x=>x.tgl===tglLokal(new Date(o.created_at)));
     if(h)h.total+=Number(o.total_amount||0);
   });
-
   const maks=Math.max(...hari.map(h=>h.total),1);
   const totalMinggu=hari.reduce((s,h)=>s+h.total,0);
-
-  wadah.innerHTML=
-    '<div class="muted">Total 7 hari: <strong>'+rupiah(totalMinggu)+'</strong></div>'+
-    '<div class="grafik">'+hari.map(h=>{
-      const persen=Math.round(h.total/maks*100);
-      const tinggi=h.total>0?Math.max(persen,4):0;
-      const nilai=h.total>0?Math.round(h.total/1000)+"rb":"";
-      return '<div class="kolom">'+
-        '<div class="nilai">'+nilai+'</div>'+
-        '<div class="batang-wrap"><div class="batang" style="height:'+tinggi+'%"></div></div>'+
-        '<div class="hari">'+esc(h.label)+'</div>'+
-      '</div>';
-    }).join("")+'</div>';
+  wadah.innerHTML='<div class="muted">Total 7 hari: <strong>'+rupiah(totalMinggu)+'</strong></div><div class="grafik">'+hari.map(h=>{
+    const tinggi=h.total>0?Math.max(Math.round(h.total/maks*100),4):0;
+    const nilai=h.total>0?Math.round(h.total/1000)+"rb":"";
+    return '<div class="kolom"><div class="nilai">'+nilai+'</div><div class="batang-wrap"><div class="batang" style="height:'+tinggi+'%"></div></div><div class="hari">'+esc(h.label)+'</div></div>';
+  }).join("")+'</div>';
 }
 
 /* ---------- LAPORAN ---------- */
@@ -536,9 +507,7 @@ async function ambilLaporan(){
   if(akhir<=awal){notif("notif-laporan","gagal","Tanggal sampai harus sama atau setelah tanggal dari.");return null;}
   const {data,error}=await supabase.from("orders")
     .select("order_code,customer_name,customer_whatsapp,total_amount,status,payment_method,created_at,order_items(product_name,variant_name,quantity,subtotal)")
-    .gte("created_at",awal.toISOString())
-    .lt("created_at",akhir.toISOString())
-    .order("created_at",{ascending:true});
+    .gte("created_at",awal.toISOString()).lt("created_at",akhir.toISOString()).order("created_at",{ascending:true});
   if(error){notif("notif-laporan","gagal","Gagal memuat laporan: "+error.message);return null;}
   return data||[];
 }
@@ -549,12 +518,9 @@ async function muatLaporan(){
   wadah.innerHTML='<p class="muted">Memuat laporan...</p>';
   const data=await ambilLaporan();
   if(!data){wadah.innerHTML="";return;}
-  laporanCache=data;
-
   const lunas=data.filter(o=>o.status==="diproses"||o.status==="selesai");
   const pendapatan=lunas.reduce((s,o)=>s+Number(o.total_amount||0),0);
   const dibatalkan=data.filter(o=>o.status==="dibatalkan").length;
-
   let itemTerjual=0;
   const produkMap={};
   lunas.forEach(o=>(o.order_items||[]).forEach(i=>{
@@ -565,11 +531,9 @@ async function muatLaporan(){
     produkMap[kunci].omzet+=Number(i.subtotal||0);
   }));
   const terlaris=Object.entries(produkMap).sort((a,b)=>b[1].qty-a[1].qty).slice(0,5);
-
   const daftarTerlaris=terlaris.length
     ? terlaris.map((t,idx)=>`<div class="item">${idx+1}. ${esc(t[0])} · ${t[1].qty} terjual · ${rupiah(t[1].omzet)}</div>`).join("")
     : '<p class="muted">Belum ada penjualan lunas pada periode ini.</p>';
-
   wadah.innerHTML=`
     <div class="grid-kpi">
       <div class="kpi"><div class="label">Total pesanan</div><div class="angka">${data.length}</div></div>
@@ -578,12 +542,8 @@ async function muatLaporan(){
       <div class="kpi"><div class="label">Item terjual</div><div class="angka">${itemTerjual}</div></div>
       <div class="kpi"><div class="label">Pendapatan</div><div class="angka">${rupiah(pendapatan)}</div></div>
     </div>
-    <div class="blok">
-      <strong>Produk terlaris</strong>
-      ${daftarTerlaris}
-    </div>
-    <div class="blok">
-      <strong>Daftar pesanan (${data.length})</strong>
+    <div class="blok"><strong>Produk terlaris</strong>${daftarTerlaris}</div>
+    <div class="blok"><strong>Daftar pesanan (${data.length})</strong>
       ${data.length===0?'<p class="muted">Tidak ada pesanan pada periode ini.</p>':data.map(o=>`
         <div class="item" style="border-top:1px dashed var(--dusty);padding-top:6px;margin-top:6px">
           <span class="kode">${esc(o.order_code)}</span> · ${new Date(o.created_at).toLocaleDateString("id-ID")} · ${STATUS_LABEL[o.status]||esc(o.status)}<br>
@@ -596,29 +556,16 @@ async function unduhLaporan(){
   const data=await ambilLaporan();
   if(!data)return;
   if(data.length===0){notif("notif-laporan","gagal","Tidak ada pesanan pada periode ini untuk diunduh.");return;}
-
   const baris=[["Kode pesanan","Tanggal","Nama pelanggan","WhatsApp","Metode","Status","Lunas","Item","Total"]];
   data.forEach(o=>{
     const lunas=(o.status==="diproses"||o.status==="selesai")?"Ya":"Tidak";
     const item=(o.order_items||[]).map(i=>i.product_name+" ("+i.variant_name+") x"+i.quantity).join("; ");
-    baris.push([
-      o.order_code,
-      new Date(o.created_at).toLocaleString("id-ID"),
-      o.customer_name,
-      o.customer_whatsapp,
-      METODE_LABEL[o.payment_method]||o.payment_method||"-",
-      STATUS_LABEL[o.status]||o.status,
-      lunas,
-      item,
-      o.total_amount
-    ]);
+    baris.push([o.order_code,new Date(o.created_at).toLocaleString("id-ID"),o.customer_name,o.customer_whatsapp,METODE_LABEL[o.payment_method]||o.payment_method||"-",STATUS_LABEL[o.status]||o.status,lunas,item,o.total_amount]);
   });
-
   const csv=baris.map(r=>r.map(c=>'"'+String(c??"").replace(/"/g,'""')+'"').join(",")).join("\n");
   const url=URL.createObjectURL(new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"}));
   const a=document.createElement("a");
-  a.href=url;
-  a.download="laporan-kimmy-"+val("lap-dari")+"-sampai-"+val("lap-sampai")+".csv";
+  a.href=url;a.download="laporan-kimmy-"+val("lap-dari")+"-sampai-"+val("lap-sampai")+".csv";
   document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
   notif("notif-laporan","sukses","CSV laporan berhasil diunduh.");
 }
@@ -637,7 +584,6 @@ async function muatPesanan(){
   const {data,error}=await q;
   if(error){wadah.innerHTML="";notif("notif-pesanan","gagal","Gagal memuat pesanan: "+error.message);return;}
   if(!data||data.length===0){wadah.innerHTML='<p class="muted">Belum ada pesanan.</p>';return;}
-
   wadah.innerHTML=data.map(o=>{
     const items=(o.order_items||[]).map(i=>'<div class="item">'+esc(i.product_name)+" ("+esc(i.variant_name)+") x"+i.quantity+" = "+rupiah(i.subtotal)+"</div>").join("");
     const opsi=Object.keys(STATUS_LABEL).map(s=>'<option value="'+s+'"'+(s===o.status?" selected":"")+">"+STATUS_LABEL[s]+"</option>").join("");
@@ -655,7 +601,7 @@ async function muatPesanan(){
           <a href="https://wa.me/${esc(o.customer_whatsapp)}" target="_blank"><button class="kecil" type="button">WhatsApp</button></a>
         </div>
         <label>Catatan internal (hanya admin)</label>
-        <textarea id="ca-${o.id}" rows="2" placeholder="Contoh: sudah transfer, menunggu konfirmasi mutasi">${esc(o.catatan_admin||"")}</textarea>
+        <textarea id="ca-${o.id}" rows="2">${esc(o.catatan_admin||"")}</textarea>
         <button class="kecil" onclick="simpanCatatan(${o.id})">Simpan catatan</button>
       </div>`;
   }).join("");
@@ -664,7 +610,7 @@ async function muatPesanan(){
 async function ubahStatus(id,baru){
   const {error}=await supabase.from("orders").update({status:baru}).eq("id",id);
   if(error){notif("notif-pesanan","gagal","Gagal mengubah status: "+error.message);muatPesanan();return;}
-  notif("notif-pesanan","sukses","Status pesanan diperbarui. Jika dibatalkan, stok produk dikembalikan otomatis.");
+  notif("notif-pesanan","sukses","Status pesanan diperbarui. Jika dibatalkan, stok dikembalikan otomatis.");
   muatPesanan();cekPesananBaru();
 }
 
@@ -740,7 +686,7 @@ async function muatProdukAdmin(){
   const wadah=document.getElementById("daftar-produk-admin");
   wadah.innerHTML='<p class="muted">Memuat produk...</p>';
   const {data,error}=await supabase.from("products")
-    .select("id,name,description,image_url,is_active,category_id,categories(name),product_variants(id,name,price,promo_type,promo_value,promo_label,stock_status,stok,is_active)")
+    .select("id,name,description,image_url,is_active,is_featured,category_id,categories(name),product_variants(id,name,price,promo_type,promo_value,promo_label,stock_status,stok,warranty_days,is_active)")
     .order("id");
   if(error){wadah.innerHTML="";notif("notif-produk","gagal","Gagal memuat produk: "+error.message);return;}
   if(!data||data.length===0){wadah.innerHTML='<p class="muted">Belum ada produk.</p>';return;}
@@ -759,6 +705,8 @@ async function muatProdukAdmin(){
         </div>
         <label>Jumlah stok (kosongkan jika tidak dibatasi)</label>
         <input id="v-qty-${v.id}" type="number" min="0" value="${v.stok??""}" placeholder="Contoh: 10">
+        <label>Garansi (hari, isi 0 jika tanpa garansi)</label>
+        <input id="v-garansi-${v.id}" type="number" min="0" value="${v.warranty_days??0}">
         <div class="promo-box">
           <label>Jenis promo</label>
           <select id="v-tipe-${v.id}" onchange="hitungPreview(${v.id})">
@@ -789,6 +737,7 @@ async function muatProdukAdmin(){
         </div>
         <div class="baris" style="margin-top:8px">
           <button class="kecil" onclick="mulaiEdit(${p.id})">Edit produk</button>
+          <button class="kecil ${p.is_featured?"unggulan-on":""}" onclick="gantiUnggulan(${p.id},${!p.is_featured})">${p.is_featured?"★ Unggulan":"☆ Jadikan unggulan"}</button>
           <button class="kecil" onclick="toggleProduk(${p.id},${!p.is_active})">${p.is_active?"Nonaktifkan":"Aktifkan"}</button>
         </div>
         ${varian}
@@ -804,6 +753,13 @@ async function muatProdukAdmin(){
   }).join("");
 
   data.forEach(p=>(p.product_variants||[]).forEach(v=>hitungPreview(v.id)));
+}
+
+async function gantiUnggulan(id,nilai){
+  const {error}=await supabase.from("products").update({is_featured:nilai}).eq("id",id);
+  if(error){notif("notif-produk","gagal","Gagal: "+error.message);return;}
+  notif("notif-produk","sukses",nilai?"Produk ditandai unggulan.":"Tanda unggulan dihapus.");
+  muatProdukAdmin();
 }
 
 function mulaiEdit(id){
@@ -854,7 +810,7 @@ async function toggleProduk(id,aktifBaru){
 
 async function simpanVarian(vid){
   const nama=val("v-nama-"+vid),harga=parseInt(val("v-harga-"+vid),10),stok=val("v-stok-"+vid);
-  const qtyRaw=val("v-qty-"+vid);
+  const qtyRaw=val("v-qty-"+vid),garansiRaw=val("v-garansi-"+vid);
   const aktif=document.getElementById("v-aktif-"+vid).checked;
   const tipe=val("v-tipe-"+vid),nilai=parseInt(val("v-nilai-"+vid),10),labelPromo=val("v-label-"+vid);
   if(nama.length<1){notif("notif-produk","gagal","Nama varian wajib diisi.");return;}
@@ -864,6 +820,8 @@ async function simpanVarian(vid){
     qty=parseInt(qtyRaw,10);
     if(isNaN(qty)||qty<0){notif("notif-produk","gagal","Jumlah stok harus angka, minimal 0.");return;}
   }
+  const garansi=parseInt(garansiRaw,10);
+  if(isNaN(garansi)||garansi<0){notif("notif-produk","gagal","Garansi harus angka, minimal 0.");return;}
   let promoTipe=null,promoNilai=null;
   if(tipe){
     promoNilai=nilai;
@@ -873,7 +831,7 @@ async function simpanVarian(vid){
     promoTipe=tipe;
   }
   const {error}=await supabase.from("product_variants").update({
-    name:nama,price:harga,stok:qty,stock_status:stok,is_active:aktif,
+    name:nama,price:harga,stok:qty,stock_status:stok,is_active:aktif,warranty_days:garansi,
     promo_type:promoTipe,promo_value:promoNilai,promo_label:promoTipe&&labelPromo?labelPromo:null
   }).eq("id",vid);
   if(error){notif("notif-produk","gagal","Gagal menyimpan varian: "+error.message);return;}
@@ -935,8 +893,7 @@ async function hapusPromo(id){
 async function muatKeuangan(){
   const wadah=document.getElementById("daftar-keuangan");
   wadah.innerHTML='<p class="muted">Memuat catatan...</p>';
-  const {data,error}=await supabase.from("keuangan").select("id,tanggal,jenis,kategori,keterangan,jumlah")
-    .order("tanggal",{ascending:false}).order("created_at",{ascending:false}).limit(100);
+  const {data,error}=await supabase.from("keuangan").select("id,tanggal,jenis,kategori,keterangan,jumlah").order("tanggal",{ascending:false}).order("created_at",{ascending:false}).limit(100);
   if(error){wadah.innerHTML="";notif("notif-keuangan","gagal","Gagal memuat catatan: "+error.message);return;}
   keuanganCache=data||[];
   if(keuanganCache.length===0){wadah.innerHTML='<p class="muted">Belum ada catatan keuangan.</p>';return;}
@@ -990,10 +947,7 @@ async function simpanKlaim(){
   const {data:order,error:errOrder}=await supabase.from("orders").select("id,customer_name,customer_whatsapp").eq("order_code",kode).maybeSingle();
   if(errOrder){notif("notif-klaim","gagal","Gagal mencari pesanan: "+errOrder.message);return;}
   if(!order){notif("notif-klaim","gagal","Kode pesanan tidak ditemukan.");return;}
-  const {error}=await supabase.from("garansi_klaim").insert({
-    order_id:order.id,order_code:kode,customer_name:order.customer_name,customer_whatsapp:order.customer_whatsapp,
-    produk:produk||null,keterangan:kendala,status:status
-  });
+  const {error}=await supabase.from("garansi_klaim").insert({order_id:order.id,order_code:kode,customer_name:order.customer_name,customer_whatsapp:order.customer_whatsapp,produk:produk||null,keterangan:kendala,status:status});
   if(error){notif("notif-klaim","gagal","Gagal menyimpan klaim: "+error.message);return;}
   setVal("k-kode","");setVal("k-produk-klaim","");setVal("k-ket","");
   notif("notif-klaim","sukses","Klaim garansi tersimpan.");muatKlaim();
@@ -1002,9 +956,7 @@ async function simpanKlaim(){
 async function muatKlaim(){
   const wadah=document.getElementById("daftar-klaim");
   wadah.innerHTML='<p class="muted">Memuat klaim...</p>';
-  const {data,error}=await supabase.from("garansi_klaim")
-    .select("id,order_code,customer_name,customer_whatsapp,produk,keterangan,status,created_at")
-    .order("created_at",{ascending:false}).limit(100);
+  const {data,error}=await supabase.from("garansi_klaim").select("id,order_code,customer_name,customer_whatsapp,produk,keterangan,status,created_at").order("created_at",{ascending:false}).limit(100);
   if(error){wadah.innerHTML="";notif("notif-klaim","gagal","Gagal memuat klaim: "+error.message);return;}
   if(!data||data.length===0){wadah.innerHTML='<p class="muted">Belum ada klaim garansi.</p>';return;}
   wadah.innerHTML='<strong>Daftar klaim</strong>'+data.map(k=>{
@@ -1061,7 +1013,7 @@ async function simpanToko(){
   ];
   const {error}=await supabase.from("store_settings").upsert(rows,{onConflict:"key"});
   if(error){notif("notif-toko","gagal","Gagal menyimpan: "+error.message);return;}
-  notif("notif-toko","sukses","Info toko tersimpan. Website akan menampilkannya saat dibuka ulang.");
+  notif("notif-toko","sukses","Info toko tersimpan.");
 }
 
 async function muatFaqAdmin(){
@@ -1074,7 +1026,6 @@ async function muatFaqAdmin(){
     <div class="blok">
       <div class="baris"><strong>${esc(f.pertanyaan)}</strong><span class="status">${f.is_active?"Tampil":"Disembunyikan"}</span></div>
       <div class="muted">${esc(f.jawaban)}</div>
-      <div class="muted">Urutan: ${f.urutan}</div>
       <div class="baris" style="margin-top:8px">
         <button class="kecil" onclick="toggleFaq(${f.id},${!f.is_active})">${f.is_active?"Sembunyikan":"Tampilkan"}</button>
         <button class="kecil keluar" onclick="hapusFaq(${f.id})">Hapus</button>
@@ -1110,8 +1061,7 @@ async function hapusFaq(id){
 async function muatMetodeAdmin(){
   const wadah=document.getElementById("daftar-metode-admin");
   wadah.innerHTML='<p class="muted">Memuat metode...</p>';
-  const {data,error}=await supabase.from("payment_methods")
-    .select("id,code,label,account_name,account_number,image_url,is_active,sort_order").order("sort_order",{ascending:true});
+  const {data,error}=await supabase.from("payment_methods").select("id,code,label,account_name,account_number,image_url,is_active,sort_order").order("sort_order",{ascending:true});
   if(error){wadah.innerHTML="";notif("notif-pengaturan","gagal","Gagal memuat metode: "+error.message);return;}
   if(!data||data.length===0){wadah.innerHTML='<p class="muted">Belum ada metode.</p>';return;}
   data.forEach(m=>metodeCache[m.id]=m);
@@ -1147,9 +1097,7 @@ async function simpanMetode(id){
     try{imageUrl=await uploadGambar(fileInput.files[0],"qris");}
     catch(e){tombol.disabled=false;notif("notif-pengaturan","gagal","Gagal mengunggah gambar: "+e.message);return;}
   }
-  const {error}=await supabase.from("payment_methods").update({
-    label:label,account_name:an||null,account_number:nomor||null,image_url:imageUrl||null,is_active:aktif
-  }).eq("id",id);
+  const {error}=await supabase.from("payment_methods").update({label:label,account_name:an||null,account_number:nomor||null,image_url:imageUrl||null,is_active:aktif}).eq("id",id);
   tombol.disabled=false;
   if(error){notif("notif-pengaturan","gagal","Gagal menyimpan: "+error.message);return;}
   notif("notif-pengaturan","sukses",'Metode "'+label+'" tersimpan.');muatMetodeAdmin();
@@ -1162,7 +1110,7 @@ async function tambahMetode(){
   const {error}=await supabase.from("payment_methods").insert({code:kode,label:label,account_name:an||null,account_number:nomor||null,is_active:true,sort_order:99});
   if(error){notif("notif-tambah-metode","gagal","Gagal menambah metode: "+error.message);return;}
   ["m-kode","m-label","m-an","m-nomor"].forEach(id=>setVal(id,""));
-  notif("notif-tambah-metode","sukses","Metode baru ditambahkan. Unggah gambar QRIS di daftar metode jika ada.");
+  notif("notif-tambah-metode","sukses","Metode baru ditambahkan.");
   muatMetodeAdmin();
 }
 
