@@ -343,6 +343,7 @@
   const MAKS_QTY = 10;
   const KUNCI_KERANJANG = "kimmy_keranjang";
   const METODE_LABEL = { transfer_bank: "Transfer Bank", qris: "QRIS", dana: "DANA", bca: "Transfer BCA" };
+  const STATUS_KLAIM_PUBLIK = { diajukan: "Klaim diajukan", diproses: "Klaim sedang diproses", disetujui: "Klaim disetujui", ditolak: "Klaim ditolak", selesai: "Klaim selesai" };
   const STATUS_LABEL = {
     menunggu_pembayaran: "Menunggu pembayaran",
     menunggu_verifikasi: "Pembayaran sedang diverifikasi",
@@ -384,7 +385,6 @@
     return n;
   }
 
-  // Rumus ini sama dengan yang ada di database
   function hitungHargaAkhir(v) {
     if (!v.promo_type || !v.promo_value) return v.price;
     if (v.promo_type === "nominal") return Math.max(v.price - v.promo_value, 0);
@@ -808,8 +808,17 @@
     const items = (data.items || []).map(i =>
       '<div>' + escapeHTML(i.product_name) + " (" + escapeHTML(i.variant_name) + ") x" + i.quantity + " = " + rupiah(i.subtotal) + "</div>"
     ).join("");
+
     const infoBayar = data.status === "menunggu_pembayaran"
       ? '<div class="info-bayar">Silakan lakukan pembayaran lalu kirim bukti transfer ke WhatsApp toko.</div>'
+      : "";
+    const infoKirim = data.tanggal_kirim
+      ? '<div class="info-bayar">Produk dikirim: ' + escapeHTML(new Date(data.tanggal_kirim).toLocaleString("id-ID")) + '</div>'
+      : "";
+    const infoKlaim = (data.klaim || []).length
+      ? '<div class="info-bayar"><strong>Klaim garansi:</strong><br>' +
+        data.klaim.map(k => escapeHTML(STATUS_KLAIM_PUBLIK[k.status] || k.status)).join("<br>") +
+        '</div>'
       : "";
 
     hasil.innerHTML = `
@@ -820,7 +829,7 @@
         <div class="muted" style="margin-top:6px;">Metode: ${METODE_LABEL[data.payment_method] || escapeHTML(data.payment_method || "-")}</div>
         <div style="margin-top:6px;">${items}</div>
         <div class="total">Total: ${rupiah(data.total_amount)}</div>
-        ${infoBayar}
+        ${infoBayar}${infoKirim}${infoKlaim}
       </div>`;
   }
 
@@ -1113,4 +1122,4 @@
 </script>
 
 </body>
-  </html>
+</html>
