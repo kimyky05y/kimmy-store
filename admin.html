@@ -129,6 +129,8 @@ button:disabled{opacity:.6}
 
   <div id="bagian-pesanan" class="kartu sembunyi">
     <div class="baris"><strong>Pesanan Masuk</strong><button class="kecil" onclick="muatPesanan()">Refresh</button></div>
+    <label for="cari-pesanan">Cari kode pesanan</label>
+    <input id="cari-pesanan" type="search" placeholder="Contoh: KS-2610" oninput="muatPesanan()">
     <label for="filter">Filter status</label>
     <select id="filter" onchange="muatPesanan()">
       <option value="">Semua</option>
@@ -574,16 +576,18 @@ async function unduhLaporan(){
 
 async function muatPesanan(){
   const filter=val("filter");
+  const cari=val("cari-pesanan").toUpperCase();
   const wadah=document.getElementById("daftar-pesanan");
   notif("notif-pesanan","","");
   wadah.innerHTML='<p class="muted">Memuat pesanan...</p>';
   let q=supabase.from("orders")
-    .select("id,order_code,customer_name,customer_whatsapp,total_amount,status,payment_method,notes,catatan_admin,created_at,order_items(product_name,variant_name,quantity,subtotal)")
+    .select("id,order_code,customer_name,customer_whatsapp,total_amount,status,payment_method,notes,catatan_admin,tanggal_kirim,created_at,order_items(product_name,variant_name,quantity,subtotal)")
     .order("created_at",{ascending:false}).limit(50);
   if(filter)q=q.eq("status",filter);
+  if(cari)q=q.ilike("order_code","%"+cari+"%");
   const {data,error}=await q;
   if(error){wadah.innerHTML="";notif("notif-pesanan","gagal","Gagal memuat pesanan: "+error.message);return;}
-  if(!data||data.length===0){wadah.innerHTML='<p class="muted">Belum ada pesanan.</p>';return;}
+  if(!data||data.length===0){wadah.innerHTML='<p class="muted">Tidak ada pesanan yang cocok.</p>';return;}
   wadah.innerHTML=data.map(o=>{
     const items=(o.order_items||[]).map(i=>'<div class="item">'+esc(i.product_name)+" ("+esc(i.variant_name)+") x"+i.quantity+" = "+rupiah(i.subtotal)+"</div>").join("");
     const opsi=Object.keys(STATUS_LABEL).map(s=>'<option value="'+s+'"'+(s===o.status?" selected":"")+">"+STATUS_LABEL[s]+"</option>").join("");
@@ -596,6 +600,7 @@ async function muatPesanan(){
         <div class="muted">Metode: ${METODE_LABEL[o.payment_method]||esc(o.payment_method||"-")}</div>
         ${o.notes?'<div class="muted">Catatan pembeli: '+esc(o.notes)+"</div>":""}
         <div><strong>Total: ${rupiah(o.total_amount)}</strong></div>
+        ${o.tanggal_kirim?'<div class="muted">Terkirim: '+new Date(o.tanggal_kirim).toLocaleString("id-ID")+'</div>':'<button class="kecil" onclick="tandaiTerkirim('+o.id+')">Tandai terkirim</button>'}
         <div class="baris" style="margin-top:8px">
           <select style="width:auto;flex:1" onchange="ubahStatus(${o.id},this.value)">${opsi}</select>
           <a href="https://wa.me/${esc(o.customer_whatsapp)}" target="_blank"><button class="kecil" type="button">WhatsApp</button></a>
@@ -605,6 +610,13 @@ async function muatPesanan(){
         <button class="kecil" onclick="simpanCatatan(${o.id})">Simpan catatan</button>
       </div>`;
   }).join("");
+}
+
+async function tandaiTerkirim(id){
+  const {error}=await supabase.from("orders").update({tanggal_kirim:new Date().toISOString(),status:"selesai"}).eq("id",id);
+  if(error){notif("notif-pesanan","gagal","Gagal: "+error.message);return;}
+  notif("notif-pesanan","sukses","Pesanan ditandai terkirim dan selesai.");
+  muatPesanan();
 }
 
 async function ubahStatus(id,baru){
