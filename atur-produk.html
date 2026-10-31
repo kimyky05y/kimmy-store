@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atur Produk - KIMMY STORE</title>
+<style>
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#263F55;color:#263F55;margin:0;padding:16px}
+h1{color:#F7E9B8;text-align:center;font-size:1.3rem}
+.kartu{background:#fff;border-radius:14px;padding:14px;max-width:600px;margin:0 auto 12px}
+input{width:100%;padding:9px;margin-top:4px;border:1px solid #527A96;border-radius:10px;font-size:.95rem}
+label{display:block;font-size:.85rem;font-weight:bold;margin-top:8px}
+button{background:#263F55;color:#F7E9B8;border:none;border-radius:999px;padding:8px 14px;font-size:.85rem;cursor:pointer;margin-top:8px}
+button.unggulan-on{background:#D99A3D;color:#263F55;font-weight:bold}
+.varian{border-top:1px dashed #527A96;padding-top:8px;margin-top:8px}
+.muted{color:#527A96;font-size:.85rem}
+.notif{padding:8px;border-radius:10px;margin-top:8px;font-size:.9rem}
+.gagal{background:#F6D5D0;color:#8A2A1A}.sukses{background:#DFF3E4;color:#1E6B35}
+.sembunyi{display:none}
+</style>
+</head>
+<body>
+<h1>Atur Produk (Admin)</h1>
+
+<section id="login" class="kartu sembunyi">
+  <label for="email">Email</label>
+  <input id="email" type="email">
+  <label for="password">Password</label>
+  <input id="password" type="password">
+  <button onclick="masuk()">Masuk</button>
+  <div id="notif"></div>
+</section>
+
+<section id="isi" class="sembunyi"></section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const supabase = window.supabase.createClient(
+  "https://yftnynobgxvulhmgirdx.supabase.co",
+  "sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E"
+);
+
+function esc(t){return String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function notif(teks,jenis){
+  const el=document.getElementById("notif");
+  el.className="notif "+jenis;
+  el.textContent=teks;
+}
+
+async function masuk(){
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
+  const {error}=await supabase.auth.signInWithPassword({email,password});
+  if(error){notif("Login gagal: "+error.message,"gagal");return;}
+  tampilkanIsi();
+}
+
+async function tampilkanIsi(){
+  document.getElementById("login").classList.add("sembunyi");
+  document.getElementById("isi").classList.remove("sembunyi");
+  muatProduk();
+}
+
+async function muatProduk(){
+  const wadah=document.getElementById("isi");
+  wadah.innerHTML='<p class="muted">Memuat...</p>';
+  const {data,error}=await supabase.from("products")
+    .select("id,name,is_featured,product_variants(id,name,price,warranty_days)")
+    .order("id");
+  if(error){wadah.innerHTML="";notif("Gagal memuat: "+error.message,"gagal");return;}
+
+  wadah.innerHTML=(data||[]).map(p=>`
+    <div class="kartu">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <strong>${esc(p.name)}</strong>
+        <button class="${p.is_featured?"unggulan-on":""}" onclick="gantiUnggulan(${p.id},${!p.is_featured})">
+          ${p.is_featured?"★ Unggulan":"☆ Jadikan unggulan"}
+        </button>
+      </div>
+      ${(p.product_variants||[]).sort((a,b)=>a.id-b.id).map(v=>`
+        <div class="varian">
+          <div><strong>${esc(v.name)}</strong> · Rp ${Number(v.price).toLocaleString("id-ID")}</div>
+          <label>Garansi (hari, 0 = tanpa garansi)</label>
+          <input id="g-${v.id}" type="number" min="0" value="${v.warranty_days??0}">
+          <button onclick="simpanGaransi(${v.id})">Simpan garansi</button>
+        </div>`).join("")}
+    </div>`).join("")||'<p class="muted">Belum ada produk.</p>';
+  notif("","");
+}
+
+async function gantiUnggulan(id,nilai){
+  const {error}=await supabase.from("products").update({is_featured:nilai}).eq("id",id);
+  if(error){notif("Gagal: "+error.message,"gagal");return;}
+  notif(nilai?"Produk ditandai unggulan.":"Tanda unggulan dihapus.","sukses");
+  muatProduk();
+}
+
+async function simpanGaransi(vid){
+  const hari=parseInt(document.getElementById("g-"+vid).value,10);
+  if(isNaN(hari)||hari<0){notif("Garansi harus angka, minimal 0.","gagal");return;}
+  const {error}=await supabase.from("product_variants").update({warranty_days:hari}).eq("id",vid);
+  if(error){notif("Gagal: "+error.message,"gagal");return;}
+  notif("Garansi tersimpan.","sukses");
+}
+
+(async()=>{
+  const {data}=await supabase.auth.getSession();
+  if(data.session)tampilkanIsi();
+  else document.getElementById("login").classList.remove("sembunyi");
+})();
+</script>
+</body>
+</html>
