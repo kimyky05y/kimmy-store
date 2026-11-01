@@ -5,185 +5,174 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KIMMY STORE</title>
 <style>
-:root{--denim:#2F5486;--navy:#14213D;--maroon:#7A1F2B;--merah:#D62828;--biru:#1D4ED8;--kuning:#FFD23F;--perak:#C9D1DC;--putih:#fff;--hitam:#111;--pink:#FF6FA8}
+:root{--navy:#14213D;--denim:#2F5486;--biru:#1D4ED8;--merah:#D62828;--kuning:#FFD23F;--perak:#C9D1DC;--pink:#FF6FA8;--hitam:#111;--putih:#fff;--abu:#4A5B6E}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:110px}
-body{font-family:"Trebuchet MS","Arial Black",system-ui,sans-serif;color:var(--hitam);min-height:100vh;line-height:1.4;background-color:var(--denim);
-  background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(0,0,0,.09) 0 1px,transparent 1px 9px)}
-.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+html{scroll-behavior:smooth;scroll-padding-top:96px}
+body{font-family:"Trebuchet MS",Arial,system-ui,sans-serif;color:var(--hitam);min-height:100vh;line-height:1.4;background-color:var(--denim);
+  background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(0,0,0,.08) 0 1px,transparent 1px 9px);background-attachment:fixed;background-size:auto,auto}
+body.ada-bg{background-size:cover;background-position:center}
+.wrap{max-width:1200px;margin:0 auto;padding:0 14px}
 .sembunyi{display:none!important}
 a{color:inherit}
-/* teks outline putih ala sticker */
-.ol{color:#fff;font-weight:900;text-shadow:2px 0 0 var(--navy),-2px 0 0 var(--navy),0 2px 0 var(--navy),0 -2px 0 var(--navy),3px 3px 0 #000}
-.patch{background:#fff;border:4px solid #fff;outline:2px dashed var(--navy);outline-offset:-9px;box-shadow:4px 4px 0 #000;border-radius:6px;position:relative}
-.stiker{position:absolute;background:var(--merah);color:#fff;font-weight:900;text-align:center;display:grid;place-items:center;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);font-size:.7rem;z-index:3;padding-top:8px;width:72px;height:72px;transform:rotate(12deg)}
+.ol{color:#fff;font-weight:900;text-shadow:2px 0 0 var(--navy),-2px 0 0 var(--navy),0 2px 0 var(--navy),0 -2px 0 var(--navy),2px 2px 0 #000}
+.box{background:var(--putih);border:3px solid #000;box-shadow:4px 4px 0 #000;border-radius:10px}
 
 /* HEADER */
-header.top{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:4px solid var(--merah);box-shadow:0 4px 0 #000}
-.top-inner{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0}
-.logo{display:flex;align-items:center;gap:8px;text-decoration:none;font-size:1.25rem;letter-spacing:1px;white-space:nowrap}
-.logo-ikon{width:42px;height:42px;border-radius:50%;background:var(--kuning);border:3px solid #fff;display:grid;place-items:center;font-size:1.3rem;box-shadow:2px 2px 0 #000}
+header.top{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:4px solid var(--merah);box-shadow:0 3px 0 #000}
+.top-inner{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:#fff;white-space:nowrap;min-width:0}
+.logo-ikon{width:42px;height:42px;border-radius:50%;background:var(--kuning);border:3px solid #fff;display:grid;place-items:center;font-size:1.3rem;overflow:hidden;flex-shrink:0}
+.logo-ikon img{width:100%;height:100%;object-fit:cover}
+.logo .teks{font-weight:900;font-size:1.1rem;letter-spacing:.5px;overflow:hidden;text-overflow:ellipsis;max-width:200px}
 nav.menu{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 nav.menu::-webkit-scrollbar{display:none}
-nav.menu a{background:#fff;color:var(--hitam);text-decoration:none;font-size:.82rem;font-weight:900;padding:5px 11px;border-radius:999px;white-space:nowrap;border:2px solid #000;box-shadow:2px 2px 0 var(--merah)}
+nav.menu a{background:#fff;color:var(--hitam);text-decoration:none;font-size:.82rem;font-weight:900;padding:5px 11px;border-radius:999px;white-space:nowrap;border:2px solid #000}
 nav.menu a:hover{background:var(--kuning)}
 .tombol-keranjang{background:var(--merah);color:#fff;text-decoration:none;font-weight:900;padding:7px 14px;border-radius:999px;border:3px solid #fff;box-shadow:3px 3px 0 #000;white-space:nowrap}
 
 /* HERO */
-.hero{position:relative;margin:26px 0 18px;background:var(--navy);border:4px solid #fff;outline:3px dashed var(--merah);outline-offset:6px;padding:28px 22px;box-shadow:6px 6px 0 #000;border-radius:4px;transform:rotate(-.5deg)}
-.hero::before{content:"";position:absolute;top:-14px;left:50%;width:120px;height:26px;margin-left:-60px;background:repeating-linear-gradient(90deg,#9FB3C8 0 6px,#7D93AB 6px 12px);transform:rotate(-3deg);border-radius:2px;opacity:.9}
-.hero h1{font-size:clamp(1.8rem,5vw,2.8rem);line-height:1.1;text-transform:uppercase}
+.hero{background:var(--navy);color:#fff;border:3px solid #000;box-shadow:5px 5px 0 var(--merah);border-radius:12px;padding:22px 18px;margin:18px 0 14px}
+.hero h1{font-size:clamp(1.4rem,4vw,2.1rem);line-height:1.15;text-transform:uppercase}
 .hero h1 .pink{color:var(--pink)}
-.hero p{margin-top:10px;color:#fff;font-size:1rem;max-width:560px}
-.tombol-utama{display:inline-block;margin-top:16px;background:var(--kuning);color:var(--hitam);padding:12px 24px;border-radius:999px;text-decoration:none;font-weight:900;border:3px solid #000;box-shadow:4px 4px 0 var(--merah)}
-.stiker-hero{top:-22px;right:-8px;background:var(--merah);width:88px;height:88px;font-size:.85rem}
-.banner-promo{display:grid;gap:10px;margin-top:16px}
+.hero p{margin-top:8px;font-size:.95rem;max-width:560px}
+.tombol-utama{display:inline-block;margin-top:14px;background:var(--kuning);color:var(--hitam);padding:10px 22px;border-radius:999px;text-decoration:none;font-weight:900;border:3px solid #000;box-shadow:3px 3px 0 var(--merah)}
+.banner-promo{display:grid;gap:8px;margin-top:14px}
 .banner-promo:empty{display:none}
-.promo-item{background:var(--kuning);color:var(--hitam);padding:10px 14px;border:3px solid #000;box-shadow:3px 3px 0 #000;transform:rotate(-1deg);border-radius:4px}
+.promo-item{background:var(--kuning);color:var(--hitam);padding:8px 12px;border:2px solid #000;border-radius:8px;font-size:.9rem}
 
 /* KEUNGGULAN */
-.keunggulan{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:24px 0 4px}
-.keunggulan div{background:#fff;border:3px solid #000;box-shadow:4px 4px 0 var(--merah);padding:16px 8px 12px;text-align:center;font-weight:900;font-size:.9rem;border-radius:6px}
-.keunggulan div:nth-child(odd){transform:rotate(-2deg)}
-.keunggulan div:nth-child(even){transform:rotate(2deg)}
-.ikon-lingkaran{width:56px;height:56px;margin:0 auto 6px;border-radius:50%;background:var(--perak);border:3px solid #000;display:grid;place-items:center;font-size:1.5rem;box-shadow:inset -3px -3px 0 rgba(0,0,0,.2)}
+.keunggulan{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:14px 0 4px}
+.keunggulan div{background:#fff;border:2px solid #000;box-shadow:3px 3px 0 var(--merah);padding:12px 6px;text-align:center;font-weight:900;font-size:.85rem;border-radius:8px}
+.ikon-lingkaran{width:46px;height:46px;margin:0 auto 4px;border-radius:50%;background:var(--perak);border:2px solid #000;display:grid;place-items:center;font-size:1.25rem}
 
 /* JUDUL */
-.judul{display:inline-block;font-size:1.5rem;text-transform:uppercase;margin:34px 0 14px;color:#fff;font-weight:900;text-shadow:2px 2px 0 #000,-1px -1px 0 var(--navy)}
+.judul{font-size:1.2rem;text-transform:uppercase;margin:26px 0 10px;color:#fff;font-weight:900;text-shadow:2px 2px 0 #000}
 .judul::before{content:"★ "}
 .judul::after{content:" ★";color:var(--kuning)}
 
 /* KATEGORI */
-.kat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.kat-kartu{background:var(--kuning);border:3px solid #000;box-shadow:4px 4px 0 #000;padding:14px 10px;text-align:left;cursor:pointer;font-family:inherit;border-radius:6px;position:relative;color:var(--hitam)}
-.kat-kartu:nth-child(odd){transform:rotate(-1.5deg)}
-.kat-kartu:nth-child(even){transform:rotate(1.5deg);background:var(--perak)}
-.kat-kartu:hover{transform:scale(1.03) rotate(0)}
-.kat-kartu b{display:block;font-size:1rem;text-transform:uppercase}
-.kat-kartu span{font-size:.78rem;font-weight:700}
+.kat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.kat-kartu{background:var(--kuning);border:2px solid #000;box-shadow:3px 3px 0 #000;padding:10px 12px;text-align:left;cursor:pointer;font-family:inherit;border-radius:8px;color:var(--hitam)}
+.kat-kartu:nth-child(even){background:var(--perak)}
+.kat-kartu b{display:block;font-size:.92rem;text-transform:uppercase}
+.kat-kartu span{font-size:.75rem;font-weight:700}
 
-/* KARTU PRODUK */
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 14px;margin-top:14px}
-.card{display:flex;flex-direction:column;padding:10px 10px 12px;box-shadow:5px 5px 0 #000;transition:transform .15s}
-.card:nth-child(3n+1){transform:rotate(-1.2deg)}
-.card:nth-child(3n+2){transform:rotate(1deg)}
-.card:nth-child(3n){transform:rotate(-.4deg)}
-.card:hover{transform:rotate(0) translateY(-3px)}
-.card::before{content:"";position:absolute;top:-11px;left:50%;width:70px;height:20px;margin-left:-35px;background:repeating-linear-gradient(90deg,#9FB3C8 0 5px,#7D93AB 5px 10px);transform:rotate(-4deg);z-index:2}
-.foto{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border:3px solid #000;background:var(--perak)}
-.foto-kosong{aspect-ratio:1/1;display:grid;place-items:center;background:repeating-conic-gradient(#222 0 25%,#fff 0 50%) 0 0/28px 28px;font-size:2.6rem;border:3px solid #000}
-.isi{padding:10px 2px 0;display:flex;flex-direction:column;flex:1}
-.kategori{font-size:.72rem;font-weight:900;color:var(--biru);text-transform:uppercase;letter-spacing:.5px}
-.card h3{font-size:1.02rem;margin:2px 0 4px;line-height:1.2;text-transform:uppercase}
-.mulai{font-weight:900;font-size:.95rem;color:var(--maroon)}
-.badge-promo{position:absolute;top:-14px;right:-10px;z-index:4;background:var(--merah);color:#fff;font-weight:900;font-size:.72rem;width:66px;height:66px;display:grid;place-items:center;text-align:center;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);text-shadow:1px 1px 0 #000;transform:rotate(10deg)}
-.tombol-detail{margin-top:auto;width:100%;background:none;border:none;padding-top:10px;cursor:pointer}
-.tombol-detail span{display:block;background:var(--navy);color:#fff;text-align:center;padding:9px;border-radius:999px;font-weight:900;font-size:.88rem;border:3px solid #000;box-shadow:3px 3px 0 var(--kuning);text-transform:uppercase}
+/* KARTU PRODUK (ukuran normal) */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:10px}
+.card{position:relative;background:#fff;border:2px solid #000;box-shadow:3px 3px 0 #000;border-radius:10px;display:flex;flex-direction:column;overflow:hidden}
+.foto{width:100%;aspect-ratio:4/3;object-fit:contain;display:block;background:#fff;border-bottom:2px solid #000}
+.foto-kosong{aspect-ratio:4/3;display:grid;place-items:center;background:repeating-conic-gradient(#222 0 25%,#fff 0 50%) 0 0/24px 24px;font-size:2.2rem;border-bottom:2px solid #000}
+.isi{padding:10px 10px 12px;display:flex;flex-direction:column;flex:1}
+.kategori{font-size:.68rem;font-weight:900;color:var(--biru);text-transform:uppercase;letter-spacing:.4px}
+.card h3{font-size:.95rem;margin:2px 0 4px;line-height:1.2;text-transform:uppercase}
+.mulai{font-weight:900;font-size:.9rem;color:var(--merah)}
+.badge-promo{position:absolute;top:8px;right:8px;z-index:2;background:var(--merah);color:#fff;font-weight:900;font-size:.68rem;padding:3px 8px;border:2px solid #000;border-radius:999px}
+.tombol-detail{margin-top:auto;width:100%;background:none;border:none;padding-top:8px;cursor:pointer}
+.tombol-detail span{display:block;background:var(--navy);color:#fff;text-align:center;padding:8px;border-radius:999px;font-weight:900;font-size:.82rem;border:2px solid #000;box-shadow:2px 2px 0 var(--kuning);text-transform:uppercase}
 .tombol-detail:hover span{background:var(--biru)}
 
-/* TAB KATEGORI & CARI */
-.chips{display:flex;gap:8px;overflow-x:auto;padding:6px 2px 12px;scrollbar-width:none}
+/* CHIP & CARI */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{border:3px solid #000;background:#fff;color:var(--hitam);padding:6px 14px;border-radius:999px;font-size:.9rem;cursor:pointer;white-space:nowrap;font-family:inherit;font-weight:900;box-shadow:2px 2px 0 #000}
+.chip{border:2px solid #000;background:#fff;color:var(--hitam);padding:5px 13px;border-radius:999px;font-size:.85rem;cursor:pointer;white-space:nowrap;font-family:inherit;font-weight:900;box-shadow:2px 2px 0 #000}
 .chip.aktif{background:var(--merah);color:#fff}
-.cari{width:100%;padding:12px 18px;border-radius:999px;border:3px solid #000;font-size:.98rem;font-family:inherit;background:#fff;margin-bottom:6px;box-shadow:3px 3px 0 var(--kuning)}
+.cari{width:100%;padding:10px 16px;border-radius:999px;border:2px solid #000;font-size:.95rem;font-family:inherit;background:#fff;margin-bottom:4px;box-shadow:2px 2px 0 var(--kuning)}
 .cari:focus{outline:none;border-color:var(--merah)}
 
 /* PROMO */
-.promo-list{display:grid;gap:12px}
-.promo-baris{background:#fff;border:3px solid #000;box-shadow:4px 4px 0 var(--merah);padding:12px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-radius:6px}
-.promo-baris:nth-child(odd){transform:rotate(-.5deg)}
-.promo-baris:nth-child(even){transform:rotate(.5deg)}
-.promo-baris .info-promo{flex:1;min-width:160px}
+.promo-list{display:grid;gap:10px}
+.promo-baris{background:#fff;border:2px solid #000;box-shadow:3px 3px 0 var(--merah);padding:10px 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-radius:8px}
+.promo-baris .info-promo{flex:1;min-width:150px}
 .promo-baris small{font-weight:700;color:var(--biru)}
 .coret{color:#777;text-decoration:line-through;font-size:.8rem;display:block;font-weight:700}
-.akhir{color:var(--merah);font-weight:900;font-size:1.05rem}
-.tombol-kecil{background:var(--navy);color:#fff;border:3px solid #000;padding:7px 14px;border-radius:999px;font-size:.84rem;cursor:pointer;font-family:inherit;font-weight:900;box-shadow:2px 2px 0 var(--kuning)}
+.akhir{color:var(--merah);font-weight:900}
+.tombol-kecil{background:var(--navy);color:#fff;border:2px solid #000;padding:6px 12px;border-radius:999px;font-size:.82rem;cursor:pointer;font-family:inherit;font-weight:900;box-shadow:2px 2px 0 var(--kuning)}
 .tombol-kecil:disabled{opacity:.45;box-shadow:none}
 
 /* KATALOG + KERANJANG */
-.shop{display:grid;gap:26px;align-items:start;margin-top:10px}
-.cart{background:#fff;border:4px solid #000;box-shadow:6px 6px 0 var(--merah);padding:18px;border-radius:6px;position:relative}
-.cart::before{content:"";position:absolute;top:-12px;right:24px;width:80px;height:22px;background:repeating-linear-gradient(90deg,#9FB3C8 0 5px,#7D93AB 5px 10px);transform:rotate(5deg)}
-.cart h2{font-size:1.3rem;text-transform:uppercase;margin-bottom:8px}
-.item-keranjang{border-top:3px dashed var(--navy);padding:12px 0}
-.kontrol{display:flex;align-items:center;gap:8px;margin-top:8px}
-.kontrol button{background:var(--navy);color:#fff;border:2px solid #000;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:1rem;font-weight:900}
-.kontrol .hapus{background:var(--merah);width:auto;border-radius:999px;padding:4px 12px;margin-left:auto;font-size:.8rem}
-.subtotal{text-align:right;font-weight:900;margin-top:6px}
-.total{border-top:3px solid #000;margin-top:10px;padding-top:10px;text-align:right;font-size:1.1rem;font-weight:900}
-.formulir{margin-top:12px;border-top:3px dashed var(--navy);padding-top:12px}
-.formulir label,.kotak label{display:block;font-size:.92rem;margin-top:12px;font-weight:900;text-transform:uppercase}
-input[type=text],input[type=tel],input[type=number],input[type=search],textarea,select{width:100%;padding:11px 12px;margin-top:5px;border:3px solid #000;border-radius:10px;font-size:.95rem;font-family:inherit;background:#fff}
+.shop{display:grid;gap:22px;align-items:start;margin-top:8px}
+.cart{background:#fff;border:3px solid #000;box-shadow:5px 5px 0 var(--merah);padding:16px;border-radius:10px}
+.cart h2{font-size:1.1rem;text-transform:uppercase;margin-bottom:6px}
+.item-keranjang{border-top:2px dashed var(--navy);padding:10px 0}
+.kontrol{display:flex;align-items:center;gap:8px;margin-top:6px}
+.kontrol button{background:var(--navy);color:#fff;border:2px solid #000;border-radius:50%;width:28px;height:28px;cursor:pointer;font-weight:900}
+.kontrol .hapus{background:var(--merah);width:auto;border-radius:999px;padding:4px 10px;margin-left:auto;font-size:.78rem}
+.subtotal{text-align:right;font-weight:900;margin-top:4px}
+.total{border-top:3px solid #000;margin-top:8px;padding-top:8px;text-align:right;font-weight:900}
+.formulir{margin-top:10px;border-top:2px dashed var(--navy);padding-top:10px}
+.formulir label,.kotak label{display:block;font-size:.85rem;margin-top:10px;font-weight:900;text-transform:uppercase}
+input[type=text],input[type=tel],input[type=number],input[type=search],textarea,select{width:100%;padding:10px 11px;margin-top:4px;border:2px solid #000;border-radius:8px;font-size:.95rem;font-family:inherit;background:#fff}
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--merah)}
-.detail-metode{margin-top:10px;background:#EAF2FB;border:3px dashed var(--navy);border-radius:10px;padding:14px;font-size:.92rem}
-.nomor{font-size:1.15rem;font-weight:900;letter-spacing:1px;margin-top:4px;word-break:break-all}
-.tombol-salin{margin-top:8px;background:var(--biru);color:#fff;border:2px solid #000;border-radius:999px;padding:7px 14px;font-size:.84rem;cursor:pointer;font-family:inherit;font-weight:900}
-.qris-img{display:block;width:100%;max-width:240px;margin:10px auto 0;border:4px solid #000;background:#fff;padding:6px;box-shadow:3px 3px 0 var(--merah)}
-.tombol-checkout,.tombol-cek{width:100%;margin-top:16px;background:var(--kuning);color:var(--hitam);border:3px solid #000;border-radius:999px;padding:13px;font-weight:900;font-size:1.05rem;cursor:pointer;font-family:inherit;box-shadow:4px 4px 0 var(--merah);text-transform:uppercase}
+.detail-metode{margin-top:8px;background:#EAF2FB;border:2px dashed var(--navy);border-radius:8px;padding:12px;font-size:.9rem}
+.nomor{font-size:1.05rem;font-weight:900;letter-spacing:1px;margin-top:4px;word-break:break-all}
+.tombol-salin{margin-top:8px;background:var(--biru);color:#fff;border:2px solid #000;border-radius:999px;padding:6px 14px;font-size:.82rem;cursor:pointer;font-family:inherit;font-weight:900}
+.qris-img{display:block;width:100%;max-width:220px;margin:8px auto 0;border:3px solid #000;background:#fff;padding:4px}
+.tombol-checkout,.tombol-cek{width:100%;margin-top:14px;background:var(--kuning);color:var(--hitam);border:2px solid #000;border-radius:999px;padding:11px;font-weight:900;font-size:1rem;cursor:pointer;font-family:inherit;box-shadow:3px 3px 0 var(--merah);text-transform:uppercase}
 .tombol-checkout:disabled,.tombol-cek:disabled{opacity:.6;box-shadow:none}
-.notif{margin-top:12px;padding:11px 14px;border:3px solid #000;border-radius:8px;font-size:.92rem;font-weight:700}
+.notif{margin-top:10px;padding:10px 12px;border:2px solid #000;border-radius:8px;font-size:.9rem;font-weight:700}
 .sukses{background:#D9F7E4}
 .gagal{background:#FFD6D6}
-.muted{color:#4A5B6E;font-size:.88rem;font-weight:700}
-.info-bayar{background:var(--kuning);border:3px solid #000;border-radius:8px;padding:12px;margin-top:10px;font-size:.92rem;font-weight:700}
-.status-cek{display:inline-block;font-weight:900;padding:5px 14px;border-radius:999px;background:var(--perak);border:2px solid #000;margin-top:6px}
+.muted{color:var(--abu);font-size:.86rem;font-weight:700}
+.info-bayar{background:var(--kuning);border:2px solid #000;border-radius:8px;padding:10px;margin-top:8px;font-size:.9rem;font-weight:700}
+.status-cek{display:inline-block;font-weight:900;padding:4px 12px;border-radius:999px;background:var(--perak);border:2px solid #000;margin-top:4px}
 
 /* PANEL */
-.kotak{background:#fff;border:4px solid #000;box-shadow:6px 6px 0 var(--kuning);padding:20px;margin-top:30px;border-radius:6px;position:relative}
-.kotak::before{content:"";position:absolute;top:-12px;left:30px;width:90px;height:22px;background:repeating-linear-gradient(90deg,#9FB3C8 0 5px,#7D93AB 5px 10px);transform:rotate(-6deg)}
-.kotak h2{font-size:1.3rem;text-transform:uppercase;margin-bottom:8px}
-.kotak p{font-size:.96rem;line-height:1.6;margin-bottom:8px}
+.kotak{background:#fff;border:3px solid #000;box-shadow:5px 5px 0 var(--kuning);padding:18px;margin-top:24px;border-radius:10px}
+.kotak h2{font-size:1.15rem;text-transform:uppercase;margin-bottom:8px}
+.kotak p{font-size:.95rem;line-height:1.6;margin-bottom:8px}
 #kode-cek{text-transform:uppercase}
-.faq-item{border-top:3px dashed var(--navy);padding:12px 0}
-.faq-item strong{display:block;margin-bottom:4px;font-size:1.02rem}
-.faq-item div{font-size:.93rem;line-height:1.55}
-.tombol-wa{display:inline-block;margin-top:10px;background:#1E6B35;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:900;border:3px solid #000;box-shadow:4px 4px 0 var(--kuning)}
-.kembali a{display:inline-block;margin:16px 0 8px;color:#fff;text-decoration:none;font-weight:900;background:var(--merah);padding:8px 16px;border-radius:999px;border:3px solid #000;box-shadow:3px 3px 0 #000;text-transform:uppercase}
-.hero-halaman{margin:16px 0 0}
-.grid-tentang{display:grid;gap:22px;margin-top:22px}
+.faq-item{border-top:2px dashed var(--navy);padding:10px 0}
+.faq-item strong{display:block;margin-bottom:3px}
+.faq-item div{font-size:.92rem;line-height:1.5}
+.tombol-wa{display:inline-block;margin-top:8px;background:#1E6B35;color:#fff;padding:10px 20px;border-radius:999px;text-decoration:none;font-weight:900;border:2px solid #000;box-shadow:3px 3px 0 var(--kuning)}
+.kembali a{display:inline-block;margin:14px 0 6px;color:#fff;text-decoration:none;font-weight:900;background:var(--merah);padding:7px 14px;border-radius:999px;border:2px solid #000;box-shadow:2px 2px 0 #000;text-transform:uppercase;font-size:.9rem}
+.grid-tentang{display:grid;gap:18px;margin-top:14px}
 
 /* MODAL */
 .modal{position:fixed;inset:0;background:rgba(20,33,61,.7);display:flex;align-items:flex-end;justify-content:center;z-index:50}
-.modal-isi{background:var(--denim);width:100%;max-width:520px;border:4px solid #000;border-radius:14px 14px 0 0;padding:18px;max-height:90vh;overflow-y:auto;position:relative}
-.modal-body-putih{background:#fff;border:3px solid #000;padding:14px;border-radius:8px}
-.modal-tutup{position:absolute;top:10px;right:12px;background:var(--merah);color:#fff;border:3px solid #000;border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:1rem;font-weight:900;box-shadow:2px 2px 0 #000}
-.modal-foto{width:100%;aspect-ratio:1/1;object-fit:cover;border:3px solid #000;background:var(--perak)}
-.opsi{display:flex;align-items:center;gap:10px;background:#fff;border:3px solid #000;border-radius:10px;padding:12px 14px;margin-top:10px;cursor:pointer;font-size:.95rem}
-.opsi:has(input:checked){background:var(--kuning);box-shadow:3px 3px 0 var(--merah)}
+.modal-isi{background:var(--denim);width:100%;max-width:500px;border:3px solid #000;border-radius:14px 14px 0 0;padding:16px;max-height:90vh;overflow-y:auto;position:relative}
+.modal-body-putih{background:#fff;border:2px solid #000;padding:14px;border-radius:8px}
+.modal-tutup{position:absolute;top:10px;right:12px;background:var(--merah);color:#fff;border:2px solid #000;border-radius:50%;width:34px;height:34px;cursor:pointer;font-weight:900}
+.modal-foto{width:100%;aspect-ratio:4/3;object-fit:contain;border:2px solid #000;background:#fff}
+.opsi{display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #000;border-radius:8px;padding:10px 12px;margin-top:8px;cursor:pointer;font-size:.92rem}
+.opsi:has(input:checked){background:var(--kuning)}
 .opsi.nonaktif{opacity:.5}
 .opsi input{width:auto}
 .opsi .teks{flex:1}
-.detail-harga{margin-top:14px;font-size:1.2rem;font-weight:900}
-.tombol-utama-modal{width:100%;margin-top:16px;background:var(--merah);color:#fff;border:3px solid #000;border-radius:999px;padding:13px;font-weight:900;font-size:1.05rem;cursor:pointer;font-family:inherit;box-shadow:4px 4px 0 #000;text-transform:uppercase}
+.detail-harga{margin-top:12px;font-size:1.1rem;font-weight:900}
+.tombol-utama-modal{width:100%;margin-top:12px;background:var(--merah);color:#fff;border:2px solid #000;border-radius:999px;padding:11px;font-weight:900;font-size:1rem;cursor:pointer;font-family:inherit;box-shadow:3px 3px 0 #000;text-transform:uppercase}
 .tombol-utama-modal:disabled{opacity:.6;box-shadow:none}
-#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--merah);color:#fff;padding:11px 18px;border:3px solid #000;border-radius:8px;font-size:.92rem;font-weight:900;z-index:60;display:none;box-shadow:3px 3px 0 #000;max-width:90vw;text-align:center}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--merah);color:#fff;padding:10px 16px;border:2px solid #000;border-radius:8px;font-size:.9rem;font-weight:900;z-index:60;display:none;max-width:90vw;text-align:center}
 
 /* FOOTER */
-footer{margin-top:44px;background:var(--navy);color:#fff;text-align:center;padding:34px 0 40px;border-top:6px solid var(--merah)}
-footer strong{font-size:1.4rem;letter-spacing:1px}
-footer .sub{opacity:.8;margin-top:4px;font-size:.88rem}
-footer nav{margin-top:14px;display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
-footer nav a{color:#fff;text-decoration:none;font-size:.9rem;font-weight:900;background:var(--denim);padding:5px 12px;border-radius:999px;border:2px solid #fff}
+footer{margin-top:36px;background:var(--navy);color:#fff;text-align:center;padding:26px 0 30px;border-top:5px solid var(--merah)}
+footer strong{font-size:1.2rem}
+footer .sub{opacity:.8;margin-top:4px;font-size:.85rem}
+footer nav{margin-top:12px;display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
+footer nav a{color:#fff;text-decoration:none;font-size:.85rem;font-weight:900;background:var(--denim);padding:4px 12px;border-radius:999px;border:2px solid #fff}
 
-@media(min-width:640px){
+/* RESPONSIF: HP, tablet, laptop */
+@media(min-width:560px){
   .keunggulan{grid-template-columns:repeat(4,1fr)}
   .kat-grid{grid-template-columns:repeat(4,1fr)}
-  .grid{grid-template-columns:repeat(3,1fr);gap:26px 22px}
+  .grid{grid-template-columns:repeat(3,1fr);gap:16px}
   .grid-tentang{grid-template-columns:1fr 1fr}
   .modal{align-items:center}
   .modal-isi{border-radius:14px}
-  .hero{padding:44px 40px}
+  .hero{padding:32px 32px}
 }
 @media(min-width:900px){
-  .shop{grid-template-columns:minmax(0,1fr) 370px;gap:30px}
-  .cart{position:sticky;top:110px;max-height:calc(100vh - 130px);overflow-y:auto}
+  .shop{grid-template-columns:minmax(0,1fr) 340px;gap:24px}
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .cart{position:sticky;top:100px;max-height:calc(100vh - 120px);overflow-y:auto}
   nav.menu{overflow:visible}
 }
+@media(min-width:1100px){
+  .grid{grid-template-columns:repeat(4,1fr)}
+}
 @media(max-width:480px){
-  .logo span.teks{display:none}
-  nav.menu a{font-size:.74rem;padding:5px 8px}
-  .stiker-hero{width:70px;height:70px;font-size:.72rem}
+  .logo .teks{display:none}
+  nav.menu a{font-size:.74rem;padding:4px 8px}
 }
 </style>
 </head>
@@ -191,7 +180,10 @@ footer nav a{color:#fff;text-decoration:none;font-size:.9rem;font-weight:900;bac
 
 <header class="top">
   <div class="wrap top-inner">
-    <a class="logo ol" href="#beranda"><span class="logo-ikon">🐱</span><span class="teks">KIMMY STORE</span></a>
+    <a class="logo" href="#beranda">
+      <span class="logo-ikon" id="logo-box">🐱</span>
+      <span class="teks" id="nama-header">KIMMY STORE</span>
+    </a>
     <nav class="menu">
       <a href="#produk">Katalog</a>
       <a href="#cek-status">Cek Status</a>
@@ -205,12 +197,10 @@ footer nav a{color:#fff;text-decoration:none;font-size:.9rem;font-weight:900;bac
 </header>
 
 <main class="wrap" id="toko">
-
   <section class="hero" id="beranda">
-    <div class="stiker stiker-hero">PUNK<br>PREMIUM!</div>
-    <h1 class="ol">Digital Premium <span class="pink">Anti Ribet</span> ⭐</h1>
+    <h1 class="ol">Produk Digital <span class="pink">Pilihan Terbaik</span> untuk Kamu</h1>
     <p>Akun premium dan aplikasi pilihan. Proses cepat, dan siap dikirim setelah pembayaran diverifikasi.</p>
-    <a class="tombol-utama" href="#produk">Lihat Katalog ⚡</a>
+    <a class="tombol-utama" href="#produk">Lihat Katalog</a>
     <div class="banner-promo" id="banner-promo"></div>
   </section>
 
@@ -269,7 +259,7 @@ footer nav a{color:#fff;text-decoration:none;font-size:.9rem;font-weight:900;bac
 
 <section id="p-tentang" class="wrap sembunyi">
   <div class="kembali"><a href="#beranda">← Kembali ke toko</a></div>
-  <div class="hero hero-halaman"><h1 class="ol">Tentang KIMMY STORE ⭐</h1><p id="info-tentang">Memuat...</p></div>
+  <div class="hero"><h1 class="ol">Tentang Kami</h1><p id="info-tentang">Memuat...</p></div>
   <div class="kotak"><h2>🕒 Jam Operasional</h2><p id="info-jam">-</p></div>
 </section>
 
@@ -307,8 +297,8 @@ footer nav a{color:#fff;text-decoration:none;font-size:.9rem;font-weight:900;bac
 
 <footer>
   <div class="wrap">
-    <strong>🐱 KIMMY STORE</strong>
-    <div class="sub">Digital products &amp; app services · Trusted &amp; cute since 2022</div>
+    <strong id="nama-footer">KIMMY STORE</strong>
+    <div class="sub">Digital products &amp; app services</div>
     <nav>
       <a href="#beranda">Beranda</a><a href="#produk">Katalog</a><a href="#cek-status">Cek Status</a>
       <a href="#tentang">Tentang</a><a href="#faq">FAQ</a><a href="#kebijakan">Kebijakan</a><a href="#kontak">Kontak</a>
@@ -353,14 +343,14 @@ window.addEventListener("hashchange",aturHalaman);
 
 /* PRODUK */
 function indeks(){semuaProduk.forEach(p=>(p.product_variants||[]).forEach(v=>{daftarVarian[v.id]={produk:p.name,varian:v.name,harga:hargaAkhir(v),normal:v.price,stok:v.stok,stock_status:v.stock_status,warranty_days:v.warranty_days,promo_label:v.promo_label,promo_type:v.promo_type,promo_value:v.promo_value}}))}
-function fotoHTML(p,kls){return p.image_url?'<img class="'+kls+'" src="'+esc(p.image_url)+'" alt="'+esc(p.name)+'">':'<div class="foto-kosong">🐱</div>'}
+function fotoHTML(p,kls){return p.image_url?'<img class="'+kls+'" src="'+esc(p.image_url)+'" alt="'+esc(p.name)+'" loading="lazy">':'<div class="foto-kosong">🐱</div>'}
 function kartuHTML(p){
   const av=aktifVarian(p),min=av.length?Math.min(...av.map(hargaAkhir)):null;
-  return `<div class="card patch">${adaPromo(p)?'<span class="badge-promo">PROMO!</span>':""}${fotoHTML(p,"foto")}<div class="isi"><div class="kategori">${esc(p.categories?p.categories.name:"")}</div><h3>${esc(p.name)}</h3><div class="mulai">${min!==null?"mulai "+rupiah(min):"Belum ada varian"}</div><button class="tombol-detail" onclick="bukaDetail(${p.id})"><span>Lihat detail</span></button></div></div>`;
+  return `<div class="card">${adaPromo(p)?'<span class="badge-promo">PROMO!</span>':""}${fotoHTML(p,"foto")}<div class="isi"><div class="kategori">${esc(p.categories?p.categories.name:"")}</div><h3>${esc(p.name)}</h3><div class="mulai">${min!==null?"mulai "+rupiah(min):"Belum ada varian"}</div><button class="tombol-detail" onclick="bukaDetail(${p.id})"><span>Lihat detail</span></button></div></div>`;
 }
 function renderKategoriHome(){
   const h={};semuaProduk.forEach(p=>{const n=p.categories?p.categories.name:"Lainnya";h[n]=(h[n]||0)+1});
-  document.getElementById("kat-grid").innerHTML=Object.keys(h).map(n=>`<button class="kat-kartu" onclick="pilihKategori('${esc(n).replace(/'/g,"\\'")}')"><b>★ ${esc(n)}</b><span>${h[n]} produk</span></button>`).join("")||'<p class="muted">Belum ada kategori.</p>';
+  document.getElementById("kat-grid").innerHTML=Object.keys(h).map(n=>`<button class="kat-kartu" onclick="pilihKategori('${esc(n).replace(/'/g,"\\'")}')"><b>${esc(n)}</b><span>${h[n]} produk</span></button>`).join("")||'<p class="muted">Belum ada kategori.</p>';
 }
 function pilihKategori(n){kategoriAktif=n;kataCari="";document.getElementById("cari").value="";renderChips();renderProduk();location.hash="#produk"}
 function renderUnggulan(){
@@ -392,7 +382,7 @@ function bukaDetail(pid){
   detailPid=pid;const av=aktifVarian(p);
   const pilihan=av.map(v=>{const h=habis(v),d=daftarVarian[v.id],sisa=(v.stok!=null&&!h)?" · sisa "+v.stok:"",g=v.warranty_days>0?" · garansi "+v.warranty_days+" hari":"";
     return `<label class="opsi ${h?"nonaktif":""}"><input type="radio" name="vd" value="${v.id}" ${h?"disabled":""}><span class="teks"><b>${esc(v.name)}</b><br><span class="muted">${h?"Habis":"Tersedia"+sisa+g}</span></span><span>${rupiah(d.harga)}</span></label>`}).join("");
-  document.getElementById("modal-body").innerHTML=`${fotoHTML(p,"modal-foto")}<div class="kategori" style="margin-top:14px">${esc(p.categories?p.categories.name:"")}</div><h3 style="font-size:1.4rem;margin:2px 0 6px;text-transform:uppercase">${esc(p.name)}</h3>${p.description?'<p class="muted">'+esc(p.description)+'</p>':""}<div>${pilihan||'<p class="muted">Belum ada varian.</p>'}</div><div class="detail-harga" id="dh"></div><div class="kontrol" style="margin-top:14px"><span style="font-weight:900">Jumlah</span><button onclick="qtyDetail(-1)">−</button><span id="qd">1</span><button onclick="qtyDetail(1)">+</button></div><button class="tombol-utama-modal" id="tbd" onclick="tambahDariDetail()">Tambah ke keranjang</button>`;
+  document.getElementById("modal-body").innerHTML=`${fotoHTML(p,"modal-foto")}<div class="kategori" style="margin-top:10px">${esc(p.categories?p.categories.name:"")}</div><h3 style="font-size:1.2rem;margin:2px 0 6px;text-transform:uppercase">${esc(p.name)}</h3>${p.description?'<p class="muted">'+esc(p.description)+'</p>':""}<div>${pilihan||'<p class="muted">Belum ada varian.</p>'}</div><div class="detail-harga" id="dh"></div><div class="kontrol" style="margin-top:12px"><span style="font-weight:900">Jumlah</span><button onclick="qtyDetail(-1)">−</button><span id="qd">1</span><button onclick="qtyDetail(1)">+</button></div><button class="tombol-utama-modal" id="tbd" onclick="tambahDariDetail()">Tambah ke keranjang</button>`;
   const pertama=av.find(v=>!habis(v));detailVid=pertama?pertama.id:null;
   if(pertama)document.querySelector('input[name="vd"][value="'+pertama.id+'"]').checked=true;
   document.querySelectorAll('input[name="vd"]').forEach(r=>r.addEventListener("change",()=>{detailVid=Number(r.value);detailQty=1;updDetail()}));
@@ -435,7 +425,7 @@ function totalKeranjang(){return keranjang.reduce((s,i)=>s+i.harga*i.qty,0)}
 function renderKeranjang(){
   document.getElementById("jumlah-keranjang").textContent=keranjang.reduce((s,i)=>s+i.qty,0);
   const w=document.getElementById("isi-keranjang"),f=document.getElementById("form-checkout");
-  if(!keranjang.length){w.innerHTML='<p class="muted">Keranjang masih kosong. Pilih produk di katalog ✎</p>';f.style.display="none";return}
+  if(!keranjang.length){w.innerHTML='<p class="muted">Keranjang masih kosong. Pilih produk di katalog.</p>';f.style.display="none";return}
   f.style.display="block";
   w.innerHTML=keranjang.map(i=>`<div class="item-keranjang"><div><strong>${esc(i.produk)}</strong><br>${esc(i.varian)} · ${rupiah(i.harga)}</div><div class="kontrol"><button onclick="ubahQty(${i.id},-1)">−</button><span>${i.qty}</span><button onclick="ubahQty(${i.id},1)">+</button><button class="hapus" onclick="hapusItem(${i.id})">Hapus</button></div><div class="subtotal">${rupiah(i.harga*i.qty)}</div></div>`).join("")+`<div class="total">Total: <strong>${rupiah(totalKeranjang())}</strong></div>`;
 }
@@ -452,7 +442,7 @@ function tampilDetailMetode(){
   if(!m){w.innerHTML="";return}
   let h="";
   if(m.account_number)h+=`<div>a.n. ${esc(m.account_name||"-")}</div><div class="nomor">${esc(m.account_number)}</div><button type="button" class="tombol-salin" onclick="salinNomor('${esc(m.account_number)}',this)">Salin nomor</button>`;
-  if(m.image_url)h+=`<a href="${esc(m.image_url)}" target="_blank"><img class="qris-img" src="${esc(m.image_url)}" alt="Gambar ${esc(m.label)}"></a><div class="muted" style="text-align:center;margin-top:6px">Ketuk gambar untuk memperbesar</div>`;
+  if(m.image_url)h+=`<a href="${esc(m.image_url)}" target="_blank"><img class="qris-img" src="${esc(m.image_url)}" alt="Gambar ${esc(m.label)}"></a><div class="muted" style="text-align:center;margin-top:4px">Ketuk gambar untuk memperbesar</div>`;
   if(!m.account_number&&!m.image_url)h="Setelah checkout, admin akan mengirim instruksi pembayaran lewat WhatsApp.";
   w.innerHTML=h;
 }
@@ -494,11 +484,17 @@ async function cekStatus(){
   h.innerHTML=`<div style="margin-top:12px"><strong>${esc(data.order_code)}</strong><div class="muted">${new Date(data.created_at).toLocaleString("id-ID")}</div><div class="status-cek">${STATUS_LABEL[data.status]||esc(data.status)}</div><div style="margin-top:8px">${items}</div><div class="total">Total: ${rupiah(data.total_amount)}</div>${bayar}${kirim}${klaim}</div>`;
 }
 
-/* DATA TOKO */
+/* DATA TOKO & IDENTITAS */
 async function muatInfo(){
-  const {data}=await supabase.from("store_settings").select("key,value").in("key",["wa_admin","tentang","jam_operasional","kebijakan_pembayaran","kebijakan_garansi","kebijakan_pengembalian"]);
+  const {data}=await supabase.from("store_settings").select("key,value").in("key",["wa_admin","tentang","jam_operasional","kebijakan_pembayaran","kebijakan_garansi","kebijakan_pengembalian","nama_toko","logo_url","bg_url"]);
   const i={};(data||[]).forEach(r=>i[r.key]=r.value);
   waAdmin=normWA(i.wa_admin||"");
+  const nama=i.nama_toko||"KIMMY STORE";
+  document.getElementById("nama-header").textContent=nama;
+  document.getElementById("nama-footer").textContent=nama;
+  document.title=nama;
+  if(i.logo_url)document.getElementById("logo-box").innerHTML='<img src="'+esc(i.logo_url)+'" alt="Logo">';
+  if(i.bg_url){document.body.classList.add("ada-bg");document.body.style.backgroundImage='linear-gradient(rgba(20,33,61,.45),rgba(20,33,61,.45)),url("'+i.bg_url.replace(/"/g,"%22")+'")'}
   document.getElementById("tombol-hubungi").href=waAdmin?"https://wa.me/"+waAdmin:"#";
   document.getElementById("info-kontak").textContent=i.wa_admin||"-";
   document.getElementById("info-jam").textContent=i.jam_operasional||"-";
