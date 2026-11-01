@@ -304,6 +304,22 @@ button:disabled{opacity:.6}
       </div>
 
       <div class="kartu">
+        <strong class="judul-kartu">Tampilan Header & Hero</strong>
+        <p class="muted">Teks dan foto ini tampil di header dan bagian atas toko. Kosongkan kolom untuk memakai teks bawaan.</p>
+        <label for="h-tagline">Tagline di header (kecil, di bawah nama)</label>
+        <input id="h-tagline" type="text" placeholder="Contoh: Digital Products & More">
+        <label for="h-judul">Judul besar di bagian atas</label>
+        <input id="h-judul" type="text" placeholder="Contoh: Produk Digital Pilihan Terbaik untuk Kamu">
+        <label for="h-teks">Teks keterangan di bawah judul</label>
+        <textarea id="h-teks" rows="2" placeholder="Contoh: Akun premium dan aplikasi pilihan..."></textarea>
+        <label for="h-foto">Foto hero (opsional, maks 2 MB, sebaiknya kotak)</label>
+        <img id="h-preview-foto" class="preview-kecil sembunyi" alt="Pratinjau foto hero">
+        <input id="h-foto" type="file" accept="image/*" onchange="previewFile('h-foto','h-preview-foto')">
+        <button id="tombol-tampilan" onclick="simpanTampilan()">Simpan tampilan</button>
+        <div id="notif-tampilan"></div>
+      </div>
+
+      <div class="kartu">
         <strong class="judul-kartu">Info Toko</strong>
         <label for="t-wa">Nomor WhatsApp toko</label>
         <input id="t-wa" type="tel" placeholder="Contoh: 085722994977">
@@ -373,7 +389,7 @@ const BAGIAN=["ringkasan","laporan","pesanan","produk","kategori","promo","keuan
 const KUNCI_ID="kimmy_admin_last_order_id";
 
 const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let editId=null,editGambar=null,keuanganCache=[],timerPesanan=null,idTerakhir=0,produkCache={},metodeCache={},idCache={};
+let editId=null,editGambar=null,keuanganCache=[],timerPesanan=null,idTerakhir=0,produkCache={},metodeCache={},idCache={},tampilanCache={};
 
 function rupiah(a){return "Rp "+Number(a||0).toLocaleString("id-ID")}
 function esc(t){return String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
@@ -440,6 +456,34 @@ async function simpanIdentitas(){
     setVal("id-logo","");setVal("id-bg","");
     muatIdentitas();muatTopbar();
   }catch(e){notif("notif-identitas","gagal","Gagal menyimpan: "+(e.message||e))}
+  tb.disabled=false;
+}
+async function muatTampilan(){
+  const {data,error}=await supabase.from("store_settings").select("key,value").in("key",["tagline_header","hero_judul","hero_teks","hero_foto"]);
+  if(error)return notif("notif-tampilan","gagal","Gagal memuat tampilan: "+error.message);
+  tampilanCache={};(data||[]).forEach(r=>tampilanCache[r.key]=r.value);
+  setVal("h-tagline",tampilanCache.tagline_header||"");
+  setVal("h-judul",tampilanCache.hero_judul||"");
+  setVal("h-teks",tampilanCache.hero_teks||"");
+  const img=document.getElementById("h-preview-foto");
+  if(tampilanCache.hero_foto){img.src=tampilanCache.hero_foto;img.classList.remove("sembunyi")}else img.classList.add("sembunyi");
+}
+async function simpanTampilan(){
+  const tb=document.getElementById("tombol-tampilan");tb.disabled=true;
+  try{
+    let foto=tampilanCache.hero_foto||"";
+    const f=document.getElementById("h-foto").files[0];if(f)foto=await uploadGambar(f,"hero");
+    const {error}=await supabase.from("store_settings").upsert([
+      {key:"tagline_header",value:val("h-tagline")},
+      {key:"hero_judul",value:val("h-judul")},
+      {key:"hero_teks",value:val("h-teks")},
+      {key:"hero_foto",value:foto}
+    ],{onConflict:"key"});
+    if(error)throw error;
+    notif("notif-tampilan","sukses","Tampilan tersimpan. Buka ulang toko untuk melihat perubahannya.");
+    setVal("h-foto","");
+    muatTampilan();
+  }catch(e){notif("notif-tampilan","gagal","Gagal menyimpan: "+(e.message||e))}
   tb.disabled=false;
 }
 
@@ -756,7 +800,7 @@ async function hapusKlaim(id){if(!confirm("Hapus klaim ini?"))return;const {erro
 
 /* INFO TOKO & FAQ */
 async function muatToko(){
-  muatIdentitas();
+  muatIdentitas();muatTampilan();
   const {data,error}=await supabase.from("store_settings").select("key,value");
   if(error)return notif("notif-toko","gagal","Gagal memuat info toko: "+error.message);
   const m={};(data||[]).forEach(r=>m[r.key]=r.value);
@@ -825,4 +869,4 @@ async function cekSesi(){
 cekSesi();
 </script>
 </body>
-  </html>
+          </html>
