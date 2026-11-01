@@ -5,65 +5,81 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin KIMMY STORE</title>
 <style>
-:root{--navy:#263F55;--dusty:#527A96;--cream:#F7E9B8;--mustard:#D99A3D;--terracotta:#B5654A}
+:root{--denim:#2F5486;--navy:#14213D;--merah:#D62828;--biru:#1D4ED8;--kuning:#FFD23F;--perak:#C9D1DC;--pink:#FF6FA8;--hitam:#111}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--navy);color:var(--navy);min-height:100vh;padding:16px}
-h1{color:var(--cream);text-align:center;font-size:1.4rem;margin-bottom:4px}
-.sub{color:var(--cream);text-align:center;opacity:.8;font-size:.85rem;margin-bottom:14px}
-.kartu{background:#fff;border-radius:14px;padding:16px;max-width:700px;margin:0 auto 14px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
-label{display:block;font-size:.85rem;font-weight:bold;margin-top:10px}
-input,select,textarea{width:100%;padding:9px;margin-top:4px;border:1px solid var(--dusty);border-radius:10px;font-size:.95rem;font-family:inherit}
-input[type=file]{padding:7px;background:#F4F8FB}
-button{background:var(--navy);color:var(--cream);border:none;border-radius:999px;padding:9px 16px;font-size:.9rem;cursor:pointer;margin-top:10px}
-button.kecil{padding:6px 12px;font-size:.8rem;margin-top:0}
-button.keluar{background:var(--terracotta)}
-button.on{background:var(--mustard);color:var(--navy);font-weight:bold}
-button:disabled{opacity:.6}
-.tabs{display:flex;gap:8px;max-width:700px;margin:0 auto 14px;flex-wrap:wrap}
-.tabs button{flex:1;margin-top:0;background:var(--dusty);min-width:90px}
-.tabs button.aktif{background:var(--cream);color:var(--navy)}
-.badge-notif{display:inline-block;background:var(--terracotta);color:#fff;border-radius:999px;padding:1px 7px;font-size:.7rem;margin-left:4px;font-weight:bold}
-.banner-baru{max-width:700px;margin:0 auto 14px;background:var(--mustard);border-radius:14px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.banner-baru button{margin-top:0}
-.blok{border-top:1px dashed var(--dusty);padding-top:12px;margin-top:12px}
-.baris{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}
-.kode{font-weight:bold}
-.status{display:inline-block;font-size:.75rem;padding:3px 10px;border-radius:999px;background:#E8EEF3}
-.item,.muted{font-size:.85rem;color:#444;margin-top:3px}
-.muted{color:var(--dusty)}
-.kotak-kecil{background:#F4F8FB;border-radius:10px;padding:10px;margin-top:10px}
-.promo-box{background:#FFF6E5;border-radius:10px;padding:8px;margin-top:8px;border:1px dashed var(--mustard)}
-.preview-harga{font-size:.85rem;color:#1E6B35;font-weight:bold;margin-top:6px;min-height:1em}
-.notif{padding:10px;border-radius:10px;margin-top:10px;font-size:.9rem}
-.gagal{background:#F6D5D0;color:#8A2A1A}
-.sukses{background:#DFF3E4;color:#1E6B35}
+body{font-family:"Trebuchet MS","Arial Black",system-ui,sans-serif;color:var(--hitam);min-height:100vh;line-height:1.4;background-color:var(--denim);
+  background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(0,0,0,.09) 0 1px,transparent 1px 9px)}
+.ol{color:#fff;font-weight:900;text-shadow:2px 0 0 var(--navy),-2px 0 0 var(--navy),0 2px 0 var(--navy),0 -2px 0 var(--navy),3px 3px 0 #000}
 .sembunyi{display:none!important}
-.cb{display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:normal;margin:0}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:4px solid var(--merah);box-shadow:0 4px 0 #000;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.topbar h1{font-size:1.15rem;letter-spacing:1px;white-space:nowrap}
+.topbar .sub{font-size:.75rem;color:var(--kuning);font-weight:700}
+.btn-keluar{background:var(--merah);color:#fff;border:3px solid #000;border-radius:999px;padding:6px 14px;font-weight:900;cursor:pointer;font-family:inherit;box-shadow:2px 2px 0 #000;font-size:.85rem;margin-top:0}
+
+/* TAB MENU: satu baris, bisa digeser */
+.tabs{position:sticky;top:64px;z-index:25;display:flex;gap:8px;overflow-x:auto;padding:12px 14px;background:var(--denim);scrollbar-width:none;border-bottom:3px dashed rgba(255,255,255,.35)}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:0 0 auto;background:#fff;color:var(--hitam);border:3px solid #000;border-radius:999px;padding:7px 14px;font-weight:900;font-size:.85rem;cursor:pointer;font-family:inherit;box-shadow:2px 2px 0 #000;white-space:nowrap;margin-top:0}
+.tabs button.aktif{background:var(--kuning);box-shadow:3px 3px 0 var(--merah);transform:translateY(-2px)}
+.badge-notif{display:inline-block;background:var(--merah);color:#fff;border-radius:999px;padding:0 7px;font-size:.7rem;margin-left:4px;border:2px solid #000}
+
+.wrapadm{max-width:760px;margin:0 auto;padding:14px}
+.banner-baru{background:var(--kuning);border:3px solid #000;box-shadow:4px 4px 0 var(--merah);border-radius:8px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;transform:rotate(-.5deg)}
+.banner-baru button{margin-top:0}
+
+/* KARTU */
+.kartu{background:#fff;border:4px solid #000;box-shadow:6px 6px 0 var(--kuning);border-radius:6px;padding:16px;margin:0 0 16px;position:relative}
+.kartu::before{content:"";position:absolute;top:-11px;left:22px;width:70px;height:20px;background:repeating-linear-gradient(90deg,#9FB3C8 0 5px,#7D93AB 5px 10px);transform:rotate(-4deg)}
+.kartu > strong:first-child,.judul-kartu{display:block;font-size:1.2rem;text-transform:uppercase;margin-bottom:6px}
+label{display:block;font-size:.8rem;font-weight:900;margin-top:10px;text-transform:uppercase}
+input,select,textarea{width:100%;padding:9px 11px;margin-top:4px;border:3px solid #000;border-radius:10px;font-size:.95rem;font-family:inherit;background:#fff}
+input[type=file]{padding:7px;background:#EAF2FB}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--merah)}
+button{background:var(--navy);color:#fff;border:3px solid #000;border-radius:999px;padding:9px 16px;font-size:.9rem;cursor:pointer;margin-top:10px;font-family:inherit;font-weight:900;box-shadow:2px 2px 0 var(--merah)}
+button.kecil{padding:6px 12px;font-size:.8rem;margin-top:0}
+button.keluar{background:var(--merah);box-shadow:2px 2px 0 #000}
+button.on{background:var(--kuning);color:var(--hitam)}
+button:disabled{opacity:.6}
+.baris{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}
+.blok{border-top:3px dashed var(--navy);padding-top:12px;margin-top:12px}
+.kode{font-weight:900}
+.status{display:inline-block;font-size:.75rem;padding:3px 10px;border-radius:999px;background:var(--perak);border:2px solid #000;font-weight:900}
+.item,.muted{font-size:.85rem;color:#333;margin-top:3px}
+.muted{color:#4A5B6E;font-weight:700}
+.kotak-kecil{background:#EAF2FB;border:3px dashed var(--navy);border-radius:10px;padding:10px;margin-top:10px}
+.promo-box{background:#FFF6D6;border:3px dashed var(--merah);border-radius:10px;padding:8px;margin-top:8px}
+.preview-harga{font-size:.85rem;color:#1E6B35;font-weight:900;margin-top:6px;min-height:1em}
+.notif{padding:10px;border:3px solid #000;border-radius:10px;margin-top:10px;font-size:.9rem;font-weight:700}
+.gagal{background:#FFD6D6}
+.sukses{background:#D9F7E4}
+.cb{display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:700;margin:0;text-transform:none}
 .cb input{width:auto;margin:0}
-.thumb{width:52px;height:52px;object-fit:cover;border-radius:10px;background:#F4F8FB;flex-shrink:0}
-.preview{width:100%;max-height:200px;object-fit:contain;border-radius:10px;margin-top:8px;background:#F4F8FB}
-.baris-produk{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px dashed var(--dusty)}
+.thumb{width:52px;height:52px;object-fit:cover;border:3px solid #000;background:var(--perak);flex-shrink:0}
+.preview{width:100%;max-height:200px;object-fit:contain;border:3px solid #000;margin-top:8px;background:#EAF2FB}
+.baris-produk{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:3px dashed var(--navy)}
 .baris-produk .info{flex:1;min-width:0}
-.grid-kpi{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px}
-.kpi{background:#F4F8FB;border-radius:12px;padding:12px}
-.kpi .label{font-size:.75rem;color:var(--dusty)}
-.kpi .angka{font-size:1.05rem;font-weight:bold;margin-top:4px;word-break:break-word}
-.kpi.untung{background:#DFF3E4}.kpi.untung .angka{color:#1E6B35}
-.kpi.rugi{background:#F6D5D0}.kpi.rugi .angka{color:#8A2A1A}
 .baris-tanggal{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid-kpi{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px}
+.kpi{background:#EAF2FB;border:3px solid #000;border-radius:10px;padding:10px;box-shadow:3px 3px 0 var(--kuning)}
+.kpi .label{font-size:.75rem;font-weight:900;color:var(--biru);text-transform:uppercase}
+.kpi .angka{font-size:1.1rem;font-weight:900;margin-top:4px;word-break:break-word}
+.kpi.untung{background:#D9F7E4}
+.kpi.rugi{background:#FFD6D6}
 .grafik{display:flex;align-items:flex-end;gap:8px;height:190px;margin-top:12px}
 .kolom{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;min-width:0}
-.nilai{font-size:.68rem;color:var(--dusty);height:18px;white-space:nowrap;font-weight:bold}
-.batang-wrap{flex:1;width:100%;display:flex;align-items:flex-end;background:#F4F8FB;border-radius:10px;overflow:hidden}
-.batang{width:100%;background:var(--mustard);border-radius:10px 10px 0 0}
-.hari{font-size:.72rem;margin-top:5px;font-weight:bold}
+.nilai{font-size:.68rem;font-weight:900;height:18px;white-space:nowrap}
+.batang-wrap{flex:1;width:100%;display:flex;align-items:flex-end;background:#EAF2FB;border:2px solid #000;overflow:hidden}
+.batang{width:100%;background:var(--merah);border-top:2px solid #000}
+.hari{font-size:.72rem;margin-top:5px;font-weight:900}
+.kartu-login{max-width:420px;margin:40px auto}
 </style>
 </head>
 <body>
-<h1>Admin KIMMY STORE</h1>
-<p class="sub">Halaman khusus pemilik toko</p>
 
-<section id="halaman-login" class="kartu sembunyi">
+<section id="halaman-login" class="kartu kartu-login sembunyi">
+  <div class="ol" style="text-align:center;font-size:1.5rem;margin:-6px 0 10px;color:var(--navy);text-shadow:none">🐱 Admin KIMMY STORE</div>
   <label for="email">Email</label>
   <input id="email" type="email" autocomplete="username">
   <label for="password">Password</label>
@@ -73,46 +89,53 @@ button:disabled{opacity:.6}
 </section>
 
 <section id="halaman-admin" class="sembunyi">
-  <div id="banner-baru" class="banner-baru sembunyi">
-    <span id="teks-banner"></span>
-    <button class="kecil" onclick="bukaPesananBaru()">Lihat pesanan</button>
-  </div>
-
-  <div class="tabs">
-    <button id="tab-ringkasan" class="aktif" onclick="showTab('ringkasan')">Ringkasan</button>
-    <button id="tab-laporan" onclick="showTab('laporan')">Laporan</button>
-    <button id="tab-pesanan" onclick="showTab('pesanan')">Pesanan<span id="badge-pesanan" class="badge-notif sembunyi">0</span></button>
-    <button id="tab-produk" onclick="showTab('produk')">Produk</button>
-    <button id="tab-kategori" onclick="showTab('kategori')">Kategori</button>
-    <button id="tab-promo" onclick="showTab('promo')">Promo</button>
-    <button id="tab-keuangan" onclick="showTab('keuangan')">Keuangan</button>
-    <button id="tab-garansi" onclick="showTab('garansi')">Garansi</button>
-    <button id="tab-toko" onclick="showTab('toko')">Info Toko</button>
-    <button id="tab-pengaturan" onclick="showTab('pengaturan')">Pembayaran</button>
-    <button class="keluar" onclick="logout()">Keluar</button>
-  </div>
-
-  <!-- RINGKASAN -->
-  <div id="bagian-ringkasan" class="kartu">
-    <div class="baris">
-      <strong>Ringkasan</strong>
-      <select id="periode" style="width:auto" onchange="muatRingkasan()">
-        <option value="semua">Semua waktu</option>
-        <option value="hari">Hari ini</option>
-        <option value="7hari">7 hari terakhir</option>
-        <option value="bulan">Bulan ini</option>
-      </select>
+  <header class="topbar">
+    <div>
+      <h1 class="ol">🐱 ADMIN KIMMY</h1>
+      <div class="sub">Halaman khusus pemilik toko</div>
     </div>
-    <p class="muted">Pendapatan hanya dihitung dari pesanan Diproses dan Selesai.</p>
-    <div id="isi-ringkasan"></div>
-    <div class="blok"><strong>Penjualan 7 hari terakhir</strong><div id="grafik-7hari"></div></div>
-    <div id="notif-ringkasan"></div>
-  </div>
+    <button class="btn-keluar" onclick="logout()">Keluar</button>
+  </header>
 
-  <!-- LAPORAN -->
-  <div id="bagian-laporan" class="sembunyi">
-    <div class="kartu">
-      <strong>Laporan Penjualan</strong>
+  <nav class="tabs">
+    <button id="tab-ringkasan" class="aktif" onclick="showTab('ringkasan')">📊 Ringkasan</button>
+    <button id="tab-laporan" onclick="showTab('laporan')">🧾 Laporan</button>
+    <button id="tab-pesanan" onclick="showTab('pesanan')">🛍️ Pesanan<span id="badge-pesanan" class="badge-notif sembunyi">0</span></button>
+    <button id="tab-produk" onclick="showTab('produk')">📦 Produk</button>
+    <button id="tab-kategori" onclick="showTab('kategori')">🏷️ Kategori</button>
+    <button id="tab-promo" onclick="showTab('promo')">🔥 Promo</button>
+    <button id="tab-keuangan" onclick="showTab('keuangan')">💰 Keuangan</button>
+    <button id="tab-garansi" onclick="showTab('garansi')">🛡️ Garansi</button>
+    <button id="tab-toko" onclick="showTab('toko')">🏪 Info Toko</button>
+    <button id="tab-pengaturan" onclick="showTab('pengaturan')">💳 Pembayaran</button>
+  </nav>
+
+  <div class="wrapadm">
+    <div id="banner-baru" class="banner-baru sembunyi">
+      <span id="teks-banner"></span>
+      <button class="kecil" onclick="bukaPesananBaru()">Lihat pesanan</button>
+    </div>
+
+    <!-- RINGKASAN -->
+    <div id="bagian-ringkasan" class="kartu">
+      <div class="baris">
+        <strong class="judul-kartu">Ringkasan</strong>
+        <select id="periode" style="width:auto" onchange="muatRingkasan()">
+          <option value="semua">Semua waktu</option>
+          <option value="hari">Hari ini</option>
+          <option value="7hari">7 hari terakhir</option>
+          <option value="bulan">Bulan ini</option>
+        </select>
+      </div>
+      <p class="muted">Pendapatan hanya dihitung dari pesanan Diproses dan Selesai.</p>
+      <div id="isi-ringkasan"></div>
+      <div class="blok"><strong>Penjualan 7 hari terakhir</strong><div id="grafik-7hari"></div></div>
+      <div id="notif-ringkasan"></div>
+    </div>
+
+    <!-- LAPORAN -->
+    <div id="bagian-laporan" class="kartu sembunyi">
+      <strong class="judul-kartu">Laporan Penjualan</strong>
       <p class="muted">Pendapatan hanya dihitung dari pesanan Diproses dan Selesai.</p>
       <div class="baris-tanggal">
         <div><label for="lap-dari">Dari tanggal</label><input id="lap-dari" type="date"></div>
@@ -125,192 +148,192 @@ button:disabled{opacity:.6}
       <div id="notif-laporan"></div>
       <div id="isi-laporan"></div>
     </div>
-  </div>
 
-  <!-- PESANAN -->
-  <div id="bagian-pesanan" class="kartu sembunyi">
-    <div class="baris"><strong>Pesanan Masuk</strong><button class="kecil" onclick="muatPesanan()">Refresh</button></div>
-    <label for="cari-pesanan">Cari kode pesanan</label>
-    <input id="cari-pesanan" type="search" placeholder="Contoh: KS-2610" oninput="muatPesanan()">
-    <label for="filter">Filter status</label>
-    <select id="filter" onchange="muatPesanan()">
-      <option value="">Semua</option>
-      <option value="menunggu_pembayaran">Menunggu pembayaran</option>
-      <option value="menunggu_verifikasi">Menunggu verifikasi</option>
-      <option value="diproses">Diproses</option>
-      <option value="selesai">Selesai</option>
-      <option value="dibatalkan">Dibatalkan</option>
-    </select>
-    <div id="notif-pesanan"></div>
-    <div id="daftar-pesanan"></div>
-  </div>
-
-  <!-- PRODUK -->
-  <div id="bagian-produk" class="sembunyi">
-    <div class="kartu">
-      <div class="baris">
-        <strong>Daftar produk</strong>
-        <button class="kecil" onclick="bukaFormBaru()">+ Tambah produk baru</button>
-      </div>
-      <input id="cari-produk" type="search" placeholder="Cari nama produk..." oninput="renderDaftarProduk()" style="margin-top:8px">
-      <div id="daftar-produk-admin"></div>
-    </div>
-
-    <div id="panel-produk" class="kartu sembunyi">
-      <div class="baris">
-        <strong id="judul-panel">Tambah Produk Baru</strong>
-        <button class="kecil keluar" onclick="tutupPanel()">Tutup</button>
-      </div>
-      <label for="p-nama">Nama produk</label>
-      <input id="p-nama" type="text" placeholder="Contoh: Netflix Premium">
-      <label for="p-kategori">Kategori</label>
-      <select id="p-kategori"></select>
-      <label for="p-deskripsi">Deskripsi</label>
-      <textarea id="p-deskripsi" rows="2"></textarea>
-      <label for="p-gambar">Foto produk (maks 2 MB)</label>
-      <input id="p-gambar" type="file" accept="image/*" onchange="previewFile('p-gambar','p-preview')">
-      <img id="p-preview" class="preview sembunyi" alt="Pratinjau foto produk">
-      <div class="baris" style="margin-top:8px">
-        <button id="tombol-simpan-produk" onclick="simpanProduk()">Simpan produk</button>
-      </div>
-      <div id="notif-produk"></div>
-      <div id="area-varian"></div>
-    </div>
-  </div>
-
-  <!-- KATEGORI -->
-  <div id="bagian-kategori" class="sembunyi">
-    <div class="kartu">
-      <strong>Tambah Kategori</strong>
-      <p class="muted">Kalau kategori dihapus, produk di dalamnya menjadi tanpa kategori.</p>
-      <label for="kat-baru">Nama kategori</label>
-      <input id="kat-baru" type="text" placeholder="Contoh: Aplikasi Premium">
-      <button onclick="tambahKategori()">Tambah kategori</button>
-      <div id="notif-kategori"></div>
-    </div>
-    <div class="kartu" id="daftar-kategori"></div>
-  </div>
-
-  <!-- PROMO -->
-  <div id="bagian-promo" class="sembunyi">
-    <div class="kartu">
-      <strong>Tambah Promo Teks (Banner)</strong>
-      <p class="muted">Untuk promo kata-kata, seperti "Beli 2 gratis 1". Tidak mengubah harga.</p>
-      <label for="pr-judul">Judul promo</label>
-      <input id="pr-judul" type="text" placeholder="Contoh: Beli 2 gratis 1">
-      <label for="pr-deskripsi">Keterangan (opsional)</label>
-      <textarea id="pr-deskripsi" rows="2"></textarea>
-      <div class="baris">
-        <label class="cb"><input type="checkbox" id="pr-aktif" checked> Tampilkan di toko</label>
-        <button onclick="simpanPromo()">Tambah promo</button>
-      </div>
-      <div id="notif-promo"></div>
-    </div>
-    <div class="kartu" id="daftar-promo"></div>
-  </div>
-
-  <!-- KEUANGAN -->
-  <div id="bagian-keuangan" class="sembunyi">
-    <div class="kartu">
-      <div class="baris"><strong>Catat Keuangan</strong><button class="kecil" onclick="exportKeuangan()">Unduh CSV</button></div>
-      <p class="muted">Pemasukan dari pesanan sudah otomatis. Di sini catat pemasukan lain dan pengeluaran.</p>
-      <label for="k-tanggal">Tanggal</label>
-      <input id="k-tanggal" type="date">
-      <label for="k-jenis">Jenis</label>
-      <select id="k-jenis">
-        <option value="pengeluaran">Pengeluaran</option>
-        <option value="pemasukan">Pemasukan lain</option>
-      </select>
-      <label for="k-kategori">Kategori</label>
-      <input id="k-kategori" type="text" placeholder="Contoh: Pembelian akun, Iklan">
-      <label for="k-keterangan">Keterangan</label>
-      <input id="k-keterangan" type="text" placeholder="Contoh: Beli akun dari supplier">
-      <label for="k-jumlah">Jumlah (Rp)</label>
-      <input id="k-jumlah" type="number" min="0" placeholder="Contoh: 20000">
-      <button onclick="simpanKeuangan()">Simpan catatan</button>
-      <div id="notif-keuangan"></div>
-    </div>
-    <div class="kartu" id="daftar-keuangan"></div>
-  </div>
-
-  <!-- GARANSI -->
-  <div id="bagian-garansi" class="sembunyi">
-    <div class="kartu">
-      <strong>Catat Klaim Garansi</strong>
-      <p class="muted">Masukkan kode pesanan. Data pelanggan diambil otomatis.</p>
-      <label for="k-kode">Kode pesanan</label>
-      <input id="k-kode" type="text" placeholder="KS-XXXXXX-XXXXX" style="text-transform:uppercase">
-      <label for="k-produk-klaim">Produk (opsional)</label>
-      <input id="k-produk-klaim" type="text" placeholder="Contoh: Netflix Premium 1 Bulan">
-      <label for="k-ket">Kendala</label>
-      <textarea id="k-ket" rows="2" placeholder="Contoh: akun tidak bisa login"></textarea>
-      <label for="k-status-klaim">Status awal</label>
-      <select id="k-status-klaim">
-        <option value="diajukan">Diajukan</option>
+    <!-- PESANAN -->
+    <div id="bagian-pesanan" class="kartu sembunyi">
+      <div class="baris"><strong class="judul-kartu">Pesanan Masuk</strong><button class="kecil" onclick="muatPesanan()">Refresh</button></div>
+      <label for="cari-pesanan">Cari kode pesanan</label>
+      <input id="cari-pesanan" type="search" placeholder="Contoh: KS-2610" oninput="muatPesanan()">
+      <label for="filter">Filter status</label>
+      <select id="filter" onchange="muatPesanan()">
+        <option value="">Semua</option>
+        <option value="menunggu_pembayaran">Menunggu pembayaran</option>
+        <option value="menunggu_verifikasi">Menunggu verifikasi</option>
         <option value="diproses">Diproses</option>
-        <option value="disetujui">Disetujui</option>
-        <option value="ditolak">Ditolak</option>
         <option value="selesai">Selesai</option>
+        <option value="dibatalkan">Dibatalkan</option>
       </select>
-      <button onclick="simpanKlaim()">Simpan klaim</button>
-      <div id="notif-klaim"></div>
+      <div id="notif-pesanan"></div>
+      <div id="daftar-pesanan"></div>
     </div>
-    <div class="kartu" id="daftar-klaim"></div>
-  </div>
 
-  <!-- INFO TOKO -->
-  <div id="bagian-toko" class="sembunyi">
-    <div class="kartu">
-      <strong>Info Toko</strong>
-      <label for="t-wa">Nomor WhatsApp toko</label>
-      <input id="t-wa" type="tel" placeholder="Contoh: 085722994977">
-      <label for="t-jam">Jam operasional</label>
-      <input id="t-jam" type="text" placeholder="Contoh: Setiap hari, 08.00 - 22.00 WIB">
-      <label for="t-tentang">Tentang toko</label>
-      <textarea id="t-tentang" rows="3"></textarea>
-      <label for="t-bayar">Kebijakan pembayaran</label>
-      <textarea id="t-bayar" rows="2"></textarea>
-      <label for="t-garansi">Kebijakan garansi</label>
-      <textarea id="t-garansi" rows="2"></textarea>
-      <label for="t-kembali">Kebijakan pengembalian dana</label>
-      <textarea id="t-kembali" rows="2"></textarea>
-      <button onclick="simpanToko()">Simpan info toko</button>
-      <div id="notif-toko"></div>
-    </div>
-    <div class="kartu">
-      <strong>FAQ</strong>
-      <label for="f-tanya">Pertanyaan</label>
-      <input id="f-tanya" type="text" placeholder="Contoh: Berapa lama produk dikirim?">
-      <label for="f-jawab">Jawaban</label>
-      <textarea id="f-jawab" rows="2"></textarea>
-      <label for="f-urutan">Urutan tampil (angka kecil tampil lebih dulu)</label>
-      <input id="f-urutan" type="number" min="0" value="0">
-      <button onclick="tambahFaq()">Tambah FAQ</button>
-      <div id="notif-faq"></div>
-      <div id="daftar-faq-admin"></div>
-    </div>
-  </div>
+    <!-- PRODUK -->
+    <div id="bagian-produk" class="sembunyi">
+      <div class="kartu">
+        <div class="baris">
+          <strong class="judul-kartu">Daftar produk</strong>
+          <button class="kecil" onclick="bukaFormBaru()">+ Tambah produk baru</button>
+        </div>
+        <input id="cari-produk" type="search" placeholder="Cari nama produk..." oninput="renderDaftarProduk()" style="margin-top:8px">
+        <div id="daftar-produk-admin"></div>
+      </div>
 
-  <!-- PEMBAYARAN -->
-  <div id="bagian-pengaturan" class="sembunyi">
-    <div class="kartu">
-      <strong>Metode Pembayaran</strong>
-      <p class="muted">Untuk QRIS, pilih gambar lalu tekan Simpan.</p>
-      <div id="notif-pengaturan"></div>
-      <div id="daftar-metode-admin"></div>
+      <div id="panel-produk" class="kartu sembunyi">
+        <div class="baris">
+          <strong id="judul-panel" class="judul-kartu">Tambah Produk Baru</strong>
+          <button class="kecil keluar" onclick="tutupPanel()">Tutup</button>
+        </div>
+        <label for="p-nama">Nama produk</label>
+        <input id="p-nama" type="text" placeholder="Contoh: Netflix Premium">
+        <label for="p-kategori">Kategori</label>
+        <select id="p-kategori"></select>
+        <label for="p-deskripsi">Deskripsi</label>
+        <textarea id="p-deskripsi" rows="2"></textarea>
+        <label for="p-gambar">Foto produk (maks 2 MB)</label>
+        <input id="p-gambar" type="file" accept="image/*" onchange="previewFile('p-gambar','p-preview')">
+        <img id="p-preview" class="preview sembunyi" alt="Pratinjau foto produk">
+        <div class="baris" style="margin-top:8px">
+          <button id="tombol-simpan-produk" onclick="simpanProduk()">Simpan produk</button>
+        </div>
+        <div id="notif-produk"></div>
+        <div id="area-varian"></div>
+      </div>
     </div>
-    <div class="kartu">
-      <strong>Tambah Metode Baru</strong>
-      <label for="m-kode">Kode (huruf kecil, tanpa spasi)</label>
-      <input id="m-kode" type="text" placeholder="Contoh: ovo">
-      <label for="m-label">Nama yang tampil</label>
-      <input id="m-label" type="text" placeholder="Contoh: OVO">
-      <label for="m-an">Atas nama</label>
-      <input id="m-an" type="text">
-      <label for="m-nomor">Nomor rekening / HP</label>
-      <input id="m-nomor" type="text">
-      <button onclick="tambahMetode()">Tambah metode</button>
-      <div id="notif-tambah-metode"></div>
+
+    <!-- KATEGORI -->
+    <div id="bagian-kategori" class="sembunyi">
+      <div class="kartu">
+        <strong class="judul-kartu">Tambah Kategori</strong>
+        <p class="muted">Kalau kategori dihapus, produk di dalamnya menjadi tanpa kategori.</p>
+        <label for="kat-baru">Nama kategori</label>
+        <input id="kat-baru" type="text" placeholder="Contoh: Aplikasi Premium">
+        <button onclick="tambahKategori()">Tambah kategori</button>
+        <div id="notif-kategori"></div>
+      </div>
+      <div class="kartu" id="daftar-kategori"></div>
+    </div>
+
+    <!-- PROMO -->
+    <div id="bagian-promo" class="sembunyi">
+      <div class="kartu">
+        <strong class="judul-kartu">Tambah Promo Teks (Banner)</strong>
+        <p class="muted">Untuk promo kata-kata, seperti "Beli 2 gratis 1". Tidak mengubah harga.</p>
+        <label for="pr-judul">Judul promo</label>
+        <input id="pr-judul" type="text" placeholder="Contoh: Beli 2 gratis 1">
+        <label for="pr-deskripsi">Keterangan (opsional)</label>
+        <textarea id="pr-deskripsi" rows="2"></textarea>
+        <div class="baris">
+          <label class="cb"><input type="checkbox" id="pr-aktif" checked> Tampilkan di toko</label>
+          <button onclick="simpanPromo()">Tambah promo</button>
+        </div>
+        <div id="notif-promo"></div>
+      </div>
+      <div class="kartu" id="daftar-promo"></div>
+    </div>
+
+    <!-- KEUANGAN -->
+    <div id="bagian-keuangan" class="sembunyi">
+      <div class="kartu">
+        <div class="baris"><strong class="judul-kartu">Catat Keuangan</strong><button class="kecil" onclick="exportKeuangan()">Unduh CSV</button></div>
+        <p class="muted">Pemasukan dari pesanan sudah otomatis. Di sini catat pemasukan lain dan pengeluaran.</p>
+        <label for="k-tanggal">Tanggal</label>
+        <input id="k-tanggal" type="date">
+        <label for="k-jenis">Jenis</label>
+        <select id="k-jenis">
+          <option value="pengeluaran">Pengeluaran</option>
+          <option value="pemasukan">Pemasukan lain</option>
+        </select>
+        <label for="k-kategori">Kategori</label>
+        <input id="k-kategori" type="text" placeholder="Contoh: Pembelian akun, Iklan">
+        <label for="k-keterangan">Keterangan</label>
+        <input id="k-keterangan" type="text" placeholder="Contoh: Beli akun dari supplier">
+        <label for="k-jumlah">Jumlah (Rp)</label>
+        <input id="k-jumlah" type="number" min="0" placeholder="Contoh: 20000">
+        <button onclick="simpanKeuangan()">Simpan catatan</button>
+        <div id="notif-keuangan"></div>
+      </div>
+      <div class="kartu" id="daftar-keuangan"></div>
+    </div>
+
+    <!-- GARANSI -->
+    <div id="bagian-garansi" class="sembunyi">
+      <div class="kartu">
+        <strong class="judul-kartu">Catat Klaim Garansi</strong>
+        <p class="muted">Masukkan kode pesanan. Data pelanggan diambil otomatis.</p>
+        <label for="k-kode">Kode pesanan</label>
+        <input id="k-kode" type="text" placeholder="KS-XXXXXX-XXXXX" style="text-transform:uppercase">
+        <label for="k-produk-klaim">Produk (opsional)</label>
+        <input id="k-produk-klaim" type="text" placeholder="Contoh: Netflix Premium 1 Bulan">
+        <label for="k-ket">Kendala</label>
+        <textarea id="k-ket" rows="2" placeholder="Contoh: akun tidak bisa login"></textarea>
+        <label for="k-status-klaim">Status awal</label>
+        <select id="k-status-klaim">
+          <option value="diajukan">Diajukan</option>
+          <option value="diproses">Diproses</option>
+          <option value="disetujui">Disetujui</option>
+          <option value="ditolak">Ditolak</option>
+          <option value="selesai">Selesai</option>
+        </select>
+        <button onclick="simpanKlaim()">Simpan klaim</button>
+        <div id="notif-klaim"></div>
+      </div>
+      <div class="kartu" id="daftar-klaim"></div>
+    </div>
+
+    <!-- INFO TOKO -->
+    <div id="bagian-toko" class="sembunyi">
+      <div class="kartu">
+        <strong class="judul-kartu">Info Toko</strong>
+        <label for="t-wa">Nomor WhatsApp toko</label>
+        <input id="t-wa" type="tel" placeholder="Contoh: 085722994977">
+        <label for="t-jam">Jam operasional</label>
+        <input id="t-jam" type="text" placeholder="Contoh: Setiap hari, 08.00 - 22.00 WIB">
+        <label for="t-tentang">Tentang toko</label>
+        <textarea id="t-tentang" rows="3"></textarea>
+        <label for="t-bayar">Kebijakan pembayaran</label>
+        <textarea id="t-bayar" rows="2"></textarea>
+        <label for="t-garansi">Kebijakan garansi</label>
+        <textarea id="t-garansi" rows="2"></textarea>
+        <label for="t-kembali">Kebijakan pengembalian dana</label>
+        <textarea id="t-kembali" rows="2"></textarea>
+        <button onclick="simpanToko()">Simpan info toko</button>
+        <div id="notif-toko"></div>
+      </div>
+      <div class="kartu">
+        <strong class="judul-kartu">FAQ</strong>
+        <label for="f-tanya">Pertanyaan</label>
+        <input id="f-tanya" type="text" placeholder="Contoh: Berapa lama produk dikirim?">
+        <label for="f-jawab">Jawaban</label>
+        <textarea id="f-jawab" rows="2"></textarea>
+        <label for="f-urutan">Urutan tampil (angka kecil tampil lebih dulu)</label>
+        <input id="f-urutan" type="number" min="0" value="0">
+        <button onclick="tambahFaq()">Tambah FAQ</button>
+        <div id="notif-faq"></div>
+        <div id="daftar-faq-admin"></div>
+      </div>
+    </div>
+
+    <!-- PEMBAYARAN -->
+    <div id="bagian-pengaturan" class="sembunyi">
+      <div class="kartu">
+        <strong class="judul-kartu">Metode Pembayaran</strong>
+        <p class="muted">Untuk QRIS, pilih gambar lalu tekan Simpan.</p>
+        <div id="notif-pengaturan"></div>
+        <div id="daftar-metode-admin"></div>
+      </div>
+      <div class="kartu">
+        <strong class="judul-kartu">Tambah Metode Baru</strong>
+        <label for="m-kode">Kode (huruf kecil, tanpa spasi)</label>
+        <input id="m-kode" type="text" placeholder="Contoh: ovo">
+        <label for="m-label">Nama yang tampil</label>
+        <input id="m-label" type="text" placeholder="Contoh: OVO">
+        <label for="m-an">Atas nama</label>
+        <input id="m-an" type="text">
+        <label for="m-nomor">Nomor rekening / HP</label>
+        <input id="m-nomor" type="text">
+        <button onclick="tambahMetode()">Tambah metode</button>
+        <div id="notif-tambah-metode"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -360,9 +383,10 @@ function showTab(n){
   const L={ringkasan:muatRingkasan,laporan:siapkanLaporan,pesanan:muatPesanan,produk:muatProdukAdmin,kategori:muatKategoriAdmin,promo:muatPromo,
     keuangan:()=>{setVal("k-tanggal",tgl(new Date()));muatKeuangan()},garansi:muatKlaim,toko:muatToko,pengaturan:muatMetodeAdmin};
   if(L[n])L[n]();
+  window.scrollTo({top:0});
 }
 
-/* ---------- NOTIFIKASI PESANAN ---------- */
+/* NOTIFIKASI PESANAN */
 function mulaiCekPesanan(){
   idTerakhir=Number(localStorage.getItem(KUNCI_ID)||0);
   cekPesananBaru();
@@ -387,7 +411,7 @@ async function cekPesananBaru(){
 }
 function bukaPesananBaru(){document.getElementById("banner-baru").classList.add("sembunyi");showTab("pesanan")}
 
-/* ---------- RINGKASAN ---------- */
+/* RINGKASAN */
 function awal(p){const n=new Date();if(p==="hari")return new Date(n.getFullYear(),n.getMonth(),n.getDate());if(p==="7hari")return new Date(n.getTime()-7*864e5);if(p==="bulan")return new Date(n.getFullYear(),n.getMonth(),1);return null}
 async function muatRingkasan(){
   const w=document.getElementById("isi-ringkasan");w.innerHTML='<p class="muted">Memuat...</p>';
@@ -431,7 +455,7 @@ async function muatGrafik(){
     return '<div class="kolom"><div class="nilai">'+n+'</div><div class="batang-wrap"><div class="batang" style="height:'+t+'%"></div></div><div class="hari">'+esc(h.label)+'</div></div>'}).join("")+'</div>';
 }
 
-/* ---------- LAPORAN ---------- */
+/* LAPORAN */
 function siapkanLaporan(){const n=new Date();if(!val("lap-dari"))setVal("lap-dari",tgl(new Date(n.getFullYear(),n.getMonth(),1)));if(!val("lap-sampai"))setVal("lap-sampai",tgl(n));muatLaporan()}
 async function ambilLaporan(){
   const d=val("lap-dari"),s=val("lap-sampai");
@@ -457,7 +481,7 @@ async function muatLaporan(){
     <div class="kpi"><div class="label">Item terjual</div><div class="angka">${jml}</div></div>
     <div class="kpi"><div class="label">Pendapatan</div><div class="angka">${rupiah(pend)}</div></div></div>
     <div class="blok"><strong>Produk terlaris</strong>${top.map((t,i)=>`<div class="item">${i+1}. ${esc(t[0])} · ${t[1].q} terjual · ${rupiah(t[1].o)}</div>`).join("")||'<p class="muted">Belum ada penjualan lunas.</p>'}</div>
-    <div class="blok"><strong>Daftar pesanan (${data.length})</strong>${data.map(o=>`<div class="item" style="border-top:1px dashed var(--dusty);padding-top:6px;margin-top:6px"><span class="kode">${esc(o.order_code)}</span> · ${new Date(o.created_at).toLocaleDateString("id-ID")} · ${STATUS_LABEL[o.status]||esc(o.status)}<br>${esc(o.customer_name)} · ${rupiah(o.total_amount)}</div>`).join("")||'<p class="muted">Tidak ada pesanan.</p>'}</div>`;
+    <div class="blok"><strong>Daftar pesanan (${data.length})</strong>${data.map(o=>`<div class="item" style="border-top:2px dashed var(--navy);padding-top:6px;margin-top:6px"><span class="kode">${esc(o.order_code)}</span> · ${new Date(o.created_at).toLocaleDateString("id-ID")} · ${STATUS_LABEL[o.status]||esc(o.status)}<br>${esc(o.customer_name)} · ${rupiah(o.total_amount)}</div>`).join("")||'<p class="muted">Tidak ada pesanan.</p>'}</div>`;
 }
 async function unduhLaporan(){
   const data=await ambilLaporan();if(!data)return;
@@ -471,7 +495,7 @@ async function unduhLaporan(){
   notif("notif-laporan","sukses","CSV laporan berhasil diunduh.");
 }
 
-/* ---------- PESANAN ---------- */
+/* PESANAN */
 async function muatPesanan(){
   const f=val("filter"),c=val("cari-pesanan").toUpperCase(),w=document.getElementById("daftar-pesanan");
   notif("notif-pesanan","","");w.innerHTML='<p class="muted">Memuat pesanan...</p>';
@@ -503,7 +527,7 @@ async function tandaiTerkirim(id){const {error}=await supabase.from("orders").up
 async function ubahStatus(id,baru){const {error}=await supabase.from("orders").update({status:baru}).eq("id",id);if(error){notif("notif-pesanan","gagal","Gagal mengubah status: "+error.message);return muatPesanan()}notif("notif-pesanan","sukses","Status diperbarui. Jika dibatalkan, stok dikembalikan otomatis.");muatPesanan();cekPesananBaru()}
 async function simpanCatatan(id){const {error}=await supabase.from("orders").update({catatan_admin:val("ca-"+id)||null}).eq("id",id);if(error)return notif("notif-pesanan","gagal","Gagal menyimpan catatan: "+error.message);notif("notif-pesanan","sukses","Catatan internal tersimpan.")}
 
-/* ---------- KATEGORI ---------- */
+/* KATEGORI */
 async function muatKategori(){
   const {data,error}=await supabase.from("categories").select("id,name").order("name");
   if(error)return;
@@ -513,13 +537,13 @@ async function muatKategoriAdmin(){
   const w=document.getElementById("daftar-kategori");w.innerHTML='<p class="muted">Memuat...</p>';
   const {data,error}=await supabase.from("categories").select("id,name").order("name");
   if(error){w.innerHTML="";return notif("notif-kategori","gagal","Gagal memuat kategori: "+error.message)}
-  w.innerHTML='<strong>Daftar kategori</strong>'+(data||[]).map(k=>`<div class="blok"><input id="kat-nama-${k.id}" value="${esc(k.name)}"><div class="baris" style="margin-top:8px"><button class="kecil" onclick="ubahKategori(${k.id})">Simpan nama</button><button class="kecil keluar" onclick="hapusKategori(${k.id})">Hapus</button></div></div>`).join("")||'<p class="muted">Belum ada kategori.</p>';
+  w.innerHTML='<strong class="judul-kartu">Daftar kategori</strong>'+(data||[]).map(k=>`<div class="blok"><input id="kat-nama-${k.id}" value="${esc(k.name)}"><div class="baris" style="margin-top:8px"><button class="kecil" onclick="ubahKategori(${k.id})">Simpan nama</button><button class="kecil keluar" onclick="hapusKategori(${k.id})">Hapus</button></div></div>`).join("")||'<p class="muted">Belum ada kategori.</p>';
 }
 async function tambahKategori(){const n=val("kat-baru");if(n.length<2)return notif("notif-kategori","gagal","Nama kategori minimal 2 huruf.");const {error}=await supabase.from("categories").insert({name:n});if(error)return notif("notif-kategori","gagal",error.message.includes("duplicate")?"Kategori itu sudah ada.":"Gagal menambah: "+error.message);setVal("kat-baru","");notif("notif-kategori","sukses",'Kategori "'+n+'" ditambahkan.');muatKategoriAdmin();muatKategori()}
 async function ubahKategori(id){const n=val("kat-nama-"+id);if(n.length<2)return notif("notif-kategori","gagal","Nama kategori minimal 2 huruf.");const {error}=await supabase.from("categories").update({name:n}).eq("id",id);if(error)return notif("notif-kategori","gagal",error.message.includes("duplicate")?"Nama itu sudah dipakai.":"Gagal: "+error.message);notif("notif-kategori","sukses","Nama kategori diperbarui.");muatKategoriAdmin();muatKategori()}
 async function hapusKategori(id){if(!confirm("Hapus kategori ini?"))return;const {error}=await supabase.from("categories").delete().eq("id",id);if(error)return notif("notif-kategori","gagal","Gagal menghapus: "+error.message);notif("notif-kategori","sukses","Kategori dihapus.");muatKategoriAdmin();muatKategori()}
 
-/* ---------- PRODUK ---------- */
+/* PRODUK */
 async function muatProdukAdmin(){
   const {data,error}=await supabase.from("products").select("id,name,description,image_url,is_active,is_featured,category_id,categories(name),product_variants(id,name,price,promo_type,promo_value,promo_label,stock_status,stok,warranty_days,is_active)").order("id");
   if(error)return notif("notif-produk","gagal","Gagal memuat produk: "+error.message);
@@ -629,7 +653,7 @@ async function tambahVarian(pid){
   notif("notif-produk","sukses","Varian baru ditambahkan.");muatProdukAdmin();
 }
 
-/* ---------- PROMO TEKS ---------- */
+/* PROMO TEKS */
 async function muatPromo(){
   const w=document.getElementById("daftar-promo");w.innerHTML='<p class="muted">Memuat...</p>';
   const {data,error}=await supabase.from("promos").select("id,judul,deskripsi,is_active").order("created_at",{ascending:false});
@@ -640,7 +664,7 @@ async function simpanPromo(){const j=val("pr-judul");if(j.length<3)return notif(
 async function togglePromo(id,aktif){const {error}=await supabase.from("promos").update({is_active:aktif}).eq("id",id);if(error)return notif("notif-promo","gagal","Gagal: "+error.message);muatPromo()}
 async function hapusPromo(id){if(!confirm("Hapus promo ini?"))return;const {error}=await supabase.from("promos").delete().eq("id",id);if(error)return notif("notif-promo","gagal","Gagal menghapus: "+error.message);muatPromo()}
 
-/* ---------- KEUANGAN ---------- */
+/* KEUANGAN */
 async function muatKeuangan(){
   const w=document.getElementById("daftar-keuangan");w.innerHTML='<p class="muted">Memuat...</p>';
   const {data,error}=await supabase.from("keuangan").select("id,tanggal,jenis,kategori,keterangan,jumlah").order("tanggal",{ascending:false}).order("created_at",{ascending:false}).limit(100);
@@ -652,7 +676,7 @@ async function simpanKeuangan(){const t=val("k-tanggal"),j=val("k-jenis"),ket=va
 async function hapusKeuangan(id){if(!confirm("Hapus catatan ini?"))return;const {error}=await supabase.from("keuangan").delete().eq("id",id);if(error)return notif("notif-keuangan","gagal","Gagal menghapus: "+error.message);muatKeuangan()}
 function exportKeuangan(){if(!keuanganCache.length)return notif("notif-keuangan","gagal","Belum ada data untuk diunduh.");const b=[["Tanggal","Jenis","Kategori","Keterangan","Jumlah"]];keuanganCache.forEach(k=>b.push([k.tanggal,k.jenis,k.kategori||"",k.keterangan||"",k.jumlah]));const csv=b.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n");const url=URL.createObjectURL(new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"}));const a=document.createElement("a");a.href=url;a.download="keuangan-kimmy-"+tgl(new Date())+".csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url)}
 
-/* ---------- GARANSI ---------- */
+/* GARANSI */
 async function simpanKlaim(){
   const kode=val("k-kode").toUpperCase(),ken=val("k-ket"),prod=val("k-produk-klaim"),st=val("k-status-klaim");
   if(kode.length<6)return notif("notif-klaim","gagal","Masukkan kode pesanan dengan lengkap.");
@@ -668,12 +692,12 @@ async function muatKlaim(){
   const w=document.getElementById("daftar-klaim");w.innerHTML='<p class="muted">Memuat...</p>';
   const {data,error}=await supabase.from("garansi_klaim").select("id,order_code,customer_name,customer_whatsapp,produk,keterangan,status,created_at").order("created_at",{ascending:false}).limit(100);
   if(error){w.innerHTML="";return notif("notif-klaim","gagal","Gagal memuat klaim: "+error.message)}
-  w.innerHTML='<strong>Daftar klaim</strong>'+(data||[]).map(k=>`<div class="blok"><div class="baris"><span class="kode">${esc(k.order_code)}</span><span class="status">${STATUS_KLAIM[k.status]||esc(k.status)}</span></div><div class="muted">${new Date(k.created_at).toLocaleString("id-ID")}</div><div><strong>${esc(k.customer_name||"-")}</strong> · ${esc(k.customer_whatsapp||"-")}</div><div class="item">${esc(k.produk||"-")}</div><div class="item">Kendala: ${esc(k.keterangan)}</div><div class="baris" style="margin-top:8px"><select style="width:auto;flex:1" onchange="ubahKlaim(${k.id},this.value)">${Object.keys(STATUS_KLAIM).map(s=>'<option value="'+s+'"'+(s===k.status?" selected":"")+">"+STATUS_KLAIM[s]+"</option>").join("")}</select><button class="kecil keluar" onclick="hapusKlaim(${k.id})">Hapus</button></div></div>`).join("")||'<p class="muted">Belum ada klaim garansi.</p>';
+  w.innerHTML='<strong class="judul-kartu">Daftar klaim</strong>'+(data||[]).map(k=>`<div class="blok"><div class="baris"><span class="kode">${esc(k.order_code)}</span><span class="status">${STATUS_KLAIM[k.status]||esc(k.status)}</span></div><div class="muted">${new Date(k.created_at).toLocaleString("id-ID")}</div><div><strong>${esc(k.customer_name||"-")}</strong> · ${esc(k.customer_whatsapp||"-")}</div><div class="item">${esc(k.produk||"-")}</div><div class="item">Kendala: ${esc(k.keterangan)}</div><div class="baris" style="margin-top:8px"><select style="width:auto;flex:1" onchange="ubahKlaim(${k.id},this.value)">${Object.keys(STATUS_KLAIM).map(s=>'<option value="'+s+'"'+(s===k.status?" selected":"")+">"+STATUS_KLAIM[s]+"</option>").join("")}</select><button class="kecil keluar" onclick="hapusKlaim(${k.id})">Hapus</button></div></div>`).join("")||'<p class="muted">Belum ada klaim garansi.</p>';
 }
 async function ubahKlaim(id,baru){const {error}=await supabase.from("garansi_klaim").update({status:baru}).eq("id",id);if(error)return notif("notif-klaim","gagal","Gagal: "+error.message);notif("notif-klaim","sukses","Status klaim diperbarui.");muatKlaim()}
 async function hapusKlaim(id){if(!confirm("Hapus klaim ini?"))return;const {error}=await supabase.from("garansi_klaim").delete().eq("id",id);if(error)return notif("notif-klaim","gagal","Gagal menghapus: "+error.message);muatKlaim()}
 
-/* ---------- INFO TOKO & FAQ ---------- */
+/* INFO TOKO & FAQ */
 async function muatToko(){
   const {data,error}=await supabase.from("store_settings").select("key,value");
   if(error)return notif("notif-toko","gagal","Gagal memuat info toko: "+error.message);
@@ -698,7 +722,7 @@ async function tambahFaq(){const t=val("f-tanya"),j=val("f-jawab"),u=parseInt(va
 async function toggleFaq(id,aktif){const {error}=await supabase.from("faqs").update({is_active:aktif}).eq("id",id);if(error)return notif("notif-faq","gagal","Gagal: "+error.message);muatFaqAdmin()}
 async function hapusFaq(id){if(!confirm("Hapus FAQ ini?"))return;const {error}=await supabase.from("faqs").delete().eq("id",id);if(error)return notif("notif-faq","gagal","Gagal menghapus: "+error.message);muatFaqAdmin()}
 
-/* ---------- PEMBAYARAN ---------- */
+/* PEMBAYARAN */
 async function muatMetodeAdmin(){
   const w=document.getElementById("daftar-metode-admin");w.innerHTML='<p class="muted">Memuat...</p>';
   const {data,error}=await supabase.from("payment_methods").select("id,code,label,account_name,account_number,image_url,is_active,sort_order").order("sort_order",{ascending:true});
@@ -733,7 +757,7 @@ async function tambahMetode(){
   notif("notif-tambah-metode","sukses","Metode baru ditambahkan.");muatMetodeAdmin();
 }
 
-/* ---------- START ---------- */
+/* START */
 async function cekSesi(){
   const {data}=await supabase.auth.getSession();
   tampilkanSesi(!!data.session);
