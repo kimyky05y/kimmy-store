@@ -3,83 +3,85 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin KIMMY STORE</title>
+<title>Admin</title>
 <style>
-:root{--denim:#2F5486;--navy:#14213D;--merah:#D62828;--biru:#1D4ED8;--kuning:#FFD23F;--perak:#C9D1DC;--pink:#FF6FA8;--hitam:#111}
+:root{--denim:#2F5486;--navy:#14213D;--merah:#D62828;--biru:#1D4ED8;--kuning:#FFD23F;--perak:#C9D1DC;--hitam:#111}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Trebuchet MS","Arial Black",system-ui,sans-serif;color:var(--hitam);min-height:100vh;line-height:1.4;background-color:var(--denim);
-  background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(0,0,0,.09) 0 1px,transparent 1px 9px)}
-.ol{color:#fff;font-weight:900;text-shadow:2px 0 0 var(--navy),-2px 0 0 var(--navy),0 2px 0 var(--navy),0 -2px 0 var(--navy),3px 3px 0 #000}
+body{font-family:"Trebuchet MS",Arial,system-ui,sans-serif;color:var(--hitam);min-height:100vh;line-height:1.4;background-color:var(--denim);
+  background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(0,0,0,.08) 0 1px,transparent 1px 9px)}
+.ol{color:#fff;font-weight:900;text-shadow:2px 0 0 var(--navy),-2px 0 0 var(--navy),0 2px 0 var(--navy),0 -2px 0 var(--navy),2px 2px 0 #000}
 .sembunyi{display:none!important}
 
 /* TOPBAR */
-.topbar{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:4px solid var(--merah);box-shadow:0 4px 0 #000;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.topbar h1{font-size:1.15rem;letter-spacing:1px;white-space:nowrap}
-.topbar .sub{font-size:.75rem;color:var(--kuning);font-weight:700}
-.btn-keluar{background:var(--merah);color:#fff;border:3px solid #000;border-radius:999px;padding:6px 14px;font-weight:900;cursor:pointer;font-family:inherit;box-shadow:2px 2px 0 #000;font-size:.85rem;margin-top:0}
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:4px solid var(--merah);box-shadow:0 3px 0 #000;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo-kecil{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #fff;background:var(--kuning);flex-shrink:0}
+.brand h1{font-size:1.1rem;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand .sub{font-size:.72rem;color:var(--kuning);font-weight:700}
+.btn-keluar{background:var(--merah);color:#fff;border:2px solid #000;border-radius:999px;padding:6px 14px;font-weight:900;cursor:pointer;font-family:inherit;box-shadow:2px 2px 0 #000;font-size:.85rem;margin-top:0;white-space:nowrap}
 
-/* TAB MENU: satu baris, bisa digeser */
-.tabs{position:sticky;top:64px;z-index:25;display:flex;gap:8px;overflow-x:auto;padding:12px 14px;background:var(--denim);scrollbar-width:none;border-bottom:3px dashed rgba(255,255,255,.35)}
+/* TAB MENU */
+.tabs{position:sticky;top:60px;z-index:25;display:flex;gap:8px;overflow-x:auto;padding:10px 14px;background:var(--denim);scrollbar-width:none;border-bottom:2px dashed rgba(255,255,255,.35)}
 .tabs::-webkit-scrollbar{display:none}
-.tabs button{flex:0 0 auto;background:#fff;color:var(--hitam);border:3px solid #000;border-radius:999px;padding:7px 14px;font-weight:900;font-size:.85rem;cursor:pointer;font-family:inherit;box-shadow:2px 2px 0 #000;white-space:nowrap;margin-top:0}
-.tabs button.aktif{background:var(--kuning);box-shadow:3px 3px 0 var(--merah);transform:translateY(-2px)}
-.badge-notif{display:inline-block;background:var(--merah);color:#fff;border-radius:999px;padding:0 7px;font-size:.7rem;margin-left:4px;border:2px solid #000}
+.tabs button{flex:0 0 auto;background:#fff;color:var(--hitam);border:2px solid #000;border-radius:999px;padding:6px 14px;font-weight:900;font-size:.85rem;cursor:pointer;font-family:inherit;box-shadow:2px 2px 0 #000;white-space:nowrap;margin-top:0}
+.tabs button.aktif{background:var(--kuning);box-shadow:3px 3px 0 var(--merah)}
+.badge-notif{display:inline-block;background:var(--merah);color:#fff;border-radius:999px;padding:0 6px;font-size:.7rem;margin-left:4px;border:2px solid #000}
 
-.wrapadm{max-width:760px;margin:0 auto;padding:14px}
-.banner-baru{background:var(--kuning);border:3px solid #000;box-shadow:4px 4px 0 var(--merah);border-radius:8px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;transform:rotate(-.5deg)}
+.wrapadm{max-width:1100px;margin:0 auto;padding:14px}
+.banner-baru{background:var(--kuning);border:2px solid #000;box-shadow:3px 3px 0 var(--merah);border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .banner-baru button{margin-top:0}
 
 /* KARTU */
-.kartu{background:#fff;border:4px solid #000;box-shadow:6px 6px 0 var(--kuning);border-radius:6px;padding:16px;margin:0 0 16px;position:relative}
-.kartu::before{content:"";position:absolute;top:-11px;left:22px;width:70px;height:20px;background:repeating-linear-gradient(90deg,#9FB3C8 0 5px,#7D93AB 5px 10px);transform:rotate(-4deg)}
-.kartu > strong:first-child,.judul-kartu{display:block;font-size:1.2rem;text-transform:uppercase;margin-bottom:6px}
-label{display:block;font-size:.8rem;font-weight:900;margin-top:10px;text-transform:uppercase}
-input,select,textarea{width:100%;padding:9px 11px;margin-top:4px;border:3px solid #000;border-radius:10px;font-size:.95rem;font-family:inherit;background:#fff}
-input[type=file]{padding:7px;background:#EAF2FB}
+.kartu{background:#fff;border:3px solid #000;box-shadow:4px 4px 0 var(--kuning);border-radius:8px;padding:14px;margin:0 0 14px}
+.judul-kartu{display:block;font-size:1.1rem;text-transform:uppercase;margin-bottom:6px}
+label{display:block;font-size:.78rem;font-weight:900;margin-top:10px;text-transform:uppercase}
+input,select,textarea{width:100%;padding:8px 10px;margin-top:4px;border:2px solid #000;border-radius:8px;font-size:.92rem;font-family:inherit;background:#fff}
+input[type=file]{padding:6px;background:#EAF2FB}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--merah)}
-button{background:var(--navy);color:#fff;border:3px solid #000;border-radius:999px;padding:9px 16px;font-size:.9rem;cursor:pointer;margin-top:10px;font-family:inherit;font-weight:900;box-shadow:2px 2px 0 var(--merah)}
-button.kecil{padding:6px 12px;font-size:.8rem;margin-top:0}
+button{background:var(--navy);color:#fff;border:2px solid #000;border-radius:999px;padding:8px 14px;font-size:.88rem;cursor:pointer;margin-top:10px;font-family:inherit;font-weight:900;box-shadow:2px 2px 0 var(--merah)}
+button.kecil{padding:5px 12px;font-size:.8rem;margin-top:0}
 button.keluar{background:var(--merah);box-shadow:2px 2px 0 #000}
 button.on{background:var(--kuning);color:var(--hitam)}
 button:disabled{opacity:.6}
 .baris{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center}
-.blok{border-top:3px dashed var(--navy);padding-top:12px;margin-top:12px}
+.blok{border-top:2px dashed var(--navy);padding-top:10px;margin-top:10px}
 .kode{font-weight:900}
-.status{display:inline-block;font-size:.75rem;padding:3px 10px;border-radius:999px;background:var(--perak);border:2px solid #000;font-weight:900}
-.item,.muted{font-size:.85rem;color:#333;margin-top:3px}
+.status{display:inline-block;font-size:.72rem;padding:2px 9px;border-radius:999px;background:var(--perak);border:2px solid #000;font-weight:900}
+.item,.muted{font-size:.84rem;color:#333;margin-top:3px}
 .muted{color:#4A5B6E;font-weight:700}
-.kotak-kecil{background:#EAF2FB;border:3px dashed var(--navy);border-radius:10px;padding:10px;margin-top:10px}
-.promo-box{background:#FFF6D6;border:3px dashed var(--merah);border-radius:10px;padding:8px;margin-top:8px}
-.preview-harga{font-size:.85rem;color:#1E6B35;font-weight:900;margin-top:6px;min-height:1em}
-.notif{padding:10px;border:3px solid #000;border-radius:10px;margin-top:10px;font-size:.9rem;font-weight:700}
+.kotak-kecil{background:#EAF2FB;border:2px dashed var(--navy);border-radius:8px;padding:10px;margin-top:10px}
+.promo-box{background:#FFF6D6;border:2px dashed var(--merah);border-radius:8px;padding:8px;margin-top:8px}
+.preview-harga{font-size:.84rem;color:#1E6B35;font-weight:900;margin-top:6px;min-height:1em}
+.notif{padding:9px;border:2px solid #000;border-radius:8px;margin-top:10px;font-size:.88rem;font-weight:700}
 .gagal{background:#FFD6D6}
 .sukses{background:#D9F7E4}
-.cb{display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:700;margin:0;text-transform:none}
+.cb{display:flex;align-items:center;gap:6px;font-size:.84rem;font-weight:700;margin:0;text-transform:none}
 .cb input{width:auto;margin:0}
-.thumb{width:52px;height:52px;object-fit:cover;border:3px solid #000;background:var(--perak);flex-shrink:0}
-.preview{width:100%;max-height:200px;object-fit:contain;border:3px solid #000;margin-top:8px;background:#EAF2FB}
-.baris-produk{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:3px dashed var(--navy)}
+.thumb{width:48px;height:48px;object-fit:contain;border:2px solid #000;background:#fff;flex-shrink:0}
+.preview{width:100%;max-height:180px;object-fit:contain;border:2px solid #000;margin-top:8px;background:#EAF2FB}
+.preview-kecil{width:90px;height:90px;object-fit:contain;border:2px solid #000;margin-top:8px;background:#EAF2FB}
+.baris-produk{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:2px dashed var(--navy)}
 .baris-produk .info{flex:1;min-width:0}
 .baris-tanggal{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .grid-kpi{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:10px}
-.kpi{background:#EAF2FB;border:3px solid #000;border-radius:10px;padding:10px;box-shadow:3px 3px 0 var(--kuning)}
-.kpi .label{font-size:.75rem;font-weight:900;color:var(--biru);text-transform:uppercase}
-.kpi .angka{font-size:1.1rem;font-weight:900;margin-top:4px;word-break:break-word}
+.kpi{background:#EAF2FB;border:2px solid #000;border-radius:8px;padding:10px;box-shadow:2px 2px 0 var(--kuning)}
+.kpi .label{font-size:.72rem;font-weight:900;color:var(--biru);text-transform:uppercase}
+.kpi .angka{font-size:1.05rem;font-weight:900;margin-top:4px;word-break:break-word}
 .kpi.untung{background:#D9F7E4}
 .kpi.rugi{background:#FFD6D6}
-.grafik{display:flex;align-items:flex-end;gap:8px;height:190px;margin-top:12px}
+.grafik{display:flex;align-items:flex-end;gap:8px;height:180px;margin-top:10px}
 .kolom{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;min-width:0}
-.nilai{font-size:.68rem;font-weight:900;height:18px;white-space:nowrap}
+.nilai{font-size:.66rem;font-weight:900;height:18px;white-space:nowrap}
 .batang-wrap{flex:1;width:100%;display:flex;align-items:flex-end;background:#EAF2FB;border:2px solid #000;overflow:hidden}
 .batang{width:100%;background:var(--merah);border-top:2px solid #000}
-.hari{font-size:.72rem;margin-top:5px;font-weight:900}
+.hari{font-size:.7rem;margin-top:5px;font-weight:900}
 .kartu-login{max-width:420px;margin:40px auto}
 </style>
 </head>
 <body>
 
 <section id="halaman-login" class="kartu kartu-login sembunyi">
-  <div class="ol" style="text-align:center;font-size:1.5rem;margin:-6px 0 10px;color:var(--navy);text-shadow:none">🐱 Admin KIMMY STORE</div>
+  <div class="ol" style="text-align:center;font-size:1.4rem;margin:0 0 10px;color:var(--navy);text-shadow:none">Admin Toko</div>
   <label for="email">Email</label>
   <input id="email" type="email" autocomplete="username">
   <label for="password">Password</label>
@@ -90,9 +92,12 @@ button:disabled{opacity:.6}
 
 <section id="halaman-admin" class="sembunyi">
   <header class="topbar">
-    <div>
-      <h1 class="ol">🐱 ADMIN KIMMY</h1>
-      <div class="sub">Halaman khusus pemilik toko</div>
+    <div class="brand">
+      <img id="admin-logo" class="logo-kecil sembunyi" alt="Logo">
+      <div>
+        <h1 class="ol" id="admin-nama">ADMIN TOKO</h1>
+        <div class="sub">Halaman khusus pemilik toko</div>
+      </div>
     </div>
     <button class="btn-keluar" onclick="logout()">Keluar</button>
   </header>
@@ -283,6 +288,21 @@ button:disabled{opacity:.6}
     <!-- INFO TOKO -->
     <div id="bagian-toko" class="sembunyi">
       <div class="kartu">
+        <strong class="judul-kartu">Identitas Toko</strong>
+        <p class="muted">Logo dan nama tampil di header toko dan header admin.</p>
+        <label for="id-nama">Nama toko</label>
+        <input id="id-nama" type="text" placeholder="Contoh: KIMMY STORE">
+        <label for="id-logo">Logo toko (maks 2 MB)</label>
+        <img id="id-preview-logo" class="preview-kecil sembunyi" alt="Pratinjau logo">
+        <input id="id-logo" type="file" accept="image/*" onchange="previewFile('id-logo','id-preview-logo')">
+        <label for="id-bg">Gambar latar website (opsional, maks 2 MB)</label>
+        <img id="id-preview-bg" class="preview sembunyi" alt="Pratinjau latar">
+        <input id="id-bg" type="file" accept="image/*" onchange="previewFile('id-bg','id-preview-bg')">
+        <button id="tombol-identitas" onclick="simpanIdentitas()">Simpan identitas</button>
+        <div id="notif-identitas"></div>
+      </div>
+
+      <div class="kartu">
         <strong class="judul-kartu">Info Toko</strong>
         <label for="t-wa">Nomor WhatsApp toko</label>
         <input id="t-wa" type="tel" placeholder="Contoh: 085722994977">
@@ -299,6 +319,7 @@ button:disabled{opacity:.6}
         <button onclick="simpanToko()">Simpan info toko</button>
         <div id="notif-toko"></div>
       </div>
+
       <div class="kartu">
         <strong class="judul-kartu">FAQ</strong>
         <label for="f-tanya">Pertanyaan</label>
@@ -349,7 +370,7 @@ const BAGIAN=["ringkasan","laporan","pesanan","produk","kategori","promo","keuan
 const KUNCI_ID="kimmy_admin_last_order_id";
 
 const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let editId=null,editGambar=null,keuanganCache=[],timerPesanan=null,idTerakhir=0,produkCache={},metodeCache={};
+let editId=null,editGambar=null,keuanganCache=[],timerPesanan=null,idTerakhir=0,produkCache={},metodeCache={},idCache={};
 
 function rupiah(a){return "Rp "+Number(a||0).toLocaleString("id-ID")}
 function esc(t){return String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
@@ -374,7 +395,7 @@ async function login(){
   if(!e||!p)return notif("notif-login","gagal","Email dan password wajib diisi.");
   t.disabled=true;const {error}=await supabase.auth.signInWithPassword({email:e,password:p});t.disabled=false;
   if(error)return notif("notif-login","gagal","Login gagal: "+error.message);
-  setVal("password","");tampilkanSesi(true);showTab("ringkasan");muatKategori();mulaiCekPesanan();
+  setVal("password","");tampilkanSesi(true);showTab("ringkasan");muatKategori();mulaiCekPesanan();muatTopbar();
 }
 async function logout(){if(timerPesanan)clearInterval(timerPesanan);await supabase.auth.signOut();tampilkanSesi(false)}
 
@@ -384,6 +405,39 @@ function showTab(n){
     keuangan:()=>{setVal("k-tanggal",tgl(new Date()));muatKeuangan()},garansi:muatKlaim,toko:muatToko,pengaturan:muatMetodeAdmin};
   if(L[n])L[n]();
   window.scrollTo({top:0});
+}
+
+/* IDENTITAS (logo, nama, latar) */
+async function muatTopbar(){
+  const {data}=await supabase.from("store_settings").select("key,value").in("key",["nama_toko","logo_url"]);
+  const m={};(data||[]).forEach(r=>m[r.key]=r.value);
+  document.getElementById("admin-nama").textContent=(m.nama_toko||"KIMMY STORE").toUpperCase();
+  const lg=document.getElementById("admin-logo");
+  if(m.logo_url){lg.src=m.logo_url;lg.classList.remove("sembunyi")}else lg.classList.add("sembunyi");
+}
+async function muatIdentitas(){
+  const {data,error}=await supabase.from("store_settings").select("key,value").in("key",["nama_toko","logo_url","bg_url"]);
+  if(error)return notif("notif-identitas","gagal","Gagal memuat identitas: "+error.message);
+  idCache={};(data||[]).forEach(r=>idCache[r.key]=r.value);
+  setVal("id-nama",idCache.nama_toko||"KIMMY STORE");
+  const pl=document.getElementById("id-preview-logo"),pb=document.getElementById("id-preview-bg");
+  if(idCache.logo_url){pl.src=idCache.logo_url;pl.classList.remove("sembunyi")}else pl.classList.add("sembunyi");
+  if(idCache.bg_url){pb.src=idCache.bg_url;pb.classList.remove("sembunyi")}else pb.classList.add("sembunyi");
+}
+async function simpanIdentitas(){
+  const nama=val("id-nama")||"KIMMY STORE",tb=document.getElementById("tombol-identitas");
+  tb.disabled=true;
+  try{
+    let logo=idCache.logo_url||"",bg=idCache.bg_url||"";
+    const fl=document.getElementById("id-logo").files[0];if(fl)logo=await uploadGambar(fl,"identitas");
+    const fb=document.getElementById("id-bg").files[0];if(fb)bg=await uploadGambar(fb,"identitas");
+    const {error}=await supabase.from("store_settings").upsert([{key:"nama_toko",value:nama},{key:"logo_url",value:logo},{key:"bg_url",value:bg}],{onConflict:"key"});
+    if(error)throw error;
+    notif("notif-identitas","sukses","Identitas tersimpan. Buka ulang toko untuk melihat perubahannya.");
+    setVal("id-logo","");setVal("id-bg","");
+    muatIdentitas();muatTopbar();
+  }catch(e){notif("notif-identitas","gagal","Gagal menyimpan: "+(e.message||e))}
+  tb.disabled=false;
 }
 
 /* NOTIFIKASI PESANAN */
@@ -490,7 +544,7 @@ async function unduhLaporan(){
   data.forEach(o=>baris.push([o.order_code,new Date(o.created_at).toLocaleString("id-ID"),o.customer_name,o.customer_whatsapp,METODE_LABEL[o.payment_method]||o.payment_method||"-",STATUS_LABEL[o.status]||o.status,(o.status==="diproses"||o.status==="selesai")?"Ya":"Tidak",(o.order_items||[]).map(i=>i.product_name+" ("+i.variant_name+") x"+i.quantity).join("; "),o.total_amount]));
   const csv=baris.map(r=>r.map(c=>'"'+String(c??"").replace(/"/g,'""')+'"').join(",")).join("\n");
   const url=URL.createObjectURL(new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"}));
-  const a=document.createElement("a");a.href=url;a.download="laporan-kimmy-"+val("lap-dari")+"-sampai-"+val("lap-sampai")+".csv";
+  const a=document.createElement("a");a.href=url;a.download="laporan-"+val("lap-dari")+"-sampai-"+val("lap-sampai")+".csv";
   document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
   notif("notif-laporan","sukses","CSV laporan berhasil diunduh.");
 }
@@ -674,7 +728,7 @@ async function muatKeuangan(){
 }
 async function simpanKeuangan(){const t=val("k-tanggal"),j=val("k-jenis"),ket=val("k-keterangan"),jml=parseInt(val("k-jumlah"),10);if(!t)return notif("notif-keuangan","gagal","Tanggal wajib diisi.");if(isNaN(jml)||jml<0)return notif("notif-keuangan","gagal","Jumlah harus angka, minimal 0.");if(ket.length<2)return notif("notif-keuangan","gagal","Keterangan wajib diisi.");const {error}=await supabase.from("keuangan").insert({tanggal:t,jenis:j,kategori:val("k-kategori")||null,keterangan:ket,jumlah:jml});if(error)return notif("notif-keuangan","gagal","Gagal menyimpan: "+error.message);setVal("k-kategori","");setVal("k-keterangan","");setVal("k-jumlah","");notif("notif-keuangan","sukses","Catatan keuangan tersimpan.");muatKeuangan()}
 async function hapusKeuangan(id){if(!confirm("Hapus catatan ini?"))return;const {error}=await supabase.from("keuangan").delete().eq("id",id);if(error)return notif("notif-keuangan","gagal","Gagal menghapus: "+error.message);muatKeuangan()}
-function exportKeuangan(){if(!keuanganCache.length)return notif("notif-keuangan","gagal","Belum ada data untuk diunduh.");const b=[["Tanggal","Jenis","Kategori","Keterangan","Jumlah"]];keuanganCache.forEach(k=>b.push([k.tanggal,k.jenis,k.kategori||"",k.keterangan||"",k.jumlah]));const csv=b.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n");const url=URL.createObjectURL(new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"}));const a=document.createElement("a");a.href=url;a.download="keuangan-kimmy-"+tgl(new Date())+".csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url)}
+function exportKeuangan(){if(!keuanganCache.length)return notif("notif-keuangan","gagal","Belum ada data untuk diunduh.");const b=[["Tanggal","Jenis","Kategori","Keterangan","Jumlah"]];keuanganCache.forEach(k=>b.push([k.tanggal,k.jenis,k.kategori||"",k.keterangan||"",k.jumlah]));const csv=b.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n");const url=URL.createObjectURL(new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"}));const a=document.createElement("a");a.href=url;a.download="keuangan-"+tgl(new Date())+".csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url)}
 
 /* GARANSI */
 async function simpanKlaim(){
@@ -699,6 +753,7 @@ async function hapusKlaim(id){if(!confirm("Hapus klaim ini?"))return;const {erro
 
 /* INFO TOKO & FAQ */
 async function muatToko(){
+  muatIdentitas();
   const {data,error}=await supabase.from("store_settings").select("key,value");
   if(error)return notif("notif-toko","gagal","Gagal memuat info toko: "+error.message);
   const m={};(data||[]).forEach(r=>m[r.key]=r.value);
@@ -761,9 +816,9 @@ async function tambahMetode(){
 async function cekSesi(){
   const {data}=await supabase.auth.getSession();
   tampilkanSesi(!!data.session);
-  if(data.session){showTab("ringkasan");muatKategori();mulaiCekPesanan()}
+  if(data.session){showTab("ringkasan");muatKategori();mulaiCekPesanan();muatTopbar()}
 }
 cekSesi();
 </script>
 </body>
-</html>
+  </html>
