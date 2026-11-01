@@ -308,6 +308,8 @@ button:disabled{opacity:.6}
         <p class="muted">Teks dan foto ini tampil di header dan bagian atas toko. Kosongkan kolom untuk memakai teks bawaan.</p>
         <label for="h-tagline">Tagline di header (kecil, di bawah nama)</label>
         <input id="h-tagline" type="text" placeholder="Contoh: Digital Products & More">
+        <label for="h-kicker">Label kecil di atas judul</label>
+        <input id="h-kicker" type="text" placeholder="Contoh: DIGITAL GOODIES FOR YOU~">
         <label for="h-judul">Judul besar di bagian atas</label>
         <input id="h-judul" type="text" placeholder="Contoh: Produk Digital Pilihan Terbaik untuk Kamu">
         <label for="h-teks">Teks keterangan di bawah judul</label>
@@ -459,10 +461,11 @@ async function simpanIdentitas(){
   tb.disabled=false;
 }
 async function muatTampilan(){
-  const {data,error}=await supabase.from("store_settings").select("key,value").in("key",["tagline_header","hero_judul","hero_teks","hero_foto"]);
+  const {data,error}=await supabase.from("store_settings").select("key,value").in("key",["tagline_header","hero_kicker","hero_judul","hero_teks","hero_foto"]);
   if(error)return notif("notif-tampilan","gagal","Gagal memuat tampilan: "+error.message);
   tampilanCache={};(data||[]).forEach(r=>tampilanCache[r.key]=r.value);
   setVal("h-tagline",tampilanCache.tagline_header||"");
+  setVal("h-kicker",tampilanCache.hero_kicker||"");
   setVal("h-judul",tampilanCache.hero_judul||"");
   setVal("h-teks",tampilanCache.hero_teks||"");
   const img=document.getElementById("h-preview-foto");
@@ -475,6 +478,7 @@ async function simpanTampilan(){
     const f=document.getElementById("h-foto").files[0];if(f)foto=await uploadGambar(f,"hero");
     const {error}=await supabase.from("store_settings").upsert([
       {key:"tagline_header",value:val("h-tagline")},
+      {key:"hero_kicker",value:val("h-kicker")},
       {key:"hero_judul",value:val("h-judul")},
       {key:"hero_teks",value:val("h-teks")},
       {key:"hero_foto",value:foto}
@@ -869,4 +873,4 @@ async function cekSesi(){
 cekSesi();
 </script>
 </body>
-          </html>
+</html>
