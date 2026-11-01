@@ -22,6 +22,7 @@
       background: var(--navy); color: var(--navy); min-height: 100vh; line-height: 1.4;
     }
     .wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+    .sembunyi { display: none !important; }
 
     header.top { background: var(--navy); color: var(--cream); position: sticky; top: 0; z-index: 20; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
     .top-inner { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; }
@@ -140,8 +141,14 @@
     .tombol-cek { width: 100%; margin-top: 12px; background: var(--mustard); color: var(--navy); border: none; border-radius: 999px; padding: 11px; font-weight: 800; font-size: 0.98rem; cursor: pointer; font-family: inherit; }
     .tombol-cek:disabled { opacity: 0.6; }
 
+    .halaman-tentang { margin-top: 16px; }
+    .kembali { margin: 14px 0 6px; }
+    .kembali a { color: var(--cream); text-decoration: none; font-weight: 700; font-size: 0.92rem; }
+    .kembali a:hover { text-decoration: underline; }
+    .grid-tentang { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+    .grid-tentang .kotak h2 { margin-top: 0; }
+
     .modal { position: fixed; inset: 0; background: rgba(20,30,40,0.55); display: flex; align-items: flex-end; justify-content: center; z-index: 50; }
-    .modal.sembunyi { display: none; }
     .modal-isi { background: var(--putih); color: var(--navy); width: 100%; max-width: 520px; border-radius: 20px 20px 0 0; padding: 16px; max-height: 90vh; overflow-y: auto; position: relative; }
     .modal-tutup { position: absolute; top: 10px; right: 12px; background: var(--navy); color: var(--cream); border: none; border-radius: 999px; width: 32px; height: 32px; font-size: 1rem; cursor: pointer; }
     .modal-foto { width: 100%; height: 200px; object-fit: cover; border-radius: 14px; background: #E8EEF3; display: block; }
@@ -158,6 +165,7 @@
     .detail-sisa { font-size: 0.8rem; color: var(--dusty); margin-top: 2px; }
     .tombol-utama-modal { width: 100%; margin-top: 12px; background: var(--mustard); color: var(--navy); border: none; border-radius: 999px; padding: 12px; font-weight: 800; font-size: 1rem; cursor: pointer; font-family: inherit; }
     .tombol-utama-modal:disabled { opacity: 0.6; cursor: not-allowed; }
+    .modal.sembunyi { display: none; }
 
     #toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--navy); color: var(--cream); padding: 10px 16px; border-radius: 999px; font-size: 0.88rem; z-index: 60; display: none; box-shadow: var(--bayangan); max-width: 90vw; text-align: center; }
 
@@ -172,7 +180,8 @@
       .trust { grid-template-columns: repeat(4, 1fr); }
       .kat-grid { grid-template-columns: repeat(4, 1fr); }
       .grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
-      .panel-bawah { grid-template-columns: 1fr 1fr; }
+      .panel-bawah { grid-template-columns: 1fr; }
+      .grid-tentang { grid-template-columns: 1fr 1fr; }
       .modal { align-items: center; }
       .modal-isi { border-radius: 20px; }
     }
@@ -200,16 +209,14 @@
       <a href="#produk">Katalog</a>
       <a href="#cek-status">Cek Status</a>
       <a href="#tentang">Tentang</a>
-      <a href="#faq">FAQ</a>
-      <a href="#kontak">Kontak</a>
     </nav>
     <a class="tombol-keranjang" href="#keranjang">🛒 <span id="jumlah-keranjang">0</span></a>
   </div>
 </header>
 
-<main class="wrap" id="beranda">
+<main class="wrap" id="halaman-toko">
 
-  <section class="hero">
+  <section class="hero" id="beranda">
     <h1>Produk Digital<br>Pilihan Terbaik untuk Kamu</h1>
     <p>Akun premium dan aplikasi pilihan, proses cepat, dan siap dikirim setelah pembayaran diverifikasi.</p>
     <a class="tombol-utama" href="#produk">Lihat Katalog</a>
@@ -282,34 +289,40 @@
       <button class="tombol-cek" id="tombol-cek-status" onclick="cekStatus()">Cek Status</button>
       <div id="hasil-cek"></div>
     </section>
+  </div>
 
-    <section class="kotak" id="tentang">
-      <h2>Tentang Kami</h2>
-      <p id="info-tentang" class="muted">Memuat...</p>
+</main>
+
+<section class="wrap halaman-tentang sembunyi" id="halaman-tentang">
+  <div class="kembali"><a href="#beranda">← Kembali ke toko</a></div>
+
+  <section class="hero">
+    <h1>Tentang KIMMY STORE</h1>
+    <p id="info-tentang" class="muted" style="color:var(--cream);opacity:.92">Memuat...</p>
+  </section>
+
+  <div class="grid-tentang">
+    <section class="kotak">
       <h2>Jam Operasional</h2>
       <p id="info-jam" class="muted">-</p>
+      <h2>Kontak Admin</h2>
+      <p><strong>WhatsApp:</strong> <span id="info-kontak">-</span></p>
+      <a class="tombol-wa" id="tombol-hubungi" href="#" target="_blank">💬 Hubungi Admin</a>
     </section>
 
-    <section class="kotak" id="faq">
-      <h2>Pertanyaan yang Sering Ditanyakan</h2>
-      <div id="daftar-faq"><p class="muted">Memuat...</p></div>
-    </section>
-
-    <section class="kotak" id="kebijakan">
+    <section class="kotak">
       <h2>Kebijakan Toko</h2>
       <p><strong>Pembayaran:</strong> <span id="info-pembayaran" class="muted">Memuat...</span></p>
       <p><strong>Garansi:</strong> <span id="info-garansi" class="muted">Memuat...</span></p>
       <p><strong>Pengembalian dana:</strong> <span id="info-pengembalian" class="muted">Memuat...</span></p>
     </section>
 
-    <section class="kotak" id="kontak">
-      <h2>Kontak Admin</h2>
-      <p><strong>WhatsApp:</strong> <span id="info-kontak">-</span></p>
-      <a class="tombol-wa" id="tombol-hubungi" href="#" target="_blank">💬 Hubungi Admin</a>
+    <section class="kotak" style="grid-column: 1 / -1;">
+      <h2>Pertanyaan yang Sering Ditanyakan</h2>
+      <div id="daftar-faq"><p class="muted">Memuat...</p></div>
     </section>
   </div>
-
-</main>
+</section>
 
 <div id="modal-detail" class="modal sembunyi" onclick="if(event.target===this)tutupDetail()">
   <div class="modal-isi">
@@ -329,8 +342,6 @@
       <a href="#produk">Katalog</a>
       <a href="#cek-status">Cek Status</a>
       <a href="#tentang">Tentang</a>
-      <a href="#faq">FAQ</a>
-      <a href="#kontak">Kontak</a>
     </nav>
   </div>
 </footer>
@@ -424,6 +435,27 @@
     if (timerToast) clearTimeout(timerToast);
     timerToast = setTimeout(() => { el.style.display = "none"; }, 2200);
   }
+
+  /* ---------- PINDAH HALAMAN (TOKO / TENTANG) ---------- */
+
+  function aturHalaman() {
+    const h = location.hash;
+    const tentang = h === "#tentang";
+    document.getElementById("halaman-toko").classList.toggle("sembunyi", tentang);
+    document.getElementById("halaman-tentang").classList.toggle("sembunyi", !tentang);
+    if (tentang) {
+      window.scrollTo({ top: 0 });
+      return;
+    }
+    if (h && h.length > 1) {
+      const el = document.getElementById(h.slice(1));
+      if (el) el.scrollIntoView();
+    } else {
+      window.scrollTo({ top: 0 });
+    }
+  }
+
+  window.addEventListener("hashchange", aturHalaman);
 
   function indeksVarian() {
     semuaProduk.forEach(p => {
@@ -808,7 +840,6 @@
     const items = (data.items || []).map(i =>
       '<div>' + escapeHTML(i.product_name) + " (" + escapeHTML(i.variant_name) + ") x" + i.quantity + " = " + rupiah(i.subtotal) + "</div>"
     ).join("");
-
     const infoBayar = data.status === "menunggu_pembayaran"
       ? '<div class="info-bayar">Silakan lakukan pembayaran lalu kirim bukti transfer ke WhatsApp toko.</div>'
       : "";
@@ -1114,6 +1145,7 @@
   });
 
   renderKeranjang();
+  aturHalaman();
   muatProduk();
   muatInfoToko();
   muatMetode();
@@ -1122,4 +1154,4 @@
 </script>
 
 </body>
-</html>
+        </html>
