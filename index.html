@@ -18,7 +18,7 @@ a{color:inherit}
 .ol{color:#fff;font-weight:900;text-shadow:2px 0 0 var(--navy),-2px 0 0 var(--navy),0 2px 0 var(--navy),0 -2px 0 var(--navy),2px 2px 0 #000}
 
 /* HEADER */
-header.top{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:4px solid var(--merah);box-shadow:0 4px 0 #000;position:sticky}
+header.top{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:4px solid var(--merah);box-shadow:0 4px 0 #000}
 header.top::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,210,63,.06) 0 6px,transparent 6px 14px);pointer-events:none}
 .top-inner{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;min-width:0;flex-shrink:0}
@@ -36,14 +36,20 @@ nav.menu a:hover{background:var(--kuning);transform:none}
 .tombol-keranjang{background:var(--merah);color:#fff;text-decoration:none;font-weight:900;padding:6px 12px;border-radius:999px;border:3px solid #fff;box-shadow:3px 3px 0 #000;white-space:nowrap;flex-shrink:0;transform:rotate(3deg)}
 
 /* HERO */
-.hero{position:relative;display:grid;gap:14px;background:var(--navy);color:#fff;border:3px solid #000;box-shadow:5px 5px 0 var(--merah);border-radius:12px;padding:20px 16px;margin:16px 0 12px;overflow:hidden}
-.hero::after{content:"★";position:absolute;right:14px;top:8px;color:var(--kuning);font-size:1.6rem;text-shadow:2px 2px 0 #000}
-.hero-teks h1{font-size:clamp(1.3rem,4vw,2rem);line-height:1.15;text-transform:uppercase;text-shadow:3px 3px 0 #000}
+.hero{position:relative;display:grid;gap:16px;background:var(--navy);color:#fff;border:3px solid #000;box-shadow:5px 5px 0 var(--merah);border-radius:12px;padding:22px 18px 20px;margin:16px 0 12px;overflow:hidden}
+.hero::before{content:"✦";position:absolute;left:12px;bottom:10px;color:var(--kuning);font-size:1.1rem;text-shadow:2px 2px 0 #000}
+.hero::after{content:"♡";position:absolute;right:14px;top:10px;color:var(--pink);font-size:1.3rem;text-shadow:2px 2px 0 #000}
+.hero-kicker{display:inline-block;background:var(--pink);color:var(--hitam);font-weight:900;font-size:.78rem;letter-spacing:.8px;padding:5px 12px;border:2px solid #000;border-radius:999px;box-shadow:2px 2px 0 #000;transform:rotate(-2deg);text-transform:uppercase}
+.hero-teks h1{margin-top:10px;font-size:clamp(1.3rem,4vw,2rem);line-height:1.15;text-transform:uppercase;text-shadow:3px 3px 0 #000}
 .hero-teks p{margin-top:8px;font-size:.92rem;max-width:560px}
 .tombol-utama{display:inline-block;margin-top:12px;background:var(--kuning);color:var(--hitam);padding:9px 20px;border-radius:999px;text-decoration:none;font-weight:900;border:3px solid #000;box-shadow:3px 3px 0 var(--merah)}
-.hero-foto{justify-self:center;background:#fff;padding:8px 8px 22px;border:3px solid #000;box-shadow:4px 4px 0 var(--kuning);transform:rotate(3deg);width:min(70%,240px)}
-.hero-foto img{width:100%;aspect-ratio:1/1;object-fit:cover;border:2px solid #000;display:block}
-.banner-promo{display:grid;gap:8px;margin-top:12px}
+.hero-foto{justify-self:center;position:relative;background:#fff;padding:9px 9px 26px;border:3px solid #000;box-shadow:5px 5px 0 var(--kuning);transform:rotate(3deg);width:min(62%,220px)}
+.hero-foto::before{content:"";position:absolute;top:-12px;left:50%;width:76px;height:22px;margin-left:-38px;background:repeating-linear-gradient(90deg,#9FB3C8 0 5px,#7D93AB 5px 10px);transform:rotate(-4deg);opacity:.95}
+.hero-foto img{width:100%;aspect-ratio:1/1;object-fit:cover;border:2px solid #000;display:block;background:var(--perak)}
+.hero-foto .caption{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-weight:900;font-size:.8rem;color:var(--navy);letter-spacing:1px}
+.hero-placeholder{width:100%;aspect-ratio:1/1;border:2px solid #000;display:grid;place-items:center;background:repeating-conic-gradient(var(--kuning) 0 25%,var(--pink) 0 50%) 0 0/36px 36px;font-size:3.4rem;position:relative}
+.hero-placeholder span{background:#fff;border:2px solid #000;border-radius:50%;width:84px;height:84px;display:grid;place-items:center;box-shadow:3px 3px 0 #000}
+.banner-promo{display:grid;gap:8px;margin-top:4px}
 .banner-promo:empty{display:none}
 .promo-item{background:var(--kuning);color:var(--hitam);padding:8px 12px;border:2px solid #000;border-radius:8px;font-size:.88rem}
 
@@ -168,8 +174,8 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
   .grid-tentang{grid-template-columns:1fr 1fr}
   .modal{align-items:center}
   .modal-isi{border-radius:14px}
-  .hero{grid-template-columns:1fr auto;align-items:center;padding:30px}
-  .hero-foto{width:220px}
+  .hero{grid-template-columns:1fr auto;align-items:center;padding:32px 34px}
+  .hero-foto{width:210px}
 }
 @media(min-width:900px){
   .shop{grid-template-columns:minmax(0,1fr) 330px;gap:22px}
@@ -185,6 +191,7 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
   .logo .tagline{display:none}
   .logo-ikon{width:44px;height:44px}
   nav.menu a{font-size:.72rem;padding:4px 8px}
+  .hero-foto{justify-self:center}
 }
 </style>
 </head>
@@ -215,11 +222,16 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
 <main class="wrap" id="toko">
   <section class="hero" id="beranda">
     <div class="hero-teks">
+      <span class="hero-kicker" id="hero-kicker">DIGITAL GOODIES FOR YOU~</span>
       <h1 class="ol" id="hero-judul">Produk Digital Pilihan Terbaik untuk Kamu</h1>
       <p id="hero-teks">Akun premium dan aplikasi pilihan. Proses cepat, dan siap dikirim setelah pembayaran diverifikasi.</p>
-      <a class="tombol-utama" href="#produk">Lihat Katalog</a>
+      <a class="tombol-utama" href="#produk">Lihat Katalog ♡</a>
     </div>
-    <div class="hero-foto sembunyi" id="hero-foto-box"><img id="hero-foto" alt="Foto toko"></div>
+    <div class="hero-foto" id="hero-foto-box">
+      <img id="hero-foto" alt="Foto toko" class="sembunyi">
+      <div class="hero-placeholder" id="hero-placeholder"><span>🎧</span></div>
+      <div class="caption">KIMMY ♡</div>
+    </div>
     <div class="banner-promo" id="banner-promo" style="grid-column:1/-1"></div>
   </section>
 
@@ -511,16 +523,17 @@ async function cekStatus(){
 
 /* DATA TOKO, IDENTITAS & TAMPILAN */
 async function muatInfo(){
-  const {data}=await supabase.from("store_settings").select("key,value").in("key",["wa_admin","tentang","jam_operasional","kebijakan_pembayaran","kebijakan_garansi","kebijakan_pengembalian","nama_toko","logo_url","bg_url","link_testimoni","tagline_header","hero_judul","hero_teks","hero_foto"]);
+  const {data}=await supabase.from("store_settings").select("key,value").in("key",["wa_admin","tentang","jam_operasional","kebijakan_pembayaran","kebijakan_garansi","kebijakan_pengembalian","nama_toko","logo_url","bg_url","link_testimoni","tagline_header","hero_kicker","hero_judul","hero_teks","hero_foto"]);
   const i={};(data||[]).forEach(r=>i[r.key]=r.value);
   waAdmin=normWA(i.wa_admin||"");
   const nama=i.nama_toko||"KIMMY STORE";
   document.getElementById("nama-header").textContent=nama;
   document.getElementById("nama-footer").textContent=nama;
   document.getElementById("tagline-header").textContent=i.tagline_header||"Digital Products & More";
+  document.getElementById("hero-kicker").textContent=i.hero_kicker||"DIGITAL GOODIES FOR YOU~";
   document.getElementById("hero-judul").textContent=i.hero_judul||"Produk Digital Pilihan Terbaik untuk Kamu";
   document.getElementById("hero-teks").textContent=i.hero_teks||"Akun premium dan aplikasi pilihan. Proses cepat, dan siap dikirim setelah pembayaran diverifikasi.";
-  if(i.hero_foto){document.getElementById("hero-foto").src=i.hero_foto;document.getElementById("hero-foto-box").classList.remove("sembunyi")}
+  if(i.hero_foto){const img=document.getElementById("hero-foto");img.src=i.hero_foto;img.classList.remove("sembunyi");document.getElementById("hero-placeholder").classList.add("sembunyi")}
   document.title=nama;
   if(i.logo_url)document.getElementById("logo-box").innerHTML='<img src="'+esc(i.logo_url)+'" alt="Logo">';
   if(i.bg_url){document.body.classList.add("ada-bg");document.body.style.backgroundImage='linear-gradient(rgba(20,33,61,.45),rgba(20,33,61,.45)),url("'+i.bg_url.replace(/"/g,"%22")+'")'}
@@ -570,4 +583,4 @@ muatBanner();
 muatFaq();
 </script>
 </body>
-</html>
+  </html>
