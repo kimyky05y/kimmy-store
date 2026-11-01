@@ -7,6 +7,7 @@
 <style>
 :root{--denim:#2F5486;--navy:#14213D;--merah:#D62828;--biru:#1D4ED8;--kuning:#FFD23F;--perak:#C9D1DC;--hitam:#111}
 *{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden;width:100%}
 body{font-family:"Trebuchet MS",Arial,system-ui,sans-serif;color:var(--hitam);min-height:100vh;line-height:1.4;background-color:var(--denim);
   background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(0,0,0,.08) 0 1px,transparent 1px 9px)}
 .ol{color:#fff;font-weight:900;text-shadow:2px 0 0 var(--navy),-2px 0 0 var(--navy),0 2px 0 var(--navy),0 -2px 0 var(--navy),2px 2px 0 #000}
@@ -308,6 +309,8 @@ button:disabled{opacity:.6}
         <input id="t-wa" type="tel" placeholder="Contoh: 085722994977">
         <label for="t-jam">Jam operasional</label>
         <input id="t-jam" type="text" placeholder="Contoh: Setiap hari, 08.00 - 22.00 WIB">
+        <label for="t-testi">Link testimoni (opsional)</label>
+        <input id="t-testi" type="url" placeholder="Contoh: https://instagram.com/... atau link Google Review">
         <label for="t-tentang">Tentang toko</label>
         <textarea id="t-tentang" rows="3"></textarea>
         <label for="t-bayar">Kebijakan pembayaran</label>
@@ -407,7 +410,7 @@ function showTab(n){
   window.scrollTo({top:0});
 }
 
-/* IDENTITAS (logo, nama, latar) */
+/* IDENTITAS */
 async function muatTopbar(){
   const {data}=await supabase.from("store_settings").select("key,value").in("key",["nama_toko","logo_url"]);
   const m={};(data||[]).forEach(r=>m[r.key]=r.value);
@@ -757,13 +760,14 @@ async function muatToko(){
   const {data,error}=await supabase.from("store_settings").select("key,value");
   if(error)return notif("notif-toko","gagal","Gagal memuat info toko: "+error.message);
   const m={};(data||[]).forEach(r=>m[r.key]=r.value);
-  setVal("t-wa",m.wa_admin||"");setVal("t-jam",m.jam_operasional||"");setVal("t-tentang",m.tentang||"");setVal("t-bayar",m.kebijakan_pembayaran||"");setVal("t-garansi",m.kebijakan_garansi||"");setVal("t-kembali",m.kebijakan_pengembalian||"");
+  setVal("t-wa",m.wa_admin||"");setVal("t-jam",m.jam_operasional||"");setVal("t-testi",m.link_testimoni||"");setVal("t-tentang",m.tentang||"");setVal("t-bayar",m.kebijakan_pembayaran||"");setVal("t-garansi",m.kebijakan_garansi||"");setVal("t-kembali",m.kebijakan_pengembalian||"");
   muatFaqAdmin();
 }
 async function simpanToko(){
-  const wa=val("t-wa").replace(/[^0-9]/g,"");
+  const wa=val("t-wa").replace(/[^0-9]/g,""),testi=val("t-testi");
   if(!/^(0|62)[0-9]{8,13}$/.test(wa))return notif("notif-toko","gagal","Nomor WhatsApp tidak valid. Contoh: 085722994977");
-  const {error}=await supabase.from("store_settings").upsert([{key:"wa_admin",value:wa},{key:"jam_operasional",value:val("t-jam")},{key:"tentang",value:val("t-tentang")},{key:"kebijakan_pembayaran",value:val("t-bayar")},{key:"kebijakan_garansi",value:val("t-garansi")},{key:"kebijakan_pengembalian",value:val("t-kembali")}],{onConflict:"key"});
+  if(testi&&!/^https?:\/\//.test(testi))return notif("notif-toko","gagal","Link testimoni harus diawali https:// atau http://");
+  const {error}=await supabase.from("store_settings").upsert([{key:"wa_admin",value:wa},{key:"jam_operasional",value:val("t-jam")},{key:"link_testimoni",value:testi},{key:"tentang",value:val("t-tentang")},{key:"kebijakan_pembayaran",value:val("t-bayar")},{key:"kebijakan_garansi",value:val("t-garansi")},{key:"kebijakan_pengembalian",value:val("t-kembali")}],{onConflict:"key"});
   if(error)return notif("notif-toko","gagal","Gagal menyimpan: "+error.message);
   notif("notif-toko","sukses","Info toko tersimpan.");
 }
