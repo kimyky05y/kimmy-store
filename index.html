@@ -7,7 +7,7 @@
 <style>
 :root{--navy:#14213D;--denim:#2F5486;--biru:#1D4ED8;--merah:#D62828;--kuning:#FFD23F;--perak:#C9D1DC;--pink:#FF6FA8;--hitam:#111;--putih:#fff;--abu:#4A5B6E}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:96px;overflow-x:hidden;width:100%}
+html{scroll-behavior:smooth;scroll-padding-top:110px;overflow-x:hidden;width:100%}
 body{font-family:"Trebuchet MS",Arial,system-ui,sans-serif;color:var(--hitam);min-height:100vh;line-height:1.4;overflow-x:hidden;width:100%;background-color:var(--denim);
   background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(0,0,0,.08) 0 1px,transparent 1px 9px);background-attachment:fixed}
 body.ada-bg{background-size:cover;background-position:center;background-attachment:fixed}
@@ -18,24 +18,31 @@ a{color:inherit}
 .ol{color:#fff;font-weight:900;text-shadow:2px 0 0 var(--navy),-2px 0 0 var(--navy),0 2px 0 var(--navy),0 -2px 0 var(--navy),2px 2px 0 #000}
 
 /* HEADER */
-header.top{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:4px solid var(--merah);box-shadow:0 3px 0 #000}
-.top-inner{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0}
-.logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:#fff;white-space:nowrap;min-width:0;flex-shrink:0}
-.logo-ikon{width:42px;height:42px;border-radius:50%;background:var(--kuning);border:3px solid #fff;display:grid;place-items:center;font-size:1.3rem;overflow:hidden;flex-shrink:0}
+header.top{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:4px solid var(--merah);box-shadow:0 4px 0 #000;position:sticky}
+header.top::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,210,63,.06) 0 6px,transparent 6px 14px);pointer-events:none}
+.top-inner{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;min-width:0;flex-shrink:0}
+.logo-ikon{width:50px;height:50px;border-radius:50%;background:#fff;border:3px solid var(--kuning);box-shadow:3px 3px 0 var(--merah);transform:rotate(-6deg);display:grid;place-items:center;overflow:hidden;flex-shrink:0}
 .logo-ikon img{width:100%;height:100%;object-fit:cover}
-.logo .teks{font-weight:900;font-size:1.05rem;letter-spacing:.5px;overflow:hidden;text-overflow:ellipsis;max-width:160px}
-nav.menu{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;min-width:0;flex:1;justify-content:flex-start}
+.logo-teks{min-width:0}
+.logo .teks{display:block;font-weight:900;font-size:1.05rem;letter-spacing:.5px;text-shadow:2px 2px 0 #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
+.logo .tagline{display:block;font-size:.68rem;color:var(--pink);font-weight:900;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
+nav.menu{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;min-width:0;flex:1;padding:4px 2px}
 nav.menu::-webkit-scrollbar{display:none}
-nav.menu a{background:#fff;color:var(--hitam);text-decoration:none;font-size:.8rem;font-weight:900;padding:5px 10px;border-radius:999px;white-space:nowrap;border:2px solid #000}
-nav.menu a:hover{background:var(--kuning)}
-.tombol-keranjang{background:var(--merah);color:#fff;text-decoration:none;font-weight:900;padding:6px 12px;border-radius:999px;border:3px solid #fff;box-shadow:3px 3px 0 #000;white-space:nowrap;flex-shrink:0}
+nav.menu a{background:#fff;color:var(--hitam);text-decoration:none;font-size:.8rem;font-weight:900;padding:5px 11px;border-radius:999px;white-space:nowrap;border:2px solid #000;box-shadow:2px 2px 0 var(--kuning);transition:transform .15s}
+nav.menu a:nth-child(odd){transform:rotate(-2deg)}
+nav.menu a:nth-child(even){transform:rotate(2deg)}
+nav.menu a:hover{background:var(--kuning);transform:none}
+.tombol-keranjang{background:var(--merah);color:#fff;text-decoration:none;font-weight:900;padding:6px 12px;border-radius:999px;border:3px solid #fff;box-shadow:3px 3px 0 #000;white-space:nowrap;flex-shrink:0;transform:rotate(3deg)}
 
 /* HERO */
-.hero{background:var(--navy);color:#fff;border:3px solid #000;box-shadow:5px 5px 0 var(--merah);border-radius:12px;padding:20px 16px;margin:16px 0 12px}
-.hero h1{font-size:clamp(1.3rem,4vw,2rem);line-height:1.15;text-transform:uppercase}
-.hero h1 .pink{color:var(--pink)}
-.hero p{margin-top:8px;font-size:.92rem;max-width:560px}
+.hero{position:relative;display:grid;gap:14px;background:var(--navy);color:#fff;border:3px solid #000;box-shadow:5px 5px 0 var(--merah);border-radius:12px;padding:20px 16px;margin:16px 0 12px;overflow:hidden}
+.hero::after{content:"★";position:absolute;right:14px;top:8px;color:var(--kuning);font-size:1.6rem;text-shadow:2px 2px 0 #000}
+.hero-teks h1{font-size:clamp(1.3rem,4vw,2rem);line-height:1.15;text-transform:uppercase;text-shadow:3px 3px 0 #000}
+.hero-teks p{margin-top:8px;font-size:.92rem;max-width:560px}
 .tombol-utama{display:inline-block;margin-top:12px;background:var(--kuning);color:var(--hitam);padding:9px 20px;border-radius:999px;text-decoration:none;font-weight:900;border:3px solid #000;box-shadow:3px 3px 0 var(--merah)}
+.hero-foto{justify-self:center;background:#fff;padding:8px 8px 22px;border:3px solid #000;box-shadow:4px 4px 0 var(--kuning);transform:rotate(3deg);width:min(70%,240px)}
+.hero-foto img{width:100%;aspect-ratio:1/1;object-fit:cover;border:2px solid #000;display:block}
 .banner-promo{display:grid;gap:8px;margin-top:12px}
 .banner-promo:empty{display:none}
 .promo-item{background:var(--kuning);color:var(--hitam);padding:8px 12px;border:2px solid #000;border-radius:8px;font-size:.88rem}
@@ -45,7 +52,6 @@ nav.menu a:hover{background:var(--kuning)}
 .keunggulan div{background:#fff;border:2px solid #000;box-shadow:3px 3px 0 var(--merah);padding:10px 6px;text-align:center;font-weight:900;font-size:.82rem;border-radius:8px}
 .ikon-lingkaran{width:42px;height:42px;margin:0 auto 4px;border-radius:50%;background:var(--perak);border:2px solid #000;display:grid;place-items:center;font-size:1.15rem}
 
-/* JUDUL */
 .judul{font-size:1.1rem;text-transform:uppercase;margin:22px 0 10px;color:#fff;font-weight:900;text-shadow:2px 2px 0 #000}
 .judul::before{content:"★ "}
 .judul::after{content:" ★";color:var(--kuning)}
@@ -57,7 +63,7 @@ nav.menu a:hover{background:var(--kuning)}
 .kat-kartu b{display:block;font-size:.85rem;text-transform:uppercase}
 .kat-kartu span{font-size:.72rem;font-weight:700}
 
-/* KARTU PRODUK (ukuran tetap) */
+/* KARTU PRODUK */
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:8px}
 .card{position:relative;background:#fff;border:2px solid #000;box-shadow:3px 3px 0 #000;border-radius:10px;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 .foto{width:100%;height:140px;object-fit:contain;display:block;background:#fff;border-bottom:2px solid #000}
@@ -162,11 +168,12 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
   .grid-tentang{grid-template-columns:1fr 1fr}
   .modal{align-items:center}
   .modal-isi{border-radius:14px}
-  .hero{padding:30px}
+  .hero{grid-template-columns:1fr auto;align-items:center;padding:30px}
+  .hero-foto{width:220px}
 }
 @media(min-width:900px){
   .shop{grid-template-columns:minmax(0,1fr) 330px;gap:22px}
-  .cart{position:sticky;top:96px;max-height:calc(100vh - 116px);overflow-y:auto}
+  .cart{position:sticky;top:110px;max-height:calc(100vh - 130px);overflow-y:auto}
   nav.menu{overflow:visible;flex-wrap:wrap}
 }
 @media(min-width:1100px){
@@ -174,7 +181,9 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
   .shop{grid-template-columns:minmax(0,1fr) 340px}
 }
 @media(max-width:480px){
-  .logo .teks{display:none}
+  .logo .teks{font-size:.95rem;max-width:120px}
+  .logo .tagline{display:none}
+  .logo-ikon{width:44px;height:44px}
   nav.menu a{font-size:.72rem;padding:4px 8px}
 }
 </style>
@@ -185,7 +194,10 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
   <div class="wrap top-inner">
     <a class="logo" href="#beranda">
       <span class="logo-ikon" id="logo-box">🐱</span>
-      <span class="teks" id="nama-header">KIMMY STORE</span>
+      <span class="logo-teks">
+        <span class="teks" id="nama-header">KIMMY STORE</span>
+        <span class="tagline" id="tagline-header">Digital Products &amp; More</span>
+      </span>
     </a>
     <nav class="menu">
       <a href="#produk">Katalog</a>
@@ -202,10 +214,13 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
 
 <main class="wrap" id="toko">
   <section class="hero" id="beranda">
-    <h1 class="ol">Produk Digital <span class="pink">Pilihan Terbaik</span> untuk Kamu</h1>
-    <p>Akun premium dan aplikasi pilihan. Proses cepat, dan siap dikirim setelah pembayaran diverifikasi.</p>
-    <a class="tombol-utama" href="#produk">Lihat Katalog</a>
-    <div class="banner-promo" id="banner-promo"></div>
+    <div class="hero-teks">
+      <h1 class="ol" id="hero-judul">Produk Digital Pilihan Terbaik untuk Kamu</h1>
+      <p id="hero-teks">Akun premium dan aplikasi pilihan. Proses cepat, dan siap dikirim setelah pembayaran diverifikasi.</p>
+      <a class="tombol-utama" href="#produk">Lihat Katalog</a>
+    </div>
+    <div class="hero-foto sembunyi" id="hero-foto-box"><img id="hero-foto" alt="Foto toko"></div>
+    <div class="banner-promo" id="banner-promo" style="grid-column:1/-1"></div>
   </section>
 
   <div class="keunggulan">
@@ -269,7 +284,7 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
 
 <section id="p-tentang" class="wrap sembunyi">
   <div class="kembali"><a href="#beranda">← Kembali ke toko</a></div>
-  <div class="hero"><h1 class="ol">Tentang Kami</h1><p id="info-tentang">Memuat...</p></div>
+  <div class="hero"><div class="hero-teks"><h1 class="ol">Tentang Kami</h1><p id="info-tentang">Memuat...</p></div></div>
   <div class="kotak"><h2>🕒 Jam Operasional</h2><p id="info-jam">-</p></div>
 </section>
 
@@ -494,14 +509,18 @@ async function cekStatus(){
   h.innerHTML=`<div style="margin-top:12px"><strong>${esc(data.order_code)}</strong><div class="muted">${new Date(data.created_at).toLocaleString("id-ID")}</div><div class="status-cek">${STATUS_LABEL[data.status]||esc(data.status)}</div><div style="margin-top:8px">${items}</div><div class="total">Total: ${rupiah(data.total_amount)}</div>${bayar}${kirim}${klaim}</div>`;
 }
 
-/* DATA TOKO & IDENTITAS */
+/* DATA TOKO, IDENTITAS & TAMPILAN */
 async function muatInfo(){
-  const {data}=await supabase.from("store_settings").select("key,value").in("key",["wa_admin","tentang","jam_operasional","kebijakan_pembayaran","kebijakan_garansi","kebijakan_pengembalian","nama_toko","logo_url","bg_url","link_testimoni"]);
+  const {data}=await supabase.from("store_settings").select("key,value").in("key",["wa_admin","tentang","jam_operasional","kebijakan_pembayaran","kebijakan_garansi","kebijakan_pengembalian","nama_toko","logo_url","bg_url","link_testimoni","tagline_header","hero_judul","hero_teks","hero_foto"]);
   const i={};(data||[]).forEach(r=>i[r.key]=r.value);
   waAdmin=normWA(i.wa_admin||"");
   const nama=i.nama_toko||"KIMMY STORE";
   document.getElementById("nama-header").textContent=nama;
   document.getElementById("nama-footer").textContent=nama;
+  document.getElementById("tagline-header").textContent=i.tagline_header||"Digital Products & More";
+  document.getElementById("hero-judul").textContent=i.hero_judul||"Produk Digital Pilihan Terbaik untuk Kamu";
+  document.getElementById("hero-teks").textContent=i.hero_teks||"Akun premium dan aplikasi pilihan. Proses cepat, dan siap dikirim setelah pembayaran diverifikasi.";
+  if(i.hero_foto){document.getElementById("hero-foto").src=i.hero_foto;document.getElementById("hero-foto-box").classList.remove("sembunyi")}
   document.title=nama;
   if(i.logo_url)document.getElementById("logo-box").innerHTML='<img src="'+esc(i.logo_url)+'" alt="Logo">';
   if(i.bg_url){document.body.classList.add("ada-bg");document.body.style.backgroundImage='linear-gradient(rgba(20,33,61,.45),rgba(20,33,61,.45)),url("'+i.bg_url.replace(/"/g,"%22")+'")'}
