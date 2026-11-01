@@ -1,221 +1,125 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KIMMY STORE</title>
-  <style>
-    :root {
-      --navy: #263F55;
-      --dusty: #527A96;
-      --cream: #F7E9B8;
-      --mustard: #D99A3D;
-      --terracotta: #B5654A;
-      --pink: #F4C7C3;
-      --putih: #FFFFFF;
-      --bayangan: 0 3px 10px rgba(0,0,0,0.15);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
-    body {
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      background: var(--navy); color: var(--navy); min-height: 100vh; line-height: 1.4;
-    }
-    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
-    .sembunyi { display: none !important; }
-
-    header.top { background: var(--navy); color: var(--cream); position: sticky; top: 0; z-index: 20; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
-    .top-inner { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; }
-    .logo { font-weight: 800; letter-spacing: 1px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--cream); white-space: nowrap; }
-    .logo-ikon { width: 34px; height: 34px; border-radius: 50%; background: var(--cream); display: grid; place-items: center; font-size: 1.05rem; }
-    nav.menu { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
-    nav.menu::-webkit-scrollbar { display: none; }
-    nav.menu a { color: var(--cream); text-decoration: none; font-size: 0.85rem; padding: 6px 10px; border-radius: 999px; white-space: nowrap; }
-    nav.menu a:hover { background: rgba(247,233,184,0.15); }
-    .tombol-keranjang { background: var(--mustard); color: var(--navy); text-decoration: none; font-weight: 700; padding: 7px 14px; border-radius: 999px; font-size: 0.88rem; white-space: nowrap; }
-
-    .hero { background: linear-gradient(135deg, var(--dusty) 0%, var(--navy) 100%); color: var(--cream); border-radius: 22px; padding: 24px 20px; margin: 16px 0 14px; position: relative; overflow: hidden; box-shadow: var(--bayangan); }
-    .hero::after { content: "✦"; position: absolute; right: 18px; top: 10px; color: var(--mustard); font-size: 1.6rem; }
-    .hero h1 { font-size: clamp(1.35rem, 4vw, 2rem); line-height: 1.25; }
-    .hero p { margin-top: 8px; opacity: 0.92; font-size: 0.95rem; max-width: 560px; }
-    .hero .tombol-utama { display: inline-block; margin-top: 14px; background: var(--mustard); color: var(--navy); padding: 10px 20px; border-radius: 999px; text-decoration: none; font-weight: 700; }
-    .banner-promo { display: grid; gap: 8px; margin-top: 16px; }
-    .banner-promo:empty { display: none; }
-    .promo-item { background: var(--pink); color: var(--navy); border-radius: 14px; padding: 10px 14px; font-size: 0.92rem; }
-    .promo-item span { font-size: 0.82rem; opacity: 0.85; }
-
-    .trust { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-    .trust div { background: var(--cream); color: var(--navy); border-radius: 16px; padding: 12px 8px; text-align: center; font-size: 0.84rem; font-weight: 600; box-shadow: var(--bayangan); }
-    .trust b { display: block; font-size: 1.35rem; margin-bottom: 2px; }
-
-    .blok-home { margin-top: 24px; }
-    .blok-home h2 { color: var(--cream); font-size: 1.2rem; margin-bottom: 12px; }
-    .kat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .kat-kartu { background: var(--cream); color: var(--navy); border: none; border-radius: 16px; padding: 14px; text-align: left; cursor: pointer; font-family: inherit; box-shadow: var(--bayangan); }
-    .kat-kartu b { display: block; font-size: 0.98rem; }
-    .kat-kartu span { font-size: 0.78rem; color: var(--dusty); font-weight: 600; }
-    .kat-kartu:hover { background: #FBF3D2; }
-    .promo-list { display: grid; gap: 10px; }
-    .promo-baris { background: var(--cream); color: var(--navy); border-radius: 16px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; box-shadow: var(--bayangan); }
-    .promo-baris .info-promo { flex: 1; min-width: 160px; }
-    .promo-baris .info-promo b { display: block; font-size: 0.95rem; }
-    .promo-baris .info-promo small { color: var(--dusty); font-size: 0.8rem; }
-    .promo-harga-wrap { text-align: right; }
-    .promo-harga-wrap .coret { color: #7A7A7A; text-decoration: line-through; font-size: 0.8rem; display: block; }
-    .promo-harga-wrap .akhir { color: var(--terracotta); font-weight: 800; }
-    .tombol-kecil { background: var(--navy); color: var(--cream); border: none; padding: 7px 14px; border-radius: 999px; font-size: 0.8rem; cursor: pointer; font-family: inherit; font-weight: 600; white-space: nowrap; }
-    .tombol-kecil:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .shop { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
-    h2.judul-bagian { color: var(--cream); font-size: 1.2rem; margin: 4px 0 12px; }
-    .cari { width: 100%; padding: 11px 14px; border-radius: 999px; border: none; font-size: 0.95rem; margin-bottom: 10px; font-family: inherit; box-shadow: var(--bayangan); }
-    .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
-    .chips::-webkit-scrollbar { display: none; }
-    .chip { border: 1px solid rgba(247,233,184,0.5); background: transparent; color: var(--cream); padding: 6px 14px; border-radius: 999px; font-size: 0.85rem; cursor: pointer; white-space: nowrap; font-family: inherit; }
-    .chip.aktif { background: var(--cream); color: var(--navy); border-color: var(--cream); font-weight: 700; }
-
-    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
-    .card { background: var(--cream); color: var(--navy); border-radius: 18px; overflow: hidden; box-shadow: var(--bayangan); display: flex; flex-direction: column; }
-    .foto { width: 100%; height: 120px; object-fit: cover; display: block; background: #E8EEF3; }
-    .foto-kosong { height: 120px; display: grid; place-items: center; background: var(--dusty); color: var(--cream); font-size: 2rem; }
-    .isi { padding: 12px; display: flex; flex-direction: column; flex: 1; }
-    .kategori { font-size: 0.7rem; color: var(--dusty); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-    .card h3 { font-size: 0.98rem; margin: 2px 0 4px; line-height: 1.3; }
-    .varian { border-top: 1px dashed var(--dusty); padding: 8px 0; }
-    .varian .nama { font-weight: 700; font-size: 0.88rem; }
-    .harga { font-size: 0.9rem; margin-top: 2px; }
-    .harga-coret { color: #7A7A7A; text-decoration: line-through; font-size: 0.8rem; }
-    .harga-promo { color: var(--terracotta); font-weight: 800; font-size: 0.98rem; }
-    .badge-promo { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--terracotta); color: var(--putih); margin-top: 4px; }
-    .badge { display: inline-block; font-size: 0.68rem; padding: 2px 8px; border-radius: 999px; margin-top: 4px; font-weight: 600; }
-    .tersedia { background: #DFF3E4; color: #1E6B35; }
-    .habis { background: #F6D5D0; color: #8A2A1A; }
-    .sisa { font-size: 0.74rem; color: var(--dusty); margin-top: 3px; font-weight: 600; }
-    .garansi { font-size: 0.75rem; color: var(--dusty); margin-top: 3px; }
-    .tombol { margin-top: 6px; width: 100%; background: var(--navy); color: var(--cream); border: none; padding: 8px 10px; border-radius: 999px; font-size: 0.82rem; cursor: pointer; font-family: inherit; font-weight: 600; }
-    .tombol:hover { background: var(--dusty); }
-    .tombol:disabled { opacity: 0.5; cursor: not-allowed; background: var(--navy); }
-    .tombol-detail { margin-top: auto; width: 100%; background: transparent; color: var(--navy); border: 1px solid var(--dusty); padding: 7px 10px; border-radius: 999px; font-size: 0.8rem; cursor: pointer; font-family: inherit; font-weight: 600; }
-    .tombol-detail:hover { background: #E8EEF3; }
-
-    .cart { background: var(--cream); color: var(--navy); border-radius: 20px; padding: 16px; box-shadow: 0 3px 12px rgba(0,0,0,0.2); }
-    .cart h2 { font-size: 1.12rem; margin-bottom: 4px; }
-    .item-keranjang { border-top: 1px dashed var(--dusty); padding: 10px 0; }
-    .kontrol { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
-    .kontrol button { background: var(--dusty); color: var(--putih); border: none; border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 0.95rem; }
-    .kontrol .hapus { background: var(--terracotta); margin-left: auto; font-size: 0.8rem; }
-    .subtotal { text-align: right; font-weight: 700; margin-top: 4px; }
-    .total { border-top: 2px solid var(--navy); margin-top: 8px; padding-top: 8px; text-align: right; font-size: 1.05rem; }
-    .formulir { margin-top: 12px; border-top: 2px dashed var(--dusty); padding-top: 12px; }
-    .formulir label { display: block; font-size: 0.85rem; margin-top: 10px; font-weight: 700; }
-    .formulir label:first-child { margin-top: 0; }
-    .formulir input[type="text"], .formulir input[type="tel"], .formulir textarea { width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--dusty); border-radius: 12px; font-size: 0.95rem; font-family: inherit; background: var(--putih); }
-    .metode { border: 1px solid var(--dusty); border-radius: 14px; padding: 10px; margin-top: 8px; background: var(--putih); }
-    .metode-pilih { display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer; margin: 0; }
-    .metode-pilih input { width: auto; }
-    .rekening { margin-top: 8px; background: #F4F8FB; border-radius: 10px; padding: 10px; font-size: 0.88rem; }
-    .rekening .nomor { font-size: 1.05rem; font-weight: 800; letter-spacing: 1px; margin-top: 4px; word-break: break-all; }
-    .tombol-salin { margin-top: 6px; background: var(--dusty); color: var(--putih); border: none; border-radius: 999px; padding: 6px 14px; font-size: 0.82rem; cursor: pointer; font-family: inherit; }
-    .qris-img { display: block; width: 100%; max-width: 240px; margin: 8px auto 0; border-radius: 10px; background: #fff; }
-    .tombol-checkout { width: 100%; margin-top: 14px; background: var(--mustard); color: var(--navy); border: none; border-radius: 999px; padding: 12px; font-weight: 800; font-size: 1rem; cursor: pointer; font-family: inherit; }
-    .tombol-checkout:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    .notif { margin-top: 10px; padding: 10px; border-radius: 12px; font-size: 0.9rem; }
-    .notif.sukses { background: #DFF3E4; color: #1E6B35; }
-    .notif.gagal { background: #F6D5D0; color: #8A2A1A; }
-    .muted { color: var(--dusty); font-size: 0.85rem; }
-    .info-bayar { background: #F4F8FB; border-radius: 10px; padding: 10px; margin-top: 10px; font-size: 0.88rem; }
-    .status-cek { display: inline-block; font-size: 0.85rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: #E8EEF3; margin-top: 6px; }
-
-    .panel-bawah { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
-    .kotak { background: var(--cream); color: var(--navy); border-radius: 20px; padding: 18px; box-shadow: var(--bayangan); }
-    .kotak h2 { font-size: 1.08rem; margin-bottom: 8px; }
-    .kotak h2 + h2 { margin-top: 16px; }
-    .kotak p { font-size: 0.92rem; line-height: 1.55; margin-bottom: 8px; }
-    .kotak input { width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--dusty); border-radius: 12px; font-size: 0.95rem; font-family: inherit; background: #fff; text-transform: uppercase; }
-    .kotak label { display: block; font-size: 0.85rem; font-weight: 700; margin-top: 8px; }
-    .faq-item { border-top: 1px dashed var(--dusty); padding: 10px 0; }
-    .faq-item strong { display: block; margin-bottom: 3px; font-size: 0.95rem; }
-    .faq-item div { font-size: 0.88rem; color: #3A4D5E; line-height: 1.5; }
-    .tombol-wa { display: inline-block; margin-top: 6px; background: #1E6B35; color: var(--putih); padding: 10px 18px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 0.92rem; }
-    .tombol-cek { width: 100%; margin-top: 12px; background: var(--mustard); color: var(--navy); border: none; border-radius: 999px; padding: 11px; font-weight: 800; font-size: 0.98rem; cursor: pointer; font-family: inherit; }
-    .tombol-cek:disabled { opacity: 0.6; }
-
-    .halaman-tentang { margin-top: 16px; }
-    .kembali { margin: 14px 0 6px; }
-    .kembali a { color: var(--cream); text-decoration: none; font-weight: 700; font-size: 0.92rem; }
-    .kembali a:hover { text-decoration: underline; }
-    .grid-tentang { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
-    .grid-tentang .kotak h2 { margin-top: 0; }
-
-    .modal { position: fixed; inset: 0; background: rgba(20,30,40,0.55); display: flex; align-items: flex-end; justify-content: center; z-index: 50; }
-    .modal-isi { background: var(--putih); color: var(--navy); width: 100%; max-width: 520px; border-radius: 20px 20px 0 0; padding: 16px; max-height: 90vh; overflow-y: auto; position: relative; }
-    .modal-tutup { position: absolute; top: 10px; right: 12px; background: var(--navy); color: var(--cream); border: none; border-radius: 999px; width: 32px; height: 32px; font-size: 1rem; cursor: pointer; }
-    .modal-foto { width: 100%; height: 200px; object-fit: cover; border-radius: 14px; background: #E8EEF3; display: block; }
-    .modal-foto-kosong { height: 200px; border-radius: 14px; display: grid; place-items: center; background: var(--dusty); color: var(--cream); font-size: 3rem; }
-    .modal-judul { font-size: 1.2rem; margin: 6px 0 4px; }
-    .modal-deskripsi { font-size: 0.92rem; line-height: 1.55; color: #3A4D5E; margin-top: 6px; }
-    .pilih-varian { margin-top: 12px; display: grid; gap: 8px; }
-    .opsi-varian { display: flex; align-items: center; gap: 10px; border: 1px solid var(--dusty); border-radius: 14px; padding: 10px 12px; cursor: pointer; font-size: 0.92rem; }
-    .opsi-varian.nonaktif { opacity: 0.5; cursor: not-allowed; }
-    .opsi-varian input { width: auto; }
-    .opsi-varian .teks { flex: 1; }
-    .opsi-varian .teks b { display: block; }
-    .detail-harga { margin-top: 12px; font-size: 1.05rem; font-weight: 800; }
-    .detail-sisa { font-size: 0.8rem; color: var(--dusty); margin-top: 2px; }
-    .tombol-utama-modal { width: 100%; margin-top: 12px; background: var(--mustard); color: var(--navy); border: none; border-radius: 999px; padding: 12px; font-weight: 800; font-size: 1rem; cursor: pointer; font-family: inherit; }
-    .tombol-utama-modal:disabled { opacity: 0.6; cursor: not-allowed; }
-    .modal.sembunyi { display: none; }
-
-    #toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--navy); color: var(--cream); padding: 10px 16px; border-radius: 999px; font-size: 0.88rem; z-index: 60; display: none; box-shadow: var(--bayangan); max-width: 90vw; text-align: center; }
-
-    footer { margin-top: 28px; padding: 22px 0 30px; color: var(--cream); text-align: center; border-top: 1px solid rgba(247,233,184,0.2); }
-    footer strong { font-size: 1.05rem; letter-spacing: 0.5px; }
-    footer .sub { opacity: 0.75; margin-top: 4px; font-size: 0.86rem; }
-    footer nav { margin-top: 12px; display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 14px; }
-    footer nav a { color: var(--cream); text-decoration: none; font-size: 0.88rem; opacity: 0.9; }
-    footer nav a:hover { text-decoration: underline; }
-
-    @media (min-width: 640px) {
-      .trust { grid-template-columns: repeat(4, 1fr); }
-      .kat-grid { grid-template-columns: repeat(4, 1fr); }
-      .grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
-      .panel-bawah { grid-template-columns: 1fr; }
-      .grid-tentang { grid-template-columns: 1fr 1fr; }
-      .modal { align-items: center; }
-      .modal-isi { border-radius: 20px; }
-    }
-    @media (min-width: 900px) {
-      .shop { grid-template-columns: minmax(0, 1fr) 360px; gap: 24px; }
-      .cart { position: sticky; top: 84px; max-height: calc(100vh - 104px); overflow-y: auto; }
-      .hero { padding: 36px 40px; }
-      nav.menu { overflow: visible; }
-    }
-    @media (max-width: 480px) {
-      .logo .teks { display: none; }
-      nav.menu a { font-size: 0.78rem; padding: 5px 8px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KIMMY STORE</title>
+<style>
+:root{--navy:#263F55;--dusty:#527A96;--cream:#F7E9B8;--mustard:#D99A3D;--terracotta:#B5654A;--pink:#F4C7C3;--bay:0 3px 10px rgba(0,0,0,.15)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--navy);color:var(--navy);min-height:100vh;line-height:1.4}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+.sembunyi{display:none!important}
+header.top{background:var(--navy);color:var(--cream);position:sticky;top:0;z-index:20;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.top-inner{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0}
+.logo{font-weight:800;letter-spacing:1px;font-size:1.1rem;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--cream);white-space:nowrap}
+.logo-ikon{width:34px;height:34px;border-radius:50%;background:var(--cream);display:grid;place-items:center}
+nav.menu{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.menu::-webkit-scrollbar{display:none}
+nav.menu a{color:var(--cream);text-decoration:none;font-size:.85rem;padding:6px 10px;border-radius:999px;white-space:nowrap}
+nav.menu a:hover{background:rgba(247,233,184,.15)}
+.tombol-keranjang{background:var(--mustard);color:var(--navy);text-decoration:none;font-weight:700;padding:7px 14px;border-radius:999px;font-size:.88rem;white-space:nowrap}
+.hero{background:linear-gradient(135deg,var(--dusty),var(--navy));color:var(--cream);border-radius:22px;padding:24px 20px;margin:16px 0 14px;box-shadow:var(--bay)}
+.hero h1{font-size:clamp(1.35rem,4vw,2rem);line-height:1.25}
+.hero p{margin-top:8px;opacity:.92;font-size:.95rem}
+.tombol-utama{display:inline-block;margin-top:14px;background:var(--mustard);color:var(--navy);padding:10px 20px;border-radius:999px;text-decoration:none;font-weight:700}
+.banner-promo{display:grid;gap:8px;margin-top:16px}
+.promo-item{background:var(--pink);color:var(--navy);border-radius:14px;padding:10px 14px;font-size:.92rem}
+.trust{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+.trust div{background:var(--cream);border-radius:16px;padding:12px 8px;text-align:center;font-size:.84rem;font-weight:600;box-shadow:var(--bay)}
+.trust b{display:block;font-size:1.35rem}
+h2.judul{color:var(--cream);font-size:1.2rem;margin:24px 0 12px}
+.kat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.kat-kartu{background:var(--cream);border:none;border-radius:16px;padding:14px;text-align:left;cursor:pointer;font-family:inherit;box-shadow:var(--bay)}
+.kat-kartu b{display:block}
+.kat-kartu span{font-size:.78rem;color:var(--dusty);font-weight:600}
+.promo-list{display:grid;gap:10px}
+.promo-baris{background:var(--cream);border-radius:16px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:var(--bay)}
+.promo-baris .info-promo{flex:1;min-width:160px}
+.promo-baris small{color:var(--dusty)}
+.coret{color:#7A7A7A;text-decoration:line-through;font-size:.8rem;display:block}
+.akhir{color:var(--terracotta);font-weight:800}
+.tombol-kecil{background:var(--navy);color:var(--cream);border:none;padding:7px 14px;border-radius:999px;font-size:.8rem;cursor:pointer;font-family:inherit;font-weight:600}
+.tombol-kecil:disabled{opacity:.5}
+.shop{display:grid;gap:20px;align-items:start;margin-top:12px}
+.cari{width:100%;padding:11px 14px;border-radius:999px;border:none;font-size:.95rem;margin-bottom:10px;font-family:inherit;box-shadow:var(--bay)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.chip{border:1px solid rgba(247,233,184,.5);background:transparent;color:var(--cream);padding:6px 14px;border-radius:999px;font-size:.85rem;cursor:pointer;white-space:nowrap;font-family:inherit}
+.chip.aktif{background:var(--cream);color:var(--navy);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+.card{background:var(--cream);border-radius:18px;overflow:hidden;box-shadow:var(--bay);display:flex;flex-direction:column}
+.foto{width:100%;height:120px;object-fit:cover;display:block;background:#E8EEF3}
+.foto-kosong{height:120px;display:grid;place-items:center;background:var(--dusty);color:var(--cream);font-size:2rem}
+.isi{padding:12px;display:flex;flex-direction:column;flex:1}
+.kategori{font-size:.7rem;color:var(--dusty);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.card h3{font-size:1rem;margin:2px 0 6px;line-height:1.3}
+.mulai{font-size:.92rem;font-weight:700}
+.badge-promo{display:inline-block;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--terracotta);color:#fff;margin-top:6px;align-self:flex-start}
+.tombol-detail{margin-top:12px;width:100%;background:var(--navy);color:var(--cream);border:none;padding:9px 10px;border-radius:999px;font-size:.85rem;cursor:pointer;font-family:inherit;font-weight:700}
+.cart{background:var(--cream);border-radius:20px;padding:16px;box-shadow:0 3px 12px rgba(0,0,0,.2)}
+.cart h2{font-size:1.12rem;margin-bottom:4px}
+.item-keranjang{border-top:1px dashed var(--dusty);padding:10px 0}
+.kontrol{display:flex;align-items:center;gap:8px;margin-top:6px}
+.kontrol button{background:var(--dusty);color:#fff;border:none;border-radius:8px;padding:4px 10px;cursor:pointer;font-size:.95rem}
+.kontrol .hapus{background:var(--terracotta);margin-left:auto;font-size:.8rem}
+.subtotal{text-align:right;font-weight:700;margin-top:4px}
+.total{border-top:2px solid var(--navy);margin-top:8px;padding-top:8px;text-align:right;font-size:1.05rem}
+.formulir{margin-top:12px;border-top:2px dashed var(--dusty);padding-top:12px}
+.formulir label,.kotak label{display:block;font-size:.85rem;margin-top:10px;font-weight:700}
+input[type=text],input[type=tel],input[type=search],input[type=number],textarea,select{width:100%;padding:10px;margin-top:4px;border:1px solid var(--dusty);border-radius:12px;font-size:.95rem;font-family:inherit;background:#fff}
+.detail-metode{margin-top:10px;background:#F4F8FB;border-radius:12px;padding:12px;font-size:.9rem}
+.nomor{font-size:1.05rem;font-weight:800;letter-spacing:1px;margin-top:4px;word-break:break-all}
+.tombol-salin{margin-top:8px;background:var(--dusty);color:#fff;border:none;border-radius:999px;padding:6px 14px;font-size:.82rem;cursor:pointer;font-family:inherit}
+.qris-img{display:block;width:100%;max-width:240px;margin:8px auto 0;border-radius:10px;background:#fff}
+.tombol-checkout,.tombol-cek{width:100%;margin-top:14px;background:var(--mustard);color:var(--navy);border:none;border-radius:999px;padding:12px;font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit}
+.tombol-checkout:disabled,.tombol-cek:disabled{opacity:.6}
+.notif{margin-top:10px;padding:10px;border-radius:12px;font-size:.9rem}
+.sukses{background:#DFF3E4;color:#1E6B35}
+.gagal{background:#F6D5D0;color:#8A2A1A}
+.muted{color:var(--dusty);font-size:.85rem}
+.info-bayar{background:#F4F8FB;border-radius:10px;padding:10px;margin-top:10px;font-size:.88rem}
+.status-cek{display:inline-block;font-size:.85rem;font-weight:700;padding:4px 12px;border-radius:999px;background:#E8EEF3;margin-top:6px}
+.kotak{background:var(--cream);border-radius:20px;padding:18px;box-shadow:var(--bay);margin-top:16px}
+.kotak h2{font-size:1.08rem;margin-bottom:8px}
+.kotak p{font-size:.95rem;line-height:1.6;margin-bottom:8px}
+#kode-cek{text-transform:uppercase}
+.faq-item{border-top:1px dashed var(--dusty);padding:10px 0}
+.faq-item strong{display:block;margin-bottom:3px}
+.faq-item div{font-size:.9rem;color:#3A4D5E;line-height:1.5}
+.tombol-wa{display:inline-block;margin-top:6px;background:#1E6B35;color:#fff;padding:10px 18px;border-radius:999px;text-decoration:none;font-weight:700}
+.kembali a{color:var(--cream);text-decoration:none;font-weight:700;display:inline-block;margin:14px 0 4px}
+.modal{position:fixed;inset:0;background:rgba(20,30,40,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.modal-isi{background:#fff;color:var(--navy);width:100%;max-width:520px;border-radius:20px 20px 0 0;padding:16px;max-height:90vh;overflow-y:auto;position:relative}
+.modal-tutup{position:absolute;top:10px;right:12px;background:var(--navy);color:var(--cream);border:none;border-radius:999px;width:32px;height:32px;cursor:pointer}
+.modal-foto{width:100%;height:180px;object-fit:cover;border-radius:14px;background:#E8EEF3}
+.opsi{display:flex;align-items:center;gap:10px;border:1px solid var(--dusty);border-radius:14px;padding:10px 12px;margin-top:8px;cursor:pointer;font-size:.92rem}
+.opsi.nonaktif{opacity:.5}
+.opsi input{width:auto}
+.opsi .teks{flex:1}
+.detail-harga{margin-top:12px;font-size:1.05rem;font-weight:800}
+.tombol-utama-modal{width:100%;margin-top:12px;background:var(--mustard);color:var(--navy);border:none;border-radius:999px;padding:12px;font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit}
+.tombol-utama-modal:disabled{opacity:.6}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--navy);color:var(--cream);padding:10px 16px;border-radius:999px;font-size:.88rem;z-index:60;display:none;box-shadow:var(--bay);max-width:90vw;text-align:center}
+footer{margin-top:28px;padding:22px 0 30px;color:var(--cream);text-align:center;border-top:1px solid rgba(247,233,184,.2)}
+footer nav{margin-top:10px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px 14px}
+footer nav a{color:var(--cream);text-decoration:none;font-size:.88rem}
+@media(min-width:640px){.trust{grid-template-columns:repeat(4,1fr)}.kat-grid{grid-template-columns:repeat(4,1fr)}.grid{grid-template-columns:repeat(3,1fr);gap:14px}.modal{align-items:center}.modal-isi{border-radius:20px}}
+@media(min-width:900px){.shop{grid-template-columns:minmax(0,1fr) 360px;gap:24px}.cart{position:sticky;top:84px;max-height:calc(100vh - 104px);overflow-y:auto}.hero{padding:36px 40px}}
+@media(max-width:480px){.logo .teks{display:none}nav.menu a{font-size:.78rem;padding:5px 8px}}
+</style>
 </head>
 <body>
 
-<header class="top">
-  <div class="wrap top-inner">
-    <a class="logo" href="#beranda">
-      <span class="logo-ikon">🐱</span>
-      <span class="teks">KIMMY STORE</span>
-    </a>
-    <nav class="menu">
-      <a href="#produk">Katalog</a>
-      <a href="#cek-status">Cek Status</a>
-      <a href="#tentang">Tentang</a>
-    </nav>
-    <a class="tombol-keranjang" href="#keranjang">🛒 <span id="jumlah-keranjang">0</span></a>
-  </div>
-</header>
+<header class="top"><div class="wrap top-inner">
+  <a class="logo" href="#beranda"><span class="logo-ikon">🐱</span><span class="teks">KIMMY STORE</span></a>
+  <nav class="menu">
+    <a href="#produk">Katalog</a><a href="#cek-status">Cek Status</a><a href="#tentang">Tentang</a><a href="#faq">FAQ</a><a href="#kebijakan">Kebijakan</a><a href="#kontak">Kontak</a>
+  </nav>
+  <a class="tombol-keranjang" href="#keranjang">🛒 <span id="jumlah-keranjang">0</span></a>
+</div></header>
 
-<main class="wrap" id="halaman-toko">
-
+<main class="wrap" id="toko">
   <section class="hero" id="beranda">
     <h1>Produk Digital<br>Pilihan Terbaik untuk Kamu</h1>
     <p>Akun premium dan aplikasi pilihan, proses cepat, dan siap dikirim setelah pembayaran diverifikasi.</p>
@@ -230,97 +134,79 @@
     <div><b>💬</b>Customer Support</div>
   </div>
 
-  <section class="blok-home" id="kategori-home">
-    <h2>Kategori</h2>
-    <div class="kat-grid" id="kat-grid"><p class="muted">Memuat kategori...</p></div>
-  </section>
+  <h2 class="judul">Kategori</h2>
+  <div class="kat-grid" id="kat-grid"></div>
 
-  <section class="blok-home" id="unggulan">
-    <h2>Produk Unggulan</h2>
-    <div class="grid" id="grid-unggulan"><p class="muted">Memuat...</p></div>
-  </section>
+  <h2 class="judul">Produk Unggulan</h2>
+  <div class="grid" id="grid-unggulan"></div>
 
-  <section class="blok-home" id="promo-home">
-    <h2>Sedang Promo</h2>
-    <div class="promo-list" id="list-promo"><p class="muted">Memuat...</p></div>
-  </section>
+  <h2 class="judul" id="judul-promo">Sedang Promo</h2>
+  <div class="promo-list" id="list-promo"></div>
 
-  <div class="shop" style="margin-top:24px">
-
+  <div class="shop">
     <section id="produk">
-      <h2 class="judul-bagian">Katalog Produk</h2>
+      <h2 class="judul">Katalog Produk</h2>
       <input id="cari" class="cari" type="search" placeholder="🔍 Cari produk, contoh: Netflix">
       <div class="chips" id="chips"></div>
-      <div class="grid" id="daftar-produk">
-        <p class="muted">Memuat produk...</p>
-      </div>
+      <div class="grid" id="daftar-produk"><p class="muted">Memuat produk...</p></div>
     </section>
 
     <section class="cart" id="keranjang">
       <h2>Keranjang Saya</h2>
       <div id="isi-keranjang"></div>
-
-      <div id="form-checkout" class="formulir" style="display: none;">
+      <div id="form-checkout" class="formulir" style="display:none">
         <label for="nama">Nama lengkap</label>
         <input id="nama" type="text" placeholder="Contoh: Budi Santoso">
-
         <label for="wa">Nomor WhatsApp</label>
         <input id="wa" type="tel" placeholder="Contoh: 081234567890">
-
-        <label>Metode pembayaran</label>
-        <div id="daftar-metode"><p class="muted">Memuat metode pembayaran...</p></div>
-
+        <label for="metode">Metode pembayaran</label>
+        <select id="metode" onchange="tampilDetailMetode()"></select>
+        <div id="detail-metode" class="detail-metode"></div>
         <label for="catatan">Catatan (opsional)</label>
         <textarea id="catatan" rows="2" placeholder="Contoh: tolong kirim akun ke WhatsApp ini"></textarea>
-
         <button class="tombol-checkout" id="tombol-checkout" onclick="checkout()">Checkout</button>
       </div>
       <div id="notif-checkout"></div>
     </section>
-
   </div>
 
-  <div class="panel-bawah">
-    <section class="kotak" id="cek-status">
-      <h2>Cek Status Pesanan</h2>
-      <p class="muted">Masukkan kode pesanan yang kamu terima setelah checkout, contoh: KS-261030-AB12C</p>
-      <label for="kode-cek">Kode pesanan</label>
-      <input id="kode-cek" type="text" placeholder="KS-XXXXXX-XXXXX" autocomplete="off">
-      <button class="tombol-cek" id="tombol-cek-status" onclick="cekStatus()">Cek Status</button>
-      <div id="hasil-cek"></div>
-    </section>
-  </div>
-
+  <section class="kotak" id="cek-status">
+    <h2>Cek Status Pesanan</h2>
+    <p class="muted">Masukkan kode pesanan yang kamu terima setelah checkout, contoh: KS-261030-AB12C</p>
+    <label for="kode-cek">Kode pesanan</label>
+    <input id="kode-cek" type="text" placeholder="KS-XXXXXX-XXXXX" autocomplete="off">
+    <button class="tombol-cek" id="tombol-cek-status" onclick="cekStatus()">Cek Status</button>
+    <div id="hasil-cek"></div>
+  </section>
 </main>
 
-<section class="wrap halaman-tentang sembunyi" id="halaman-tentang">
+<section id="p-tentang" class="wrap sembunyi">
   <div class="kembali"><a href="#beranda">← Kembali ke toko</a></div>
+  <div class="hero"><h1>Tentang KIMMY STORE</h1><p id="info-tentang">Memuat...</p></div>
+  <div class="kotak"><h2>Jam Operasional</h2><p id="info-jam">-</p></div>
+</section>
 
-  <section class="hero">
-    <h1>Tentang KIMMY STORE</h1>
-    <p id="info-tentang" class="muted" style="color:var(--cream);opacity:.92">Memuat...</p>
-  </section>
+<section id="p-faq" class="wrap sembunyi">
+  <div class="kembali"><a href="#beranda">← Kembali ke toko</a></div>
+  <div class="kotak"><h2>Pertanyaan yang Sering Ditanyakan</h2><div id="daftar-faq"></div></div>
+</section>
 
-  <div class="grid-tentang">
-    <section class="kotak">
-      <h2>Jam Operasional</h2>
-      <p id="info-jam" class="muted">-</p>
-      <h2>Kontak Admin</h2>
-      <p><strong>WhatsApp:</strong> <span id="info-kontak">-</span></p>
-      <a class="tombol-wa" id="tombol-hubungi" href="#" target="_blank">💬 Hubungi Admin</a>
-    </section>
+<section id="p-kebijakan" class="wrap sembunyi">
+  <div class="kembali"><a href="#beranda">← Kembali ke toko</a></div>
+  <div class="kotak">
+    <h2>Kebijakan Toko</h2>
+    <p><strong>Pembayaran:</strong> <span id="info-pembayaran">Memuat...</span></p>
+    <p><strong>Garansi:</strong> <span id="info-garansi">Memuat...</span></p>
+    <p><strong>Pengembalian dana:</strong> <span id="info-pengembalian">Memuat...</span></p>
+  </div>
+</section>
 
-    <section class="kotak">
-      <h2>Kebijakan Toko</h2>
-      <p><strong>Pembayaran:</strong> <span id="info-pembayaran" class="muted">Memuat...</span></p>
-      <p><strong>Garansi:</strong> <span id="info-garansi" class="muted">Memuat...</span></p>
-      <p><strong>Pengembalian dana:</strong> <span id="info-pengembalian" class="muted">Memuat...</span></p>
-    </section>
-
-    <section class="kotak" style="grid-column: 1 / -1;">
-      <h2>Pertanyaan yang Sering Ditanyakan</h2>
-      <div id="daftar-faq"><p class="muted">Memuat...</p></div>
-    </section>
+<section id="p-kontak" class="wrap sembunyi">
+  <div class="kembali"><a href="#beranda">← Kembali ke toko</a></div>
+  <div class="kotak">
+    <h2>Kontak Admin</h2>
+    <p><strong>WhatsApp:</strong> <span id="info-kontak">-</span></p>
+    <a class="tombol-wa" id="tombol-hubungi" href="#" target="_blank">💬 Hubungi Admin</a>
   </div>
 </section>
 
@@ -330,828 +216,238 @@
     <div id="modal-body"></div>
   </div>
 </div>
-
 <div id="toast"></div>
 
-<footer>
-  <div class="wrap">
-    <strong>🐱 KIMMY STORE</strong>
-    <div class="sub">Digital products &amp; app services · Trusted &amp; cute since 2022</div>
-    <nav>
-      <a href="#beranda">Beranda</a>
-      <a href="#produk">Katalog</a>
-      <a href="#cek-status">Cek Status</a>
-      <a href="#tentang">Tentang</a>
-    </nav>
-  </div>
-</footer>
+<footer><div class="wrap">
+  <strong>🐱 KIMMY STORE</strong>
+  <div style="opacity:.75;margin-top:4px;font-size:.86rem">Digital products &amp; app services · Trusted &amp; cute since 2022</div>
+  <nav><a href="#beranda">Beranda</a><a href="#produk">Katalog</a><a href="#cek-status">Cek Status</a><a href="#tentang">Tentang</a><a href="#faq">FAQ</a><a href="#kontak">Kontak</a></nav>
+</div></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-  const SUPABASE_URL = "https://yftnynobgxvulhmgirdx.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E";
-
-  const MAKS_QTY = 10;
-  const KUNCI_KERANJANG = "kimmy_keranjang";
-  const METODE_LABEL = { transfer_bank: "Transfer Bank", qris: "QRIS", dana: "DANA", bca: "Transfer BCA" };
-  const STATUS_KLAIM_PUBLIK = { diajukan: "Klaim diajukan", diproses: "Klaim sedang diproses", disetujui: "Klaim disetujui", ditolak: "Klaim ditolak", selesai: "Klaim selesai" };
-  const STATUS_LABEL = {
-    menunggu_pembayaran: "Menunggu pembayaran",
-    menunggu_verifikasi: "Pembayaran sedang diverifikasi",
-    diproses: "Pesanan diproses",
-    selesai: "Pesanan selesai",
-    dibatalkan: "Pesanan dibatalkan"
-  };
-
-  const wadah = document.getElementById("daftar-produk");
-  const daftarVarian = {};
-  let semuaProduk = [];
-  let kategoriAktif = "Semua";
-  let kataCari = "";
-  let metodeList = [];
-  let keranjang = [];
-  let supabase = null;
-  let waAdmin = "";
-  let detailPid = null;
-  let detailVarianId = null;
-  let detailQty = 1;
-
-  try {
-    keranjang = JSON.parse(localStorage.getItem(KUNCI_KERANJANG)) || [];
-  } catch (e) {
-    keranjang = [];
-  }
-
-  function rupiah(angka) { return "Rp " + Number(angka).toLocaleString("id-ID"); }
-
-  function escapeHTML(t) {
-    return String(t ?? "").replace(/[&<>"']/g, c => ({
-      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-    }[c]));
-  }
-
-  function normalisasiWA(nomor) {
-    let n = String(nomor || "").replace(/[^0-9]/g, "");
-    if (n.startsWith("0")) n = "62" + n.slice(1);
-    return n;
-  }
-
-  function hitungHargaAkhir(v) {
-    if (!v.promo_type || !v.promo_value) return v.price;
-    if (v.promo_type === "nominal") return Math.max(v.price - v.promo_value, 0);
-    if (v.promo_type === "persen") return Math.round(v.price * (100 - v.promo_value) / 100);
-    return v.price;
-  }
-
-  function batasQty(id) {
-    const v = daftarVarian[id];
-    if (!v) return 0;
-    if (v.stok === null || v.stok === undefined) return MAKS_QTY;
-    return Math.min(v.stok, MAKS_QTY);
-  }
-
-  function stokHabis(v) {
-    return v.stock_status !== "tersedia" || v.stok === 0;
-  }
-
-  function hitungTotal() {
-    return keranjang.reduce((s, i) => s + i.harga * i.qty, 0);
-  }
-
-  function simpanKeranjang() {
-    localStorage.setItem(KUNCI_KERANJANG, JSON.stringify(keranjang));
-  }
-
-  function tampilkanNotif(jenis, teks) {
-    document.getElementById("notif-checkout").innerHTML =
-      teks ? '<div class="notif ' + jenis + '">' + escapeHTML(teks) + '</div>' : "";
-  }
-
-  let timerToast = null;
-  function toast(teks) {
-    const el = document.getElementById("toast");
-    el.textContent = teks;
-    el.style.display = "block";
-    if (timerToast) clearTimeout(timerToast);
-    timerToast = setTimeout(() => { el.style.display = "none"; }, 2200);
-  }
-
-  /* ---------- PINDAH HALAMAN (TOKO / TENTANG) ---------- */
-
-  function aturHalaman() {
-    const h = location.hash;
-    const tentang = h === "#tentang";
-    document.getElementById("halaman-toko").classList.toggle("sembunyi", tentang);
-    document.getElementById("halaman-tentang").classList.toggle("sembunyi", !tentang);
-    if (tentang) {
-      window.scrollTo({ top: 0 });
-      return;
-    }
-    if (h && h.length > 1) {
-      const el = document.getElementById(h.slice(1));
-      if (el) el.scrollIntoView();
-    } else {
-      window.scrollTo({ top: 0 });
-    }
-  }
-
-  window.addEventListener("hashchange", aturHalaman);
-
-  function indeksVarian() {
-    semuaProduk.forEach(p => {
-      (p.product_variants || []).forEach(v => {
-        daftarVarian[v.id] = {
-          produk: p.name,
-          varian: v.name,
-          harga: hitungHargaAkhir(v),
-          normal: v.price,
-          stok: v.stok,
-          stock_status: v.stock_status,
-          warranty_days: v.warranty_days,
-          promo_label: v.promo_label,
-          promo_type: v.promo_type,
-          promo_value: v.promo_value
-        };
-      });
-    });
-  }
-
-  function tambahKeranjangQty(id, jumlah) {
-    const v = daftarVarian[id];
-    if (!v) return false;
-    const batas = batasQty(id);
-    const item = keranjang.find(i => i.id === id);
-    const sudah = item ? item.qty : 0;
-
-    if (batas < 1) {
-      toast("Stok " + v.varian + " habis.");
-      return false;
-    }
-    if (sudah >= batas) {
-      toast("Jumlah " + v.varian + " sudah mencapai batas stok.");
-      return false;
-    }
-
-    const tambah = Math.min(jumlah, batas - sudah);
-    if (item) {
-      item.qty += tambah;
-    } else {
-      keranjang.push({ id: id, produk: v.produk, varian: v.varian, harga: v.harga, qty: tambah });
-    }
-    simpanKeranjang();
-    renderKeranjang();
-    renderProduk();
-    renderPromoHome();
-    toast("Ditambahkan " + tambah + " × " + v.varian);
-    return true;
-  }
-
-  function tambahKeranjang(id) {
-    tambahKeranjangQty(id, 1);
-  }
-
-  function ubahQty(id, selisih) {
-    const item = keranjang.find(i => i.id === id);
-    if (!item) return;
-    const batas = batasQty(id);
-    item.qty += selisih;
-    if (item.qty < 1) {
-      keranjang = keranjang.filter(i => i.id !== id);
-    } else if (item.qty > batas) {
-      item.qty = batas;
-      tampilkanNotif("gagal", "Jumlah dibatasi sesuai sisa stok.");
-    }
-    simpanKeranjang();
-    renderKeranjang();
-    renderProduk();
-  }
-
-  function hapusItem(id) {
-    keranjang = keranjang.filter(i => i.id !== id);
-    simpanKeranjang();
-    renderKeranjang();
-    renderProduk();
-  }
-
-  /* ---------- DETAIL PRODUK ---------- */
-
-  function bukaDetail(pid) {
-    const p = semuaProduk.find(x => x.id === pid);
-    if (!p) return;
-    detailPid = pid;
-
-    const vars = (p.product_variants || []).filter(v => v.is_active);
-    const kategori = p.categories ? p.categories.name : "";
-    const foto = p.image_url
-      ? '<img class="modal-foto" src="' + escapeHTML(p.image_url) + '" alt="' + escapeHTML(p.name) + '">'
-      : '<div class="modal-foto-kosong">🐱</div>';
-
-    const pilihan = vars.map(v => {
-      const habis = stokHabis(v);
-      const d = daftarVarian[v.id];
-      const sisa = (v.stok !== null && v.stok !== undefined && !habis) ? " · sisa " + v.stok : "";
-      const garansi = v.warranty_days && v.warranty_days > 0 ? " · garansi " + v.warranty_days + " hari" : "";
-      return `
-        <label class="opsi-varian ${habis ? "nonaktif" : ""}" id="opsi-${v.id}">
-          <input type="radio" name="varian-detail" value="${v.id}" ${habis ? "disabled" : ""}>
-          <span class="teks">
-            <b>${escapeHTML(v.name)}</b>
-            <span class="muted">${habis ? "Habis" : "Tersedia" + sisa + garansi}</span>
-          </span>
-          <span>${rupiah(d ? d.harga : v.price)}</span>
-        </label>`;
-    }).join("");
-
-    document.getElementById("modal-body").innerHTML = `
-      ${foto}
-      <div class="kategori" style="margin-top:12px">${escapeHTML(kategori)}</div>
-      <h3 class="modal-judul">${escapeHTML(p.name)}</h3>
-      ${p.description ? '<p class="modal-deskripsi">' + escapeHTML(p.description) + '</p>' : ""}
-      <div class="pilih-varian">${pilihan || '<p class="muted">Belum ada varian.</p>'}</div>
-      <div class="detail-harga" id="detail-harga"></div>
-      <div class="detail-sisa" id="detail-sisa"></div>
-      <div class="kontrol" style="margin-top:12px">
-        <span style="font-weight:700">Jumlah</span>
-        <button type="button" onclick="ubahQtyDetail(-1)">−</button>
-        <span id="qty-detail">1</span>
-        <button type="button" onclick="ubahQtyDetail(1)">+</button>
-      </div>
-      <button class="tombol-utama-modal" id="tombol-detail" onclick="tambahDariDetail()">Tambah ke keranjang</button>`;
-
-    const pertamaTersedia = vars.find(v => !stokHabis(v));
-    if (pertamaTersedia) {
-      detailVarianId = pertamaTersedia.id;
-      document.querySelector('input[name="varian-detail"][value="' + pertamaTersedia.id + '"]').checked = true;
-    } else {
-      detailVarianId = null;
-    }
-
-    document.querySelectorAll('input[name="varian-detail"]').forEach(r => {
-      r.addEventListener("change", () => {
-        detailVarianId = Number(r.value);
-        detailQty = 1;
-        updateDetail();
-      });
-    });
-
-    detailQty = 1;
-    updateDetail();
-    document.getElementById("modal-detail").classList.remove("sembunyi");
-    document.body.style.overflow = "hidden";
-  }
-
-  function tutupDetail() {
-    document.getElementById("modal-detail").classList.add("sembunyi");
-    document.body.style.overflow = "";
-    detailPid = null;
-    detailVarianId = null;
-  }
-
-  function ubahQtyDetail(selisih) {
-    if (!detailVarianId) return;
-    const batas = Math.max(batasQty(detailVarianId), 1);
-    detailQty = Math.min(Math.max(detailQty + selisih, 1), batas);
-    updateDetail();
-  }
-
-  function updateDetail() {
-    const hargaEl = document.getElementById("detail-harga");
-    const sisaEl = document.getElementById("detail-sisa");
-    const qtyEl = document.getElementById("qty-detail");
-    const tombol = document.getElementById("tombol-detail");
-    if (!hargaEl || !tombol) return;
-
-    if (!detailVarianId || !daftarVarian[detailVarianId]) {
-      hargaEl.innerHTML = "";
-      sisaEl.textContent = "";
-      qtyEl.textContent = "0";
-      tombol.disabled = true;
-      tombol.textContent = "Tidak tersedia";
-      return;
-    }
-
-    const d = daftarVarian[detailVarianId];
-    const batas = batasQty(detailVarianId);
-    const sudah = (keranjang.find(i => i.id === detailVarianId) || { qty: 0 }).qty;
-    const sisaBisaDitambah = Math.max(batas - sudah, 0);
-
-    if (detailQty > Math.max(sisaBisaDitambah, 1)) detailQty = Math.max(sisaBisaDitambah, 1);
-    qtyEl.textContent = detailQty;
-
-    const adaPromo = d.harga < d.normal;
-    hargaEl.innerHTML = adaPromo
-      ? '<span class="harga-coret">' + rupiah(d.normal) + '</span> <span class="harga-promo">' + rupiah(d.harga) + '</span> <span class="badge-promo">' + escapeHTML(d.promo_label || "PROMO") + '</span>'
-      : rupiah(d.harga);
-
-    sisaEl.textContent = d.stok !== null && d.stok !== undefined
-      ? "Sisa stok: " + d.stok + " · sudah di keranjang: " + sudah
-      : "";
-
-    if (sisaBisaDitambah < 1) {
-      tombol.disabled = true;
-      tombol.textContent = batas < 1 ? "Habis" : "Sudah maksimal di keranjang";
-    } else {
-      tombol.disabled = false;
-      tombol.textContent = "Tambah " + detailQty + " ke keranjang";
-    }
-  }
-
-  function tambahDariDetail() {
-    if (!detailVarianId) return;
-    tambahKeranjangQty(detailVarianId, detailQty);
-    detailQty = 1;
-    updateDetail();
-  }
-
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape") tutupDetail();
-  });
-
-  /* ---------- KERANJANG & CHECKOUT ---------- */
-
-  async function salinNomor(nomor, tombol) {
-    try {
-      await navigator.clipboard.writeText(nomor);
-    } catch (e) {
-      const area = document.createElement("textarea");
-      area.value = nomor;
-      document.body.appendChild(area);
-      area.select();
-      document.execCommand("copy");
-      area.remove();
-    }
-    const teksAsli = tombol.textContent;
-    tombol.textContent = "Tersalin ✓";
-    setTimeout(() => { tombol.textContent = teksAsli; }, 1500);
-  }
-
-  function renderMetode() {
-    const wadahM = document.getElementById("daftar-metode");
-    if (metodeList.length === 0) {
-      wadahM.innerHTML = '<p class="muted">Belum ada metode pembayaran.</p>';
-      return;
-    }
-    wadahM.innerHTML = metodeList.map((m, idx) => {
-      let isi = "";
-      if (m.account_number) {
-        isi = `
-          <div class="rekening">
-            <div>a.n. ${escapeHTML(m.account_name || "-")}</div>
-            <div class="nomor">${escapeHTML(m.account_number)}</div>
-            <button type="button" class="tombol-salin" onclick="salinNomor('${escapeHTML(m.account_number)}', this)">Salin nomor</button>
-          </div>`;
-      } else if (m.image_url) {
-        isi = `
-          <div class="rekening">
-            <div>Scan QRIS berikut untuk membayar. Ketuk gambar untuk memperbesar.</div>
-            <a href="${escapeHTML(m.image_url)}" target="_blank">
-              <img class="qris-img" src="${escapeHTML(m.image_url)}" alt="Gambar QRIS ${escapeHTML(m.label)}">
-            </a>
-          </div>`;
-      } else {
-        isi = `<div class="rekening">Setelah checkout, admin akan mengirim kode QRIS lewat WhatsApp.</div>`;
-      }
-      return `
-        <div class="metode">
-          <label class="metode-pilih">
-            <input type="radio" name="metode" value="${escapeHTML(m.code)}" ${idx === 0 ? "checked" : ""}>
-            ${escapeHTML(m.label)}
-          </label>
-          ${isi}
-        </div>`;
-    }).join("");
-  }
-
-  function renderKeranjang() {
-    const wadahK = document.getElementById("isi-keranjang");
-    const form = document.getElementById("form-checkout");
-    const jumlah = keranjang.reduce((s, i) => s + i.qty, 0);
-    document.getElementById("jumlah-keranjang").textContent = jumlah;
-
-    if (keranjang.length === 0) {
-      wadahK.innerHTML = '<p class="muted">Keranjang masih kosong. Pilih produk di katalog.</p>';
-      form.style.display = "none";
-      return;
-    }
-
-    form.style.display = "block";
-    const baris = keranjang.map(i => `
-      <div class="item-keranjang">
-        <div><strong>${escapeHTML(i.produk)}</strong><br>${escapeHTML(i.varian)} · ${rupiah(i.harga)}</div>
-        <div class="kontrol">
-          <button onclick="ubahQty(${i.id}, -1)">−</button>
-          <span>${i.qty}</span>
-          <button onclick="ubahQty(${i.id}, 1)">+</button>
-          <button class="hapus" onclick="hapusItem(${i.id})">Hapus</button>
-        </div>
-        <div class="subtotal">${rupiah(i.harga * i.qty)}</div>
-      </div>`).join("");
-
-    wadahK.innerHTML = baris + `<div class="total">Total: <strong>${rupiah(hitungTotal())}</strong></div>`;
-  }
-
-  async function checkout() {
-    const nama = document.getElementById("nama").value.trim();
-    const wa = normalisasiWA(document.getElementById("wa").value);
-    const catatan = document.getElementById("catatan").value.trim();
-    const pilihan = document.querySelector('input[name="metode"]:checked');
-
-    if (nama.length < 2) { tampilkanNotif("gagal", "Nama wajib diisi."); return; }
-    if (!/^[0-9]{9,15}$/.test(wa)) { tampilkanNotif("gagal", "Nomor WhatsApp tidak valid."); return; }
-    if (!pilihan) { tampilkanNotif("gagal", "Pilih metode pembayaran."); return; }
-    if (keranjang.length === 0) { tampilkanNotif("gagal", "Keranjang masih kosong."); return; }
-    if (!waAdmin) { tampilkanNotif("gagal", "Nomor WhatsApp toko belum diatur. Coba lagi nanti."); return; }
-
-    const metode = pilihan.value;
-    const metodeInfo = metodeList.find(m => m.code === metode);
-    const labelMetode = metodeInfo ? metodeInfo.label : metode;
-
-    const tombol = document.getElementById("tombol-checkout");
-    tombol.disabled = true;
-    tombol.textContent = "Menyimpan pesanan...";
-
-    const items = keranjang.map(i => ({ variant_id: i.id, qty: i.qty }));
-    const ringkasan = keranjang.map(i => "- " + i.produk + " (" + i.varian + ") x" + i.qty + " = " + rupiah(i.harga * i.qty)).join("\n");
-    const total = hitungTotal();
-
-    const { data: kodePesanan, error } = await supabase.rpc("buat_pesanan", {
-      p_nama: nama, p_whatsapp: wa, p_items: items, p_metode: metode, p_catatan: catatan
-    });
-
-    tombol.disabled = false;
-    tombol.textContent = "Checkout";
-
-    if (error) {
-      tampilkanNotif("gagal", "Gagal menyimpan pesanan: " + error.message);
-      console.error(error);
-      await muatProduk();
-      return;
-    }
-
-    const teksWA =
-      "Halo KIMMY STORE, saya mau pesan.\n" +
-      "No. pesanan: " + kodePesanan + "\n" +
-      "Nama: " + nama + "\n\n" +
-      ringkasan + "\n\n" +
-      "Total: " + rupiah(total) + "\n" +
-      "Metode bayar: " + labelMetode + "\n" +
-      "Catatan: " + (catatan || "-") + "\n\n" +
-      "Saya akan kirim bukti transfer setelah membayar. Terima kasih.";
-
-    keranjang = [];
-    simpanKeranjang();
-    document.getElementById("catatan").value = "";
-    renderKeranjang();
-    tampilkanNotif("sukses", "Pesanan " + kodePesanan + " tersimpan. Simpan kode ini untuk cek status. Silakan bayar lalu kirim bukti transfer ke WhatsApp kami.");
-
-    window.open("https://wa.me/" + waAdmin + "?text=" + encodeURIComponent(teksWA), "_blank");
-    await muatProduk();
-  }
-
-  async function cekStatus() {
-    const kode = document.getElementById("kode-cek").value.trim().toUpperCase();
-    const tombol = document.getElementById("tombol-cek-status");
-    const hasil = document.getElementById("hasil-cek");
-
-    if (kode.length < 6) {
-      hasil.innerHTML = '<div class="notif gagal">Masukkan kode pesanan dengan lengkap.</div>';
-      return;
-    }
-    if (!supabase) {
-      hasil.innerHTML = '<div class="notif gagal">Koneksi belum siap. Coba lagi sebentar.</div>';
-      return;
-    }
-
-    tombol.disabled = true;
-    tombol.textContent = "Mencari...";
-    const { data, error } = await supabase.rpc("cek_status_pesanan", { p_kode: kode });
-    tombol.disabled = false;
-    tombol.textContent = "Cek Status";
-
-    if (error) {
-      hasil.innerHTML = '<div class="notif gagal">Gagal mengecek: ' + escapeHTML(error.message) + '</div>';
-      return;
-    }
-    if (!data) {
-      hasil.innerHTML = '<div class="notif gagal">Kode pesanan tidak ditemukan. Periksa lagi penulisannya.</div>';
-      return;
-    }
-
-    const items = (data.items || []).map(i =>
-      '<div>' + escapeHTML(i.product_name) + " (" + escapeHTML(i.variant_name) + ") x" + i.quantity + " = " + rupiah(i.subtotal) + "</div>"
-    ).join("");
-    const infoBayar = data.status === "menunggu_pembayaran"
-      ? '<div class="info-bayar">Silakan lakukan pembayaran lalu kirim bukti transfer ke WhatsApp toko.</div>'
-      : "";
-    const infoKirim = data.tanggal_kirim
-      ? '<div class="info-bayar">Produk dikirim: ' + escapeHTML(new Date(data.tanggal_kirim).toLocaleString("id-ID")) + '</div>'
-      : "";
-    const infoKlaim = (data.klaim || []).length
-      ? '<div class="info-bayar"><strong>Klaim garansi:</strong><br>' +
-        data.klaim.map(k => escapeHTML(STATUS_KLAIM_PUBLIK[k.status] || k.status)).join("<br>") +
-        '</div>'
-      : "";
-
-    hasil.innerHTML = `
-      <div style="margin-top:12px;">
-        <div><strong>${escapeHTML(data.order_code)}</strong></div>
-        <div class="muted">${new Date(data.created_at).toLocaleString("id-ID")}</div>
-        <div class="status-cek">${STATUS_LABEL[data.status] || escapeHTML(data.status)}</div>
-        <div class="muted" style="margin-top:6px;">Metode: ${METODE_LABEL[data.payment_method] || escapeHTML(data.payment_method || "-")}</div>
-        <div style="margin-top:6px;">${items}</div>
-        <div class="total">Total: ${rupiah(data.total_amount)}</div>
-        ${infoBayar}${infoKirim}${infoKlaim}
-      </div>`;
-  }
-
-  /* ---------- BAGIAN BERANDA ---------- */
-
-  function renderKategoriHome() {
-    const wadahK = document.getElementById("kat-grid");
-    const hitung = {};
-    semuaProduk.forEach(p => {
-      const nama = p.categories ? p.categories.name : "Lainnya";
-      hitung[nama] = (hitung[nama] || 0) + 1;
-    });
-    const daftar = Object.keys(hitung);
-    if (daftar.length === 0) {
-      wadahK.innerHTML = '<p class="muted">Belum ada kategori.</p>';
-      return;
-    }
-    wadahK.innerHTML = daftar.map(nama => `
-      <button class="kat-kartu" onclick="pilihKategori('${escapeHTML(nama).replace(/'/g, "\\'")}')">
-        <b>${escapeHTML(nama)}</b>
-        <span>${hitung[nama]} produk</span>
-      </button>`).join("");
-  }
-
-  function pilihKategori(nama) {
-    kategoriAktif = nama;
-    renderChips();
-    renderProduk();
-    location.hash = "#produk";
-  }
-
-  function renderUnggulan() {
-    const wadahU = document.getElementById("grid-unggulan");
-    let pilihan = semuaProduk.filter(p => p.is_featured === true);
-    if (pilihan.length === 0) pilihan = semuaProduk.slice(0, 4);
-    pilihan = pilihan.slice(0, 4);
-
-    if (pilihan.length === 0) {
-      wadahU.innerHTML = '<p class="muted">Belum ada produk unggulan.</p>';
-      return;
-    }
-
-    wadahU.innerHTML = pilihan.map(p => {
-      const aktif = (p.product_variants || []).filter(v => v.is_active);
-      const termurah = aktif.map(v => hitungHargaAkhir(v)).sort((a, b) => a - b)[0];
-      const foto = p.image_url
-        ? '<img class="foto" src="' + escapeHTML(p.image_url) + '" alt="' + escapeHTML(p.name) + '">'
-        : '<div class="foto-kosong">🐱</div>';
-      return `
-        <div class="card">
-          ${foto}
-          <div class="isi">
-            <div class="kategori">${escapeHTML(p.categories ? p.categories.name : "")}</div>
-            <h3>${escapeHTML(p.name)}</h3>
-            <div class="harga">mulai ${termurah !== undefined ? rupiah(termurah) : "-"}</div>
-            <button class="tombol-detail" onclick="bukaDetail(${p.id})">Lihat detail</button>
-          </div>
-        </div>`;
-    }).join("");
-  }
-
-  function renderPromoHome() {
-    const wadahP = document.getElementById("list-promo");
-    const daftarPromo = [];
-    semuaProduk.forEach(p => {
-      (p.product_variants || []).forEach(v => {
-        if (!v.is_active) return;
-        const akhir = hitungHargaAkhir(v);
-        if (akhir < v.price) daftarPromo.push({ p: p, v: v, akhir: akhir });
-      });
-    });
-
-    if (daftarPromo.length === 0) {
-      document.getElementById("promo-home").style.display = "none";
-      return;
-    }
-    document.getElementById("promo-home").style.display = "";
-
-    wadahP.innerHTML = daftarPromo.slice(0, 6).map(x => {
-      const habis = stokHabis(x.v);
-      const sudah = keranjang.find(i => i.id === x.v.id);
-      const penuh = sudah && sudah.qty >= batasQty(x.v.id);
-      const nonaktif = habis || penuh;
-      const teksTombol = habis ? "Habis" : (penuh ? "Maks. di keranjang" : "+ Keranjang");
-      return `
-        <div class="promo-baris">
-          <div class="info-promo">
-            <b>${escapeHTML(x.p.name)} · ${escapeHTML(x.v.name)}</b>
-            <small>${escapeHTML(x.v.promo_label || "PROMO")}${x.v.warranty_days ? " · garansi " + x.v.warranty_days + " hari" : ""}</small>
-          </div>
-          <div class="promo-harga-wrap">
-            <span class="coret">${rupiah(x.v.price)}</span>
-            <span class="akhir">${rupiah(x.akhir)}</span>
-          </div>
-          <button class="tombol-kecil" ${nonaktif ? "disabled" : ""} onclick="tambahKeranjang(${x.v.id})">${teksTombol}</button>
-        </div>`;
-    }).join("");
-  }
-
-  /* ---------- MUAT DATA ---------- */
-
-  async function muatInfoToko() {
-    const kunci = ["wa_admin", "tentang", "jam_operasional", "kebijakan_pembayaran", "kebijakan_garansi", "kebijakan_pengembalian"];
-    const { data, error } = await supabase.from("store_settings").select("key, value").in("key", kunci);
-    if (error) { console.error(error); return; }
-
-    const info = {};
-    (data || []).forEach(r => info[r.key] = r.value);
-
-    waAdmin = normalisasiWA(info.wa_admin || "");
-    document.getElementById("tombol-hubungi").href = waAdmin ? "https://wa.me/" + waAdmin : "#";
-    document.getElementById("info-kontak").textContent = info.wa_admin || "-";
-    document.getElementById("info-jam").textContent = info.jam_operasional || "-";
-    document.getElementById("info-tentang").textContent = info.tentang || "-";
-    document.getElementById("info-pembayaran").textContent = info.kebijakan_pembayaran || "-";
-    document.getElementById("info-garansi").textContent = info.kebijakan_garansi || "-";
-    document.getElementById("info-pengembalian").textContent = info.kebijakan_pengembalian || "-";
-  }
-
-  async function muatFaq() {
-    const { data, error } = await supabase
-      .from("faqs").select("pertanyaan, jawaban").eq("is_active", true).order("urutan", { ascending: true });
-    const wadahF = document.getElementById("daftar-faq");
-    if (error || !data || data.length === 0) {
-      wadahF.innerHTML = '<p class="muted">Belum ada FAQ.</p>';
-      return;
-    }
-    wadahF.innerHTML = data.map(f => `
-      <div class="faq-item">
-        <strong>${escapeHTML(f.pertanyaan)}</strong>
-        <div>${escapeHTML(f.jawaban)}</div>
-      </div>`).join("");
-  }
-
-  async function muatMetode() {
-    const { data, error } = await supabase
-      .from("payment_methods")
-      .select("code, label, account_name, account_number, image_url, sort_order")
-      .eq("is_active", true)
-      .order("sort_order", { ascending: true });
-    if (error) {
-      document.getElementById("daftar-metode").innerHTML = '<p class="muted">Gagal memuat metode pembayaran.</p>';
-      console.error(error);
-      return;
-    }
-    metodeList = data || [];
-    renderMetode();
-  }
-
-  async function muatBannerPromo() {
-    const { data, error } = await supabase
-      .from("promos").select("judul, deskripsi").eq("is_active", true).order("created_at", { ascending: false });
-    if (error || !data || data.length === 0) {
-      document.getElementById("banner-promo").innerHTML = "";
-      return;
-    }
-    document.getElementById("banner-promo").innerHTML = data.map(p => `
-      <div class="promo-item">
-        <strong>${escapeHTML(p.judul)}</strong>
-        ${p.deskripsi ? '<br><span>' + escapeHTML(p.deskripsi) + '</span>' : ""}
-      </div>`).join("");
-  }
-
-  function renderChips() {
-    const kats = ["Semua", ...new Set(semuaProduk.map(p => p.categories ? p.categories.name : "Lainnya"))];
-    document.getElementById("chips").innerHTML = kats.map(k =>
-      '<button class="chip ' + (k === kategoriAktif ? "aktif" : "") + '" data-kat="' + escapeHTML(k) + '">' + escapeHTML(k) + '</button>'
-    ).join("");
-  }
-
-  function renderProduk() {
-    const hasil = semuaProduk.filter(p => {
-      const kat = p.categories ? p.categories.name : "Lainnya";
-      const cocokKat = kategoriAktif === "Semua" || kat === kategoriAktif;
-      const cocokCari = !kataCari || p.name.toLowerCase().includes(kataCari);
-      return cocokKat && cocokCari;
-    });
-
-    if (hasil.length === 0) {
-      wadah.innerHTML = '<p class="muted" style="grid-column:1/-1">Produk tidak ditemukan.</p>';
-      return;
-    }
-
-    wadah.innerHTML = hasil.map(p => {
-      const kategori = p.categories ? p.categories.name : "";
-      const foto = p.image_url
-        ? '<img class="foto" src="' + escapeHTML(p.image_url) + '" alt="' + escapeHTML(p.name) + '">'
-        : '<div class="foto-kosong">🐱</div>';
-
-      const daftar = (p.product_variants || [])
-        .filter(v => v.is_active)
-        .map(v => {
-          const d = daftarVarian[v.id];
-          const habis = stokHabis(v);
-          const adaPromo = d && d.harga < d.normal;
-          const hargaHTML = adaPromo
-            ? '<div class="harga-coret">' + rupiah(d.normal) + '</div><div class="harga-promo">' + rupiah(d.harga) + '</div>'
-            : '<div class="harga">' + rupiah(d ? d.harga : v.price) + '</div>';
-          const badgePromo = adaPromo
-            ? '<span class="badge-promo">' + escapeHTML(v.promo_label || "PROMO") + '</span>' : "";
-          const garansi = v.warranty_days && v.warranty_days > 0
-            ? '<div class="garansi">🛡️ Garansi ' + v.warranty_days + ' hari</div>' : "";
-          const sisa = v.stok !== null && v.stok !== undefined && !habis
-            ? '<div class="sisa">Sisa ' + v.stok + ' akun</div>' : "";
-
-          const sudahDiKeranjang = keranjang.find(i => i.id === v.id);
-          const batas = batasQty(v.id);
-          const penuh = sudahDiKeranjang && sudahDiKeranjang.qty >= batas;
-          const tombolNonaktif = habis || penuh;
-
-          return `
-            <div class="varian">
-              <div class="nama">${escapeHTML(v.name)}</div>
-              ${hargaHTML}
-              ${badgePromo}
-              ${garansi}
-              <span class="badge ${habis ? "habis" : "tersedia"}">${habis ? "Habis" : "Tersedia"}</span>
-              ${sisa}
-              <button class="tombol" ${tombolNonaktif ? "disabled" : ""} onclick="tambahKeranjang(${v.id})">
-                ${habis ? "Habis" : (penuh ? "Maks. di keranjang" : "+ Keranjang")}
-              </button>
-            </div>`;
-        }).join("");
-
-      return `
-        <div class="card">
-          ${foto}
-          <div class="isi">
-            <div class="kategori">${escapeHTML(kategori)}</div>
-            <h3>${escapeHTML(p.name)}</h3>
-            ${daftar || '<p class="muted">Belum ada varian.</p>'}
-            <button class="tombol-detail" onclick="bukaDetail(${p.id})">Lihat detail</button>
-          </div>
-        </div>`;
-    }).join("");
-  }
-
-  async function muatProduk() {
-    if (!window.supabase) {
-      wadah.innerHTML = '<p class="muted">Gagal: library Supabase tidak termuat</p>';
-      return;
-    }
-
-    if (!supabase) supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    const { data, error } = await supabase
-      .from("products")
-      .select("id, name, description, image_url, is_featured, categories(name), product_variants(id, name, price, promo_type, promo_value, promo_label, warranty_days, stock_status, stok, is_active)")
-      .eq("is_active", true);
-
-    if (error) {
-      wadah.innerHTML = '<p class="muted">Gagal: ' + escapeHTML(error.message) + '</p>';
-      console.error(error);
-      return;
-    }
-
-    semuaProduk = data || [];
-    indeksVarian();
-    renderKategoriHome();
-    renderUnggulan();
-    renderPromoHome();
-    renderChips();
-    renderProduk();
-    renderKeranjang();
-
-    if (detailPid && !document.getElementById("modal-detail").classList.contains("sembunyi")) {
-      bukaDetail(detailPid);
-    }
-  }
-
-  document.getElementById("chips").addEventListener("click", e => {
-    const b = e.target.closest("button[data-kat]");
-    if (!b) return;
-    kategoriAktif = b.dataset.kat;
-    renderChips();
-    renderProduk();
-  });
-
-  document.getElementById("cari").addEventListener("input", e => {
-    kataCari = e.target.value.trim().toLowerCase();
-    renderProduk();
-  });
-
-  renderKeranjang();
-  aturHalaman();
-  muatProduk();
-  muatInfoToko();
-  muatMetode();
-  muatBannerPromo();
-  muatFaq();
+const SUPABASE_URL="https://yftnynobgxvulhmgirdx.supabase.co";
+const SUPABASE_KEY="sb_publishable_wa6K5apeG3eW1eMVFa3xvg_DMgax51E";
+const MAKS_QTY=10,KUNCI="kimmy_keranjang";
+const HALAMAN=["tentang","faq","kebijakan","kontak"];
+const METODE_LABEL={transfer_bank:"Transfer Bank",qris:"QRIS",dana:"DANA",bca:"Transfer BCA"};
+const STATUS_LABEL={menunggu_pembayaran:"Menunggu pembayaran",menunggu_verifikasi:"Pembayaran sedang diverifikasi",diproses:"Pesanan diproses",selesai:"Pesanan selesai",dibatalkan:"Pesanan dibatalkan"};
+const STATUS_KLAIM_PUBLIK={diajukan:"Klaim diajukan",diproses:"Klaim sedang diproses",disetujui:"Klaim disetujui",ditolak:"Klaim ditolak",selesai:"Klaim selesai"};
+
+let supabase=null,semuaProduk=[],daftarVarian={},kategoriAktif="Semua",kataCari="",metodeList=[],keranjang=[],waAdmin="",detailPid=null,detailVid=null,detailQty=1;
+try{keranjang=JSON.parse(localStorage.getItem(KUNCI))||[]}catch(e){keranjang=[]}
+
+function rupiah(a){return "Rp "+Number(a||0).toLocaleString("id-ID")}
+function esc(t){return String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function normWA(n){let x=String(n||"").replace(/[^0-9]/g,"");if(x.startsWith("0"))x="62"+x.slice(1);return x}
+function hargaAkhir(v){if(!v.promo_type||!v.promo_value)return v.price;if(v.promo_type==="nominal")return Math.max(v.price-v.promo_value,0);return Math.round(v.price*(100-v.promo_value)/100)}
+function batas(id){const v=daftarVarian[id];if(!v)return 0;return v.stok==null?MAKS_QTY:Math.min(v.stok,MAKS_QTY)}
+function habis(v){return v.stock_status!=="tersedia"||v.stok===0}
+function aktifVarian(p){return (p.product_variants||[]).filter(v=>v.is_active)}
+function adaPromo(p){return aktifVarian(p).some(v=>hargaAkhir(v)<v.price)}
+function simpan(){localStorage.setItem(KUNCI,JSON.stringify(keranjang))}
+let timerT;
+function toast(t){const el=document.getElementById("toast");el.textContent=t;el.style.display="block";clearTimeout(timerT);timerT=setTimeout(()=>el.style.display="none",2200)}
+function notifCheckout(j,t){document.getElementById("notif-checkout").innerHTML=t?'<div class="notif '+j+'">'+esc(t)+'</div>':""}
+
+/* ---------- HALAMAN ---------- */
+function aturHalaman(){
+  const h=location.hash.slice(1),pindah=HALAMAN.includes(h);
+  document.getElementById("toko").classList.toggle("sembunyi",pindah);
+  HALAMAN.forEach(k=>document.getElementById("p-"+k).classList.toggle("sembunyi",h!==k));
+  if(pindah){window.scrollTo({top:0});return}
+  if(h){const el=document.getElementById(h);if(el)el.scrollIntoView()}else window.scrollTo({top:0});
+}
+window.addEventListener("hashchange",aturHalaman);
+
+/* ---------- PRODUK ---------- */
+function indeks(){semuaProduk.forEach(p=>aktifVarian(p).concat((p.product_variants||[]).filter(v=>!v.is_active)).forEach(v=>{daftarVarian[v.id]={produk:p.name,varian:v.name,harga:hargaAkhir(v),normal:v.price,stok:v.stok,stock_status:v.stock_status,warranty_days:v.warranty_days,promo_label:v.promo_label,promo_type:v.promo_type,promo_value:v.promo_value}}))}
+function fotoHTML(p,kls){return p.image_url?'<img class="'+kls+'" src="'+esc(p.image_url)+'" alt="'+esc(p.name)+'">':'<div class="foto-kosong">🐱</div>'}
+function kartuHTML(p){const av=aktifVarian(p);const min=av.length?Math.min(...av.map(hargaAkhir)):null;
+  return `<div class="card">${fotoHTML(p,"foto")}<div class="isi"><div class="kategori">${esc(p.categories?p.categories.name:"")}</div><h3>${esc(p.name)}</h3><div class="mulai">${min!==null?"mulai "+rupiah(min):"Belum ada varian"}</div>${adaPromo(p)?'<span class="badge-promo">PROMO</span>':""}<button class="tombol-detail" onclick="bukaDetail(${p.id})">Lihat detail</button></div></div>`}
+
+function renderKategoriHome(){
+  const h={};semuaProduk.forEach(p=>{const n=p.categories?p.categories.name:"Lainnya";h[n]=(h[n]||0)+1});
+  document.getElementById("kat-grid").innerHTML=Object.keys(h).map(n=>`<button class="kat-kartu" onclick="pilihKategori('${esc(n).replace(/'/g,"\\'")}')"><b>${esc(n)}</b><span>${h[n]} produk</span></button>`).join("")||'<p class="muted">Belum ada kategori.</p>';
+}
+function pilihKategori(n){kategoriAktif=n;renderChips();renderProduk();location.hash="#produk"}
+function renderUnggulan(){
+  let l=semuaProduk.filter(p=>p.is_featured===true);if(!l.length)l=semuaProduk;l=l.slice(0,4);
+  document.getElementById("grid-unggulan").innerHTML=l.map(kartuHTML).join("")||'<p class="muted">Belum ada produk.</p>';
+}
+function renderPromoHome(){
+  const l=[];semuaProduk.forEach(p=>aktifVarian(p).forEach(v=>{if(hargaAkhir(v)<v.price)l.push({p:p,v:v})}));
+  const ada=l.length>0;
+  document.getElementById("judul-promo").classList.toggle("sembunyi",!ada);
+  document.getElementById("list-promo").classList.toggle("sembunyi",!ada);
+  document.getElementById("list-promo").innerHTML=l.slice(0,6).map(x=>{
+    const d=daftarVarian[x.v.id];const h=habis(x.v);const k=keranjang.find(i=>i.id===x.v.id);const penuh=k&&k.qty>=batas(x.v.id);
+    return `<div class="promo-baris"><div class="info-promo"><b>${esc(x.p.name)} · ${esc(x.v.name)}</b><small>${esc(x.v.promo_label||"PROMO")}</small></div><div><span class="coret">${rupiah(x.v.price)}</span><span class="akhir">${rupiah(d.harga)}</span></div><button class="tombol-kecil" ${h||penuh?"disabled":""} onclick="tambahKeranjang(${x.v.id})">${h?"Habis":penuh?"Maks.":"+ Keranjang"}</button></div>`;
+  }).join("");
+}
+function renderChips(){
+  const k=["Semua",...new Set(semuaProduk.map(p=>p.categories?p.categories.name:"Lainnya"))];
+  document.getElementById("chips").innerHTML=k.map(n=>`<button class="chip ${n===kategoriAktif?"aktif":""}" data-kat="${esc(n)}">${esc(n)}</button>`).join("");
+}
+function renderProduk(){
+  const l=semuaProduk.filter(p=>{const kat=p.categories?p.categories.name:"Lainnya";return (kategoriAktif==="Semua"||kat===kategoriAktif)&&(!kataCari||p.name.toLowerCase().includes(kataCari))});
+  document.getElementById("daftar-produk").innerHTML=l.map(kartuHTML).join("")||'<p class="muted" style="grid-column:1/-1">Produk tidak ditemukan.</p>';
+}
+
+/* ---------- DETAIL PRODUK ---------- */
+function bukaDetail(pid){
+  const p=semuaProduk.find(x=>x.id===pid);if(!p)return;
+  detailPid=pid;const av=aktifVarian(p);
+  const pilihan=av.map(v=>{const h=habis(v);const d=daftarVarian[v.id];const sisa=(v.stok!=null&&!h)?" · sisa "+v.stok:"";const g=v.warranty_days>0?" · garansi "+v.warranty_days+" hari":"";
+    return `<label class="opsi ${h?"nonaktif":""}"><input type="radio" name="vd" value="${v.id}" ${h?"disabled":""}><span class="teks"><b>${esc(v.name)}</b><br><span class="muted">${h?"Habis":"Tersedia"+sisa+g}</span></span><span>${rupiah(d.harga)}</span></label>`}).join("");
+  document.getElementById("modal-body").innerHTML=`${fotoHTML(p,"modal-foto")}<div class="kategori" style="margin-top:12px">${esc(p.categories?p.categories.name:"")}</div><h3 style="font-size:1.2rem;margin:4px 0">${esc(p.name)}</h3>${p.description?'<p class="muted" style="font-size:.92rem">'+esc(p.description)+'</p>':""}<div>${pilihan||'<p class="muted">Belum ada varian.</p>'}</div><div class="detail-harga" id="dh"></div><div class="kontrol" style="margin-top:12px"><span style="font-weight:700">Jumlah</span><button onclick="qtyDetail(-1)">−</button><span id="qd">1</span><button onclick="qtyDetail(1)">+</button></div><button class="tombol-utama-modal" id="tbd" onclick="tambahDariDetail()">Tambah ke keranjang</button>`;
+  const pertama=av.find(v=>!habis(v));detailVid=pertama?pertama.id:null;
+  if(pertama)document.querySelector('input[name="vd"][value="'+pertama.id+'"]').checked=true;
+  document.querySelectorAll('input[name="vd"]').forEach(r=>r.addEventListener("change",()=>{detailVid=Number(r.value);detailQty=1;updDetail()}));
+  detailQty=1;updDetail();
+  document.getElementById("modal-detail").classList.remove("sembunyi");document.body.style.overflow="hidden";
+}
+function tutupDetail(){document.getElementById("modal-detail").classList.add("sembunyi");document.body.style.overflow="";detailPid=null;detailVid=null}
+function qtyDetail(s){if(!detailVid)return;detailQty=Math.min(Math.max(detailQty+s,1),Math.max(batas(detailVid),1));updDetail()}
+function updDetail(){
+  const d=daftarVarian[detailVid],dh=document.getElementById("dh"),t=document.getElementById("tbd");
+  if(!d){dh.innerHTML="";t.disabled=true;t.textContent="Tidak tersedia";return}
+  const sudah=(keranjang.find(i=>i.id===detailVid)||{qty:0}).qty;const sisa=Math.max(batas(detailVid)-sudah,0);
+  if(detailQty>Math.max(sisa,1))detailQty=Math.max(sisa,1);
+  document.getElementById("qd").textContent=detailQty;
+  dh.innerHTML=d.harga<d.normal?'<span class="coret" style="display:inline">'+rupiah(d.normal)+'</span> <span class="akhir">'+rupiah(d.harga)+'</span>':rupiah(d.harga);
+  t.disabled=sisa<1;
+  t.textContent=batas(detailVid)<1?"Habis":sisa<1?"Sudah maksimal di keranjang":"Tambah "+detailQty+" ke keranjang";
+}
+function tambahDariDetail(){if(!detailVid)return;tambahKeranjangQty(detailVid,detailQty);detailQty=1;updDetail()}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")tutupDetail()});
+
+/* ---------- KERANJANG ---------- */
+function tambahKeranjangQty(id,j){
+  const v=daftarVarian[id];if(!v)return;const b=batas(id);const it=keranjang.find(i=>i.id===id);const s=it?it.qty:0;
+  if(b<1){toast("Stok "+v.varian+" habis.");return}
+  if(s>=b){toast("Jumlah "+v.varian+" sudah mencapai batas stok.");return}
+  const t=Math.min(j,b-s);
+  if(it)it.qty+=t;else keranjang.push({id:id,produk:v.produk,varian:v.varian,harga:v.harga,qty:t});
+  simpan();renderKeranjang();renderProduk();renderPromoHome();toast("Ditambahkan "+t+" × "+v.varian);
+}
+function tambahKeranjang(id){tambahKeranjangQty(id,1)}
+function ubahQty(id,s){
+  const it=keranjang.find(i=>i.id===id);if(!it)return;it.qty+=s;
+  if(it.qty<1)keranjang=keranjang.filter(i=>i.id!==id);
+  else if(it.qty>batas(id)){it.qty=batas(id);notifCheckout("gagal","Jumlah dibatasi sesuai sisa stok.")}
+  simpan();renderKeranjang();renderProduk();renderPromoHome();
+}
+function hapusItem(id){keranjang=keranjang.filter(i=>i.id!==id);simpan();renderKeranjang();renderProduk();renderPromoHome()}
+function totalKeranjang(){return keranjang.reduce((s,i)=>s+i.harga*i.qty,0)}
+function renderKeranjang(){
+  document.getElementById("jumlah-keranjang").textContent=keranjang.reduce((s,i)=>s+i.qty,0);
+  const w=document.getElementById("isi-keranjang"),f=document.getElementById("form-checkout");
+  if(!keranjang.length){w.innerHTML='<p class="muted">Keranjang masih kosong. Pilih produk di katalog.</p>';f.style.display="none";return}
+  f.style.display="block";
+  w.innerHTML=keranjang.map(i=>`<div class="item-keranjang"><div><strong>${esc(i.produk)}</strong><br>${esc(i.varian)} · ${rupiah(i.harga)}</div><div class="kontrol"><button onclick="ubahQty(${i.id},-1)">−</button><span>${i.qty}</span><button onclick="ubahQty(${i.id},1)">+</button><button class="hapus" onclick="hapusItem(${i.id})">Hapus</button></div><div class="subtotal">${rupiah(i.harga*i.qty)}</div></div>`).join("")+`<div class="total">Total: <strong>${rupiah(totalKeranjang())}</strong></div>`;
+}
+
+/* ---------- METODE PEMBAYARAN ---------- */
+function renderMetode(){
+  const s=document.getElementById("metode"),lama=s.value;
+  s.innerHTML=metodeList.map(m=>`<option value="${esc(m.code)}">${esc(m.label)}</option>`).join("")||'<option value="">Belum ada metode</option>';
+  if(lama&&metodeList.some(m=>m.code===lama))s.value=lama;
+  tampilDetailMetode();
+}
+function tampilDetailMetode(){
+  const m=metodeList.find(x=>x.code===document.getElementById("metode").value),w=document.getElementById("detail-metode");
+  if(!m){w.innerHTML="";return}
+  let h="";
+  if(m.account_number)h+=`<div>a.n. ${esc(m.account_name||"-")}</div><div class="nomor">${esc(m.account_number)}</div><button type="button" class="tombol-salin" onclick="salinNomor('${esc(m.account_number)}',this)">Salin nomor</button>`;
+  if(m.image_url)h+=`<a href="${esc(m.image_url)}" target="_blank"><img class="qris-img" src="${esc(m.image_url)}" alt="Gambar ${esc(m.label)}"></a><div class="muted" style="text-align:center;margin-top:6px">Ketuk gambar untuk memperbesar</div>`;
+  if(!m.account_number&&!m.image_url)h="Setelah checkout, admin akan mengirim instruksi pembayaran lewat WhatsApp.";
+  w.innerHTML=h;
+}
+async function salinNomor(n,b){try{await navigator.clipboard.writeText(n)}catch(e){const a=document.createElement("textarea");a.value=n;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}const t=b.textContent;b.textContent="Tersalin ✓";setTimeout(()=>b.textContent=t,1500)}
+
+/* ---------- CHECKOUT & CEK STATUS ---------- */
+async function checkout(){
+  const nama=document.getElementById("nama").value.trim(),wa=normWA(document.getElementById("wa").value),catatan=document.getElementById("catatan").value.trim(),metode=document.getElementById("metode").value;
+  if(nama.length<2)return notifCheckout("gagal","Nama wajib diisi.");
+  if(!/^[0-9]{9,15}$/.test(wa))return notifCheckout("gagal","Nomor WhatsApp tidak valid.");
+  if(!metode)return notifCheckout("gagal","Pilih metode pembayaran.");
+  if(!keranjang.length)return notifCheckout("gagal","Keranjang masih kosong.");
+  if(!waAdmin)return notifCheckout("gagal","Nomor WhatsApp toko belum diatur.");
+  const tb=document.getElementById("tombol-checkout");tb.disabled=true;tb.textContent="Menyimpan pesanan...";
+  const items=keranjang.map(i=>({variant_id:i.id,qty:i.qty}));
+  const ring=keranjang.map(i=>"- "+i.produk+" ("+i.varian+") x"+i.qty+" = "+rupiah(i.harga*i.qty)).join("\n");
+  const tot=totalKeranjang();
+  const label=(metodeList.find(m=>m.code===metode)||{}).label||metode;
+  const {data:kode,error}=await supabase.rpc("buat_pesanan",{p_nama:nama,p_whatsapp:wa,p_items:items,p_metode:metode,p_catatan:catatan});
+  tb.disabled=false;tb.textContent="Checkout";
+  if(error){notifCheckout("gagal","Gagal menyimpan pesanan: "+error.message);await muatProduk();return}
+  const teks="Halo KIMMY STORE, saya mau pesan.\nNo. pesanan: "+kode+"\nNama: "+nama+"\n\n"+ring+"\n\nTotal: "+rupiah(tot)+"\nMetode bayar: "+label+"\nCatatan: "+(catatan||"-")+"\n\nSaya akan kirim bukti transfer setelah membayar. Terima kasih.";
+  keranjang=[];simpan();document.getElementById("catatan").value="";renderKeranjang();
+  notifCheckout("sukses","Pesanan "+kode+" tersimpan. Simpan kode ini untuk cek status. Silakan bayar lalu kirim bukti transfer ke WhatsApp kami.");
+  window.open("https://wa.me/"+waAdmin+"?text="+encodeURIComponent(teks),"_blank");
+  await muatProduk();
+}
+async function cekStatus(){
+  const kode=document.getElementById("kode-cek").value.trim().toUpperCase(),tb=document.getElementById("tombol-cek-status"),h=document.getElementById("hasil-cek");
+  if(kode.length<6){h.innerHTML='<div class="notif gagal">Masukkan kode pesanan dengan lengkap.</div>';return}
+  tb.disabled=true;tb.textContent="Mencari...";
+  const {data,error}=await supabase.rpc("cek_status_pesanan",{p_kode:kode});
+  tb.disabled=false;tb.textContent="Cek Status";
+  if(error){h.innerHTML='<div class="notif gagal">Gagal mengecek: '+esc(error.message)+'</div>';return}
+  if(!data){h.innerHTML='<div class="notif gagal">Kode pesanan tidak ditemukan.</div>';return}
+  const items=(data.items||[]).map(i=>"<div>"+esc(i.product_name)+" ("+esc(i.variant_name)+") x"+i.quantity+" = "+rupiah(i.subtotal)+"</div>").join("");
+  const bayar=data.status==="menunggu_pembayaran"?'<div class="info-bayar">Silakan lakukan pembayaran lalu kirim bukti transfer ke WhatsApp toko.</div>':"";
+  const kirim=data.tanggal_kirim?'<div class="info-bayar">Produk dikirim: '+esc(new Date(data.tanggal_kirim).toLocaleString("id-ID"))+'</div>':"";
+  const klaim=(data.klaim||[]).length?'<div class="info-bayar"><strong>Klaim garansi:</strong><br>'+data.klaim.map(k=>esc(STATUS_KLAIM_PUBLIK[k.status]||k.status)).join("<br>")+'</div>':"";
+  h.innerHTML=`<div style="margin-top:12px"><strong>${esc(data.order_code)}</strong><div class="muted">${new Date(data.created_at).toLocaleString("id-ID")}</div><div class="status-cek">${STATUS_LABEL[data.status]||esc(data.status)}</div><div style="margin-top:6px">${items}</div><div class="total">Total: ${rupiah(data.total_amount)}</div>${bayar}${kirim}${klaim}</div>`;
+}
+
+/* ---------- DATA TOKO ---------- */
+async function muatInfo(){
+  const {data}=await supabase.from("store_settings").select("key,value").in("key",["wa_admin","tentang","jam_operasional","kebijakan_pembayaran","kebijakan_garansi","kebijakan_pengembalian"]);
+  const i={};(data||[]).forEach(r=>i[r.key]=r.value);
+  waAdmin=normWA(i.wa_admin||"");
+  document.getElementById("tombol-hubungi").href=waAdmin?"https://wa.me/"+waAdmin:"#";
+  document.getElementById("info-kontak").textContent=i.wa_admin||"-";
+  document.getElementById("info-jam").textContent=i.jam_operasional||"-";
+  document.getElementById("info-tentang").textContent=i.tentang||"-";
+  document.getElementById("info-pembayaran").textContent=i.kebijakan_pembayaran||"-";
+  document.getElementById("info-garansi").textContent=i.kebijakan_garansi||"-";
+  document.getElementById("info-pengembalian").textContent=i.kebijakan_pengembalian||"-";
+}
+async function muatFaq(){
+  const {data}=await supabase.from("faqs").select("pertanyaan,jawaban").eq("is_active",true).order("urutan",{ascending:true});
+  document.getElementById("daftar-faq").innerHTML=(data||[]).map(f=>`<div class="faq-item"><strong>${esc(f.pertanyaan)}</strong><div>${esc(f.jawaban)}</div></div>`).join("")||'<p class="muted">Belum ada FAQ.</p>';
+}
+async function muatMetode(){
+  const {data,error}=await supabase.from("payment_methods").select("code,label,account_name,account_number,image_url,sort_order").eq("is_active",true).order("sort_order",{ascending:true});
+  if(!error){metodeList=data||[];renderMetode()}
+}
+async function muatBanner(){
+  const {data}=await supabase.from("promos").select("judul,deskripsi").eq("is_active",true).order("created_at",{ascending:false});
+  document.getElementById("banner-promo").innerHTML=(data||[]).map(p=>`<div class="promo-item"><strong>${esc(p.judul)}</strong>${p.deskripsi?"<br><span>"+esc(p.deskripsi)+"</span>":""}</div>`).join("");
+}
+async function muatProduk(){
+  if(!window.supabase){document.getElementById("daftar-produk").innerHTML='<p class="muted">Library Supabase tidak termuat.</p>';return}
+  if(!supabase)supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  const {data,error}=await supabase.from("products").select("id,name,description,image_url,is_featured,categories(name),product_variants(id,name,price,promo_type,promo_value,promo_label,warranty_days,stock_status,stok,is_active)").eq("is_active",true);
+  if(error){document.getElementById("daftar-produk").innerHTML='<p class="muted">Gagal: '+esc(error.message)+'</p>';return}
+  semuaProduk=data||[];indeks();
+  renderKategoriHome();renderUnggulan();renderPromoHome();renderChips();renderProduk();renderKeranjang();
+  if(detailPid&&!document.getElementById("modal-detail").classList.contains("sembunyi"))bukaDetail(detailPid);
+}
+
+document.getElementById("chips").addEventListener("click",e=>{const b=e.target.closest("button[data-kat]");if(!b)return;kataCari="";kategoriAktif=b.dataset.kat;renderChips();renderProduk()});
+document.getElementById("cari").addEventListener("input",e=>{kataCari=e.target.value.trim().toLowerCase();renderProduk()});
+
+renderKeranjang();
+aturHalaman();
+muatProduk();
+muatInfo();
+muatMetode();
+muatBanner();
+muatFaq();
 </script>
-
 </body>
-        </html>
+</html>
