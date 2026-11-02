@@ -46,9 +46,9 @@ nav.menu a:hover{background:var(--kuning)}
 .banner-promo:empty{display:none}
 .promo-item{background:var(--kuning);color:var(--hitam);padding:8px 12px;border:2px solid #000;border-radius:8px;font-size:.88rem}
 
-/* CARA BELI (langkah jelas) */
-.cara-beli{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0 4px}
-.cara-beli div{background:#fff;border:2px solid #000;box-shadow:3px 3px 0 var(--merah);border-radius:8px;padding:8px 6px;text-align:center;font-weight:900;font-size:.78rem}
+/* CARA BELI (4 langkah) */
+.cara-beli{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0 4px}
+.cara-beli div{background:#fff;border:2px solid #000;box-shadow:3px 3px 0 var(--merah);border-radius:8px;padding:8px 6px;text-align:center;font-weight:900;font-size:.8rem;line-height:1.25}
 .cara-beli b{display:block;font-size:1.1rem;color:var(--merah)}
 
 .judul{font-size:1.1rem;text-transform:uppercase;margin:22px 0 10px;color:#fff;font-weight:900;text-shadow:2px 2px 0 #000}
@@ -134,7 +134,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--merah)}
 .kembali a{display:inline-block;margin:12px 0 6px;color:#fff;text-decoration:none;font-weight:900;background:var(--merah);padding:6px 14px;border-radius:999px;border:2px solid #000;box-shadow:2px 2px 0 #000;text-transform:uppercase;font-size:.85rem}
 .grid-tentang{display:grid;gap:16px;margin-top:12px}
 
-/* DESKRIPSI RAPI (mengikuti enter dari admin) */
+/* DESKRIPSI RAPI */
 .deskripsi{white-space:pre-line;font-size:.92rem;line-height:1.6;margin-top:8px;color:var(--hitam)}
 .deskripsi-list{margin:8px 0 0;padding-left:0;list-style:none;font-size:.92rem;line-height:1.6}
 .deskripsi-list li{position:relative;padding-left:20px;margin-bottom:4px}
@@ -165,6 +165,7 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
 
 /* RESPONSIF */
 @media(min-width:560px){
+  .cara-beli{grid-template-columns:repeat(4,minmax(0,1fr))}
   .kat-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
   .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
   .foto{height:170px}
@@ -189,7 +190,7 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
   .logo .tagline{display:none}
   .logo-ikon{width:44px;height:44px}
   nav.menu a{font-size:.72rem;padding:4px 8px}
-  .cara-beli div{font-size:.7rem}
+  .cara-beli div{font-size:.72rem}
 }
 </style>
 </head>
@@ -234,8 +235,9 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
 
   <div class="cara-beli">
     <div><b>1</b>Pilih produk</div>
-    <div><b>2</b>Isi data &amp; bayar</div>
-    <div><b>3</b>Kirim bukti WA</div>
+    <div><b>2</b>Isi nama/inisial, WA &amp; bayar</div>
+    <div><b>3</b>Kirim form order &amp; bukti bayar ke WA</div>
+    <div><b>4</b>Cek status pakai nomor pesanan</div>
   </div>
 
   <h2 class="judul">Kategori</h2>
@@ -259,8 +261,8 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
       <h2>🛒 Keranjang Saya</h2>
       <div id="isi-keranjang"></div>
       <div id="form-checkout" class="formulir" style="display:none">
-        <label for="nama">Nama lengkap</label>
-        <input id="nama" type="text" placeholder="Contoh: Budi Santoso">
+        <label for="nama">Nama atau inisial</label>
+        <input id="nama" type="text" placeholder="Contoh: B. Santoso atau BS">
         <label for="wa">Nomor WhatsApp</label>
         <input id="wa" type="tel" placeholder="Contoh: 081234567890">
         <label for="metode">Metode pembayaran</label>
@@ -282,8 +284,8 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
 
   <section class="kotak" id="cek-status">
     <h2>🔍 Cek Status Pesanan</h2>
-    <p class="muted">Masukkan kode pesanan yang kamu terima setelah checkout, contoh: KS-261030-AB12C</p>
-    <label for="kode-cek">Kode pesanan</label>
+    <p class="muted">Masukkan nomor pesanan yang kamu terima setelah checkout, contoh: KS-261030-AB12C</p>
+    <label for="kode-cek">Nomor pesanan</label>
     <input id="kode-cek" type="text" placeholder="KS-XXXXXX-XXXXX" autocomplete="off">
     <button class="tombol-cek" id="tombol-cek-status" onclick="cekStatus()">Cek Status</button>
     <div id="hasil-cek"></div>
@@ -360,7 +362,6 @@ function habis(v){return v.stock_status!=="tersedia"||v.stok===0}
 function aktifVarian(p){return (p.product_variants||[]).filter(v=>v.is_active)}
 function adaPromo(p){return aktifVarian(p).some(v=>hargaAkhir(v)<v.price)}
 function simpan(){localStorage.setItem(KUNCI,JSON.stringify(keranjang))}
-/* Deskripsi: baris dengan • atau - tampil sebagai daftar, baris lain tetap seperti ditulis admin */
 function deskripsiHTML(t){
   if(!t)return "";
   const baris=String(t).split(/\r?\n/).map(s=>s.trim()).filter(s=>s.length);
@@ -496,7 +497,7 @@ async function salinNomor(n,b){try{await navigator.clipboard.writeText(n)}catch(
 /* CHECKOUT & CEK STATUS */
 async function checkout(){
   const nama=document.getElementById("nama").value.trim(),wa=normWA(document.getElementById("wa").value),catatan=document.getElementById("catatan").value.trim(),metode=document.getElementById("metode").value;
-  if(nama.length<2)return notifCheckout("gagal","Nama wajib diisi.");
+  if(nama.length<1)return notifCheckout("gagal","Nama atau inisial wajib diisi.");
   if(!/^[0-9]{9,15}$/.test(wa))return notifCheckout("gagal","Nomor WhatsApp tidak valid.");
   if(!metode)return notifCheckout("gagal","Pilih metode pembayaran.");
   if(!keranjang.length)return notifCheckout("gagal","Keranjang masih kosong.");
@@ -508,20 +509,20 @@ async function checkout(){
   const {data:kode,error}=await supabase.rpc("buat_pesanan",{p_nama:nama,p_whatsapp:wa,p_items:items,p_metode:metode,p_catatan:catatan});
   tb.disabled=false;tb.textContent="Checkout";
   if(error){notifCheckout("gagal","Gagal menyimpan pesanan: "+error.message);await muatProduk();return}
-  const teks="Halo KIMMY STORE, saya mau pesan.\nNo. pesanan: "+kode+"\nNama: "+nama+"\n\n"+ring+"\n\nTotal: "+rupiah(tot)+"\nMetode bayar: "+label+"\nCatatan: "+(catatan||"-")+"\n\nSaya akan kirim bukti transfer setelah membayar. Terima kasih.";
+  const teks="Halo KIMMY STORE, saya mau pesan.\nNo. pesanan: "+kode+"\nNama: "+nama+"\nWA: "+wa+"\n\n"+ring+"\n\nTotal: "+rupiah(tot)+"\nMetode bayar: "+label+"\nCatatan: "+(catatan||"-")+"\n\nBukti pembayaran akan saya kirim di chat ini. Terima kasih.";
   keranjang=[];simpan();document.getElementById("catatan").value="";renderKeranjang();
-  notifCheckout("sukses","Pesanan "+kode+" tersimpan. Simpan kode ini untuk cek status. Silakan bayar lalu kirim bukti transfer ke WhatsApp kami.");
+  notifCheckout("sukses","Pesanan "+kode+" tersimpan. Simpan nomor ini untuk cek status. Lalu kirim form order dan bukti pembayaran ke WhatsApp kami.");
   window.open("https://wa.me/"+waAdmin+"?text="+encodeURIComponent(teks),"_blank");
   await muatProduk();
 }
 async function cekStatus(){
   const kode=document.getElementById("kode-cek").value.trim().toUpperCase(),tb=document.getElementById("tombol-cek-status"),h=document.getElementById("hasil-cek");
-  if(kode.length<6){h.innerHTML='<div class="notif gagal">Masukkan kode pesanan dengan lengkap.</div>';return}
+  if(kode.length<6){h.innerHTML='<div class="notif gagal">Masukkan nomor pesanan dengan lengkap.</div>';return}
   tb.disabled=true;tb.textContent="Mencari...";
   const {data,error}=await supabase.rpc("cek_status_pesanan",{p_kode:kode});
   tb.disabled=false;tb.textContent="Cek Status";
   if(error){h.innerHTML='<div class="notif gagal">Gagal mengecek: '+esc(error.message)+'</div>';return}
-  if(!data){h.innerHTML='<div class="notif gagal">Kode pesanan tidak ditemukan.</div>';return}
+  if(!data){h.innerHTML='<div class="notif gagal">Nomor pesanan tidak ditemukan.</div>';return}
   const items=(data.items||[]).map(i=>"<div>"+esc(i.product_name)+" ("+esc(i.variant_name)+") x"+i.quantity+" = "+rupiah(i.subtotal)+"</div>").join("");
   const bayar=data.status==="menunggu_pembayaran"?'<div class="info-bayar">Silakan lakukan pembayaran lalu kirim bukti transfer ke WhatsApp toko.</div>':"";
   const kirim=data.tanggal_kirim?'<div class="info-bayar">Produk dikirim: '+esc(new Date(data.tanggal_kirim).toLocaleString("id-ID"))+'</div>':"";
@@ -591,4 +592,4 @@ muatBanner();
 muatFaq();
 </script>
 </body>
-</html>
+  </html>
