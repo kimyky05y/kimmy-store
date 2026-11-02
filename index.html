@@ -19,7 +19,6 @@ a{color:inherit}
 
 /* HEADER */
 header.top{position:sticky;top:0;z-index:30;background:var(--navy);border-bottom:4px solid var(--merah);box-shadow:0 4px 0 #000}
-header.top::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,210,63,.06) 0 6px,transparent 6px 14px);pointer-events:none}
 .top-inner{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;min-width:0;flex-shrink:0}
 .logo-ikon{width:50px;height:50px;border-radius:50%;background:#fff;border:3px solid var(--kuning);box-shadow:3px 3px 0 var(--merah);transform:rotate(-6deg);display:grid;place-items:center;overflow:hidden;flex-shrink:0}
@@ -29,34 +28,28 @@ header.top::before{content:"";position:absolute;inset:0;background:repeating-lin
 .logo .tagline{display:block;font-size:.68rem;color:var(--pink);font-weight:900;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
 nav.menu{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;min-width:0;flex:1;padding:4px 2px}
 nav.menu::-webkit-scrollbar{display:none}
-nav.menu a{background:#fff;color:var(--hitam);text-decoration:none;font-size:.8rem;font-weight:900;padding:5px 11px;border-radius:999px;white-space:nowrap;border:2px solid #000;box-shadow:2px 2px 0 var(--kuning);transition:transform .15s}
-nav.menu a:nth-child(odd){transform:rotate(-2deg)}
-nav.menu a:nth-child(even){transform:rotate(2deg)}
-nav.menu a:hover{background:var(--kuning);transform:none}
-.tombol-keranjang{background:var(--merah);color:#fff;text-decoration:none;font-weight:900;padding:6px 12px;border-radius:999px;border:3px solid #fff;box-shadow:3px 3px 0 #000;white-space:nowrap;flex-shrink:0;transform:rotate(3deg)}
+nav.menu a{background:#fff;color:var(--hitam);text-decoration:none;font-size:.8rem;font-weight:900;padding:5px 11px;border-radius:999px;white-space:nowrap;border:2px solid #000;box-shadow:2px 2px 0 var(--kuning)}
+nav.menu a:hover{background:var(--kuning)}
+.tombol-keranjang{background:var(--merah);color:#fff;text-decoration:none;font-weight:900;padding:6px 12px;border-radius:999px;border:3px solid #fff;box-shadow:3px 3px 0 #000;white-space:nowrap;flex-shrink:0}
 
 /* HERO */
 .hero{position:relative;display:grid;gap:16px;background:var(--navy);color:#fff;border:3px solid #000;box-shadow:5px 5px 0 var(--merah);border-radius:12px;padding:22px 18px 20px;margin:16px 0 12px;overflow:hidden}
-.hero::before{content:"✦";position:absolute;left:12px;bottom:10px;color:var(--kuning);font-size:1.1rem;text-shadow:2px 2px 0 #000}
-.hero::after{content:"♡";position:absolute;right:14px;top:10px;color:var(--pink);font-size:1.3rem;text-shadow:2px 2px 0 #000}
-.hero-kicker{display:inline-block;background:var(--pink);color:var(--hitam);font-weight:900;font-size:.78rem;letter-spacing:.8px;padding:5px 12px;border:2px solid #000;border-radius:999px;box-shadow:2px 2px 0 #000;transform:rotate(-2deg);text-transform:uppercase}
+.hero-kicker{display:inline-block;background:var(--pink);color:var(--hitam);font-weight:900;font-size:.78rem;letter-spacing:.8px;padding:5px 12px;border:2px solid #000;border-radius:999px;box-shadow:2px 2px 0 #000;text-transform:uppercase;justify-self:start}
 .hero-teks h1{margin-top:10px;font-size:clamp(1.3rem,4vw,2rem);line-height:1.15;text-transform:uppercase;text-shadow:3px 3px 0 #000}
 .hero-teks p{margin-top:8px;font-size:.92rem;max-width:560px}
 .tombol-utama{display:inline-block;margin-top:12px;background:var(--kuning);color:var(--hitam);padding:9px 20px;border-radius:999px;text-decoration:none;font-weight:900;border:3px solid #000;box-shadow:3px 3px 0 var(--merah)}
 .hero-foto{justify-self:center;position:relative;background:#fff;padding:9px 9px 26px;border:3px solid #000;box-shadow:5px 5px 0 var(--kuning);transform:rotate(3deg);width:min(62%,220px)}
-.hero-foto::before{content:"";position:absolute;top:-12px;left:50%;width:76px;height:22px;margin-left:-38px;background:repeating-linear-gradient(90deg,#9FB3C8 0 5px,#7D93AB 5px 10px);transform:rotate(-4deg);opacity:.95}
 .hero-foto img{width:100%;aspect-ratio:1/1;object-fit:cover;border:2px solid #000;display:block;background:var(--perak)}
-.hero-foto .caption{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-weight:900;font-size:.8rem;color:var(--navy);letter-spacing:1px}
-.hero-placeholder{width:100%;aspect-ratio:1/1;border:2px solid #000;display:grid;place-items:center;background:repeating-conic-gradient(var(--kuning) 0 25%,var(--pink) 0 50%) 0 0/36px 36px;font-size:3.4rem;position:relative}
+.hero-placeholder{width:100%;aspect-ratio:1/1;border:2px solid #000;display:grid;place-items:center;background:repeating-conic-gradient(var(--kuning) 0 25%,var(--pink) 0 50%) 0 0/36px 36px;font-size:3.4rem}
 .hero-placeholder span{background:#fff;border:2px solid #000;border-radius:50%;width:84px;height:84px;display:grid;place-items:center;box-shadow:3px 3px 0 #000}
-.banner-promo{display:grid;gap:8px;margin-top:4px}
+.banner-promo{display:grid;gap:8px}
 .banner-promo:empty{display:none}
 .promo-item{background:var(--kuning);color:var(--hitam);padding:8px 12px;border:2px solid #000;border-radius:8px;font-size:.88rem}
 
-/* KEUNGGULAN */
-.keunggulan{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0 4px}
-.keunggulan div{background:#fff;border:2px solid #000;box-shadow:3px 3px 0 var(--merah);padding:10px 6px;text-align:center;font-weight:900;font-size:.82rem;border-radius:8px}
-.ikon-lingkaran{width:42px;height:42px;margin:0 auto 4px;border-radius:50%;background:var(--perak);border:2px solid #000;display:grid;place-items:center;font-size:1.15rem}
+/* CARA BELI (langkah jelas) */
+.cara-beli{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0 4px}
+.cara-beli div{background:#fff;border:2px solid #000;box-shadow:3px 3px 0 var(--merah);border-radius:8px;padding:8px 6px;text-align:center;font-weight:900;font-size:.78rem}
+.cara-beli b{display:block;font-size:1.1rem;color:var(--merah)}
 
 .judul{font-size:1.1rem;text-transform:uppercase;margin:22px 0 10px;color:#fff;font-weight:900;text-shadow:2px 2px 0 #000}
 .judul::before{content:"★ "}
@@ -76,11 +69,11 @@ nav.menu a:hover{background:var(--kuning);transform:none}
 .foto-kosong{height:140px;display:grid;place-items:center;background:repeating-conic-gradient(#222 0 25%,#fff 0 50%) 0 0/24px 24px;font-size:2rem;border-bottom:2px solid #000}
 .isi{padding:8px 10px 10px;display:flex;flex-direction:column;flex:1;min-width:0}
 .kategori{font-size:.65rem;font-weight:900;color:var(--biru);text-transform:uppercase;letter-spacing:.4px}
-.card h3{font-size:.9rem;margin:2px 0 3px;line-height:1.2;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card h3{font-size:.95rem;margin:2px 0 3px;line-height:1.2;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mulai{font-weight:900;font-size:.85rem;color:var(--merah)}
 .badge-promo{position:absolute;top:6px;right:6px;z-index:2;background:var(--merah);color:#fff;font-weight:900;font-size:.65rem;padding:2px 7px;border:2px solid #000;border-radius:999px}
 .tombol-detail{margin-top:auto;width:100%;background:none;border:none;padding-top:8px;cursor:pointer}
-.tombol-detail span{display:block;background:var(--navy);color:#fff;text-align:center;padding:7px;border-radius:999px;font-weight:900;font-size:.78rem;border:2px solid #000;box-shadow:2px 2px 0 var(--kuning);text-transform:uppercase}
+.tombol-detail span{display:block;background:var(--navy);color:#fff;text-align:center;padding:8px;border-radius:999px;font-weight:900;font-size:.8rem;border:2px solid #000;box-shadow:2px 2px 0 var(--kuning);text-transform:uppercase}
 .tombol-detail:hover span{background:var(--biru)}
 
 /* CHIP & CARI */
@@ -88,7 +81,7 @@ nav.menu a:hover{background:var(--kuning);transform:none}
 .chips::-webkit-scrollbar{display:none}
 .chip{border:2px solid #000;background:#fff;color:var(--hitam);padding:5px 12px;border-radius:999px;font-size:.82rem;cursor:pointer;white-space:nowrap;font-family:inherit;font-weight:900;box-shadow:2px 2px 0 #000}
 .chip.aktif{background:var(--merah);color:#fff}
-.cari{width:100%;padding:9px 14px;border-radius:999px;border:2px solid #000;font-size:.92rem;font-family:inherit;background:#fff;margin-bottom:4px;box-shadow:2px 2px 0 var(--kuning)}
+.cari{width:100%;padding:10px 14px;border-radius:999px;border:2px solid #000;font-size:.95rem;font-family:inherit;background:#fff;margin-bottom:4px;box-shadow:2px 2px 0 var(--kuning)}
 .cari:focus{outline:none;border-color:var(--merah)}
 
 /* PROMO */
@@ -141,6 +134,12 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--merah)}
 .kembali a{display:inline-block;margin:12px 0 6px;color:#fff;text-decoration:none;font-weight:900;background:var(--merah);padding:6px 14px;border-radius:999px;border:2px solid #000;box-shadow:2px 2px 0 #000;text-transform:uppercase;font-size:.85rem}
 .grid-tentang{display:grid;gap:16px;margin-top:12px}
 
+/* DESKRIPSI RAPI (mengikuti enter dari admin) */
+.deskripsi{white-space:pre-line;font-size:.92rem;line-height:1.6;margin-top:8px;color:var(--hitam)}
+.deskripsi-list{margin:8px 0 0;padding-left:0;list-style:none;font-size:.92rem;line-height:1.6}
+.deskripsi-list li{position:relative;padding-left:20px;margin-bottom:4px}
+.deskripsi-list li::before{content:"✦";position:absolute;left:0;top:0;color:var(--merah);font-weight:900}
+
 /* MODAL */
 .modal{position:fixed;inset:0;background:rgba(20,33,61,.7);display:flex;align-items:flex-end;justify-content:center;z-index:50}
 .modal-isi{background:var(--denim);width:100%;max-width:500px;border:3px solid #000;border-radius:14px 14px 0 0;padding:14px;max-height:90vh;overflow-y:auto;position:relative}
@@ -166,7 +165,6 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
 
 /* RESPONSIF */
 @media(min-width:560px){
-  .keunggulan{grid-template-columns:repeat(4,minmax(0,1fr))}
   .kat-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
   .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
   .foto{height:170px}
@@ -191,7 +189,7 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
   .logo .tagline{display:none}
   .logo-ikon{width:44px;height:44px}
   nav.menu a{font-size:.72rem;padding:4px 8px}
-  .hero-foto{justify-self:center}
+  .cara-beli div{font-size:.7rem}
 }
 </style>
 </head>
@@ -230,16 +228,14 @@ footer nav a{color:#fff;text-decoration:none;font-size:.84rem;font-weight:900;ba
     <div class="hero-foto" id="hero-foto-box">
       <img id="hero-foto" alt="Foto toko" class="sembunyi">
       <div class="hero-placeholder" id="hero-placeholder"><span>🎧</span></div>
-      <div class="caption">KIMMY ♡</div>
     </div>
     <div class="banner-promo" id="banner-promo" style="grid-column:1/-1"></div>
   </section>
 
-  <div class="keunggulan">
-    <div><div class="ikon-lingkaran">🛡️</div>Aman &amp; Terpercaya</div>
-    <div><div class="ikon-lingkaran">⚡</div>Proses Cepat</div>
-    <div><div class="ikon-lingkaran">💰</div>Harga Terbaik</div>
-    <div><div class="ikon-lingkaran">💬</div>Customer Support</div>
+  <div class="cara-beli">
+    <div><b>1</b>Pilih produk</div>
+    <div><b>2</b>Isi data &amp; bayar</div>
+    <div><b>3</b>Kirim bukti WA</div>
   </div>
 
   <h2 class="judul">Kategori</h2>
@@ -364,6 +360,17 @@ function habis(v){return v.stock_status!=="tersedia"||v.stok===0}
 function aktifVarian(p){return (p.product_variants||[]).filter(v=>v.is_active)}
 function adaPromo(p){return aktifVarian(p).some(v=>hargaAkhir(v)<v.price)}
 function simpan(){localStorage.setItem(KUNCI,JSON.stringify(keranjang))}
+/* Deskripsi: baris dengan • atau - tampil sebagai daftar, baris lain tetap seperti ditulis admin */
+function deskripsiHTML(t){
+  if(!t)return "";
+  const baris=String(t).split(/\r?\n/).map(s=>s.trim()).filter(s=>s.length);
+  const isiList=baris.filter(s=>/^[•\-*]\s*/.test(s));
+  const teks=baris.filter(s=>!/^[•\-*]\s*/.test(s));
+  let h="";
+  if(teks.length)h+='<div class="deskripsi">'+teks.map(s=>esc(s)).join("<br>")+'</div>';
+  if(isiList.length)h+='<ul class="deskripsi-list">'+isiList.map(s=>"<li>"+esc(s.replace(/^[•\-*]\s*/,""))+"</li>").join("")+"</ul>";
+  return h;
+}
 let timerT;
 function toast(t){const el=document.getElementById("toast");el.textContent=t;el.style.display="block";clearTimeout(timerT);timerT=setTimeout(()=>el.style.display="none",2200)}
 function notifCheckout(j,t){document.getElementById("notif-checkout").innerHTML=t?'<div class="notif '+j+'">'+esc(t)+'</div>':""}
@@ -419,7 +426,7 @@ function bukaDetail(pid){
   detailPid=pid;const av=aktifVarian(p);
   const pilihan=av.map(v=>{const h=habis(v),d=daftarVarian[v.id],sisa=(v.stok!=null&&!h)?" · sisa "+v.stok:"",g=v.warranty_days>0?" · garansi "+v.warranty_days+" hari":"";
     return `<label class="opsi ${h?"nonaktif":""}"><input type="radio" name="vd" value="${v.id}" ${h?"disabled":""}><span class="teks"><b>${esc(v.name)}</b><br><span class="muted">${h?"Habis":"Tersedia"+sisa+g}</span></span><span>${rupiah(d.harga)}</span></label>`}).join("");
-  document.getElementById("modal-body").innerHTML=`${fotoHTML(p,"modal-foto")}<div class="kategori" style="margin-top:10px">${esc(p.categories?p.categories.name:"")}</div><h3 style="font-size:1.15rem;margin:2px 0 6px;text-transform:uppercase">${esc(p.name)}</h3>${p.description?'<p class="muted">'+esc(p.description)+'</p>':""}<div>${pilihan||'<p class="muted">Belum ada varian.</p>'}</div><div class="detail-harga" id="dh"></div><div class="kontrol" style="margin-top:12px"><span style="font-weight:900">Jumlah</span><button onclick="qtyDetail(-1)">−</button><span id="qd">1</span><button onclick="qtyDetail(1)">+</button></div><button class="tombol-utama-modal" id="tbd" onclick="tambahDariDetail()">Tambah ke keranjang</button>`;
+  document.getElementById("modal-body").innerHTML=`${fotoHTML(p,"modal-foto")}<div class="kategori" style="margin-top:10px">${esc(p.categories?p.categories.name:"")}</div><h3 style="font-size:1.15rem;margin:2px 0 4px;text-transform:uppercase">${esc(p.name)}</h3>${deskripsiHTML(p.description)}<div style="margin-top:10px">${pilihan||'<p class="muted">Belum ada varian.</p>'}</div><div class="detail-harga" id="dh"></div><div class="kontrol" style="margin-top:12px"><span style="font-weight:900">Jumlah</span><button onclick="qtyDetail(-1)">−</button><span id="qd">1</span><button onclick="qtyDetail(1)">+</button></div><button class="tombol-utama-modal" id="tbd" onclick="tambahDariDetail()">Tambah ke keranjang</button>`;
   const pertama=av.find(v=>!habis(v));detailVid=pertama?pertama.id:null;
   if(pertama)document.querySelector('input[name="vd"][value="'+pertama.id+'"]').checked=true;
   document.querySelectorAll('input[name="vd"]').forEach(r=>r.addEventListener("change",()=>{detailVid=Number(r.value);detailQty=1;updDetail()}));
@@ -448,7 +455,8 @@ function tambahKeranjangQty(id,j){
   if(s>=b){toast("Jumlah "+v.varian+" sudah mencapai batas stok.");return}
   const t=Math.min(j,b-s);
   if(it)it.qty+=t;else keranjang.push({id:id,produk:v.produk,varian:v.varian,harga:v.harga,qty:t});
-  simpan();renderKeranjang();renderProduk();renderPromoHome();toast("Ditambahkan "+t+" × "+v.varian);
+  simpan();renderKeranjang();renderProduk();renderPromoHome();
+  toast("Ditambahkan "+t+" × "+v.varian+". Lanjut checkout di keranjang.");
 }
 function tambahKeranjang(id){tambahKeranjangQty(id,1)}
 function ubahQty(id,s){
@@ -521,7 +529,7 @@ async function cekStatus(){
   h.innerHTML=`<div style="margin-top:12px"><strong>${esc(data.order_code)}</strong><div class="muted">${new Date(data.created_at).toLocaleString("id-ID")}</div><div class="status-cek">${STATUS_LABEL[data.status]||esc(data.status)}</div><div style="margin-top:8px">${items}</div><div class="total">Total: ${rupiah(data.total_amount)}</div>${bayar}${kirim}${klaim}</div>`;
 }
 
-/* DATA TOKO, IDENTITAS & TAMPILAN */
+/* DATA TOKO */
 async function muatInfo(){
   const {data}=await supabase.from("store_settings").select("key,value").in("key",["wa_admin","tentang","jam_operasional","kebijakan_pembayaran","kebijakan_garansi","kebijakan_pengembalian","nama_toko","logo_url","bg_url","link_testimoni","tagline_header","hero_kicker","hero_judul","hero_teks","hero_foto"]);
   const i={};(data||[]).forEach(r=>i[r.key]=r.value);
@@ -583,4 +591,4 @@ muatBanner();
 muatFaq();
 </script>
 </body>
-  </html>
+</html>
