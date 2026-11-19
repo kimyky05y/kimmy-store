@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin</title>
 <style>
-:root{--denim:#2F5486;--navy:#14213D;--merah:#D62828;--biru:#1D4ED8;--kuning:#FFD23F;--perak:#C9D1DC;--hitam:#111;--abu:#4A5B6E}
+:root{--denim:#2F5486;--navy:#14213D;--merah:#D62828;--biru:#1D4ED8;--kuning:#FFD23F;--perak:#C9D1DC;--hitam:#111;--abu:#4A5B6E;--hijau:#1E6B35}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{overflow-x:hidden;width:100%}
 body{font-family:"Trebuchet MS",Arial,system-ui,sans-serif;color:var(--hitam);min-height:100vh;line-height:1.4;background-color:var(--denim);
@@ -21,7 +21,7 @@ body{font-family:"Trebuchet MS",Arial,system-ui,sans-serif;color:var(--hitam);mi
 .brand .sub{font-size:.72rem;color:var(--kuning);font-weight:700}
 .btn-keluar{background:var(--merah);color:#fff;border:2px solid #000;border-radius:999px;padding:6px 14px;font-weight:900;cursor:pointer;font-family:inherit;font-size:.85rem;white-space:nowrap}
 
-/* TAB MENU: satu baris, bisa digeser */
+/* TAB MENU */
 .tabs{position:sticky;top:60px;z-index:25;display:flex;gap:8px;overflow-x:auto;padding:10px 14px;background:var(--denim);scrollbar-width:none;border-bottom:2px dashed rgba(255,255,255,.35)}
 .tabs::-webkit-scrollbar{display:none}
 .tabs button{flex:0 0 auto;background:#fff;color:var(--hitam);border:2px solid #000;border-radius:999px;padding:6px 14px;font-weight:900;font-size:.85rem;cursor:pointer;font-family:inherit;white-space:nowrap}
@@ -49,13 +49,12 @@ button:disabled{opacity:.6}
 .cb{display:flex;align-items:center;gap:6px;font-size:.84rem;font-weight:700;margin:0;text-transform:none}
 .cb input{width:auto;margin:0}
 
-/* PILIH GAMBAR (ringkas) */
+/* PILIH GAMBAR */
 .pilih-gambar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px}
 .pilih-gambar .tombol-pilih{background:var(--biru);color:#fff;border:2px solid #000;border-radius:999px;padding:6px 14px;font-size:.82rem;font-weight:900;cursor:pointer;margin:0;box-shadow:2px 2px 0 #000}
 .pilih-gambar .nama{font-size:.8rem;font-weight:700;color:var(--abu);flex:1;min-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pilih-gambar input[type=file]{display:none}
 .pratinjau{width:72px;height:72px;object-fit:contain;border:2px solid #000;background:#EAF2FB;display:block}
-.pratinjau-lebar{width:100%;max-height:170px;object-fit:contain;border:2px solid #000;background:#EAF2FB;display:block;margin-top:8px}
 
 /* DAFTAR PRODUK */
 .baris-produk{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:2px dashed var(--navy)}
@@ -73,16 +72,40 @@ details.varian summary::-webkit-details-marker{display:none}
 details.varian summary::after{content:"▼";font-size:.7rem}
 details.varian[open] summary::after{content:"▲"}
 details.varian .isi-varian{padding:0 12px 12px;border-top:2px dashed var(--navy)}
-.status{display:inline-block;font-size:.72rem;padding:2px 9px;border-radius:999px;background:var(--perak);border:2px solid #000;font-weight:900}
+.status{display:inline-block;font-size:.72rem;padding:2px 9px;border-radius:999px;background:var(--perak);border:2px solid #000;font-weight:900;white-space:nowrap}
 .kpi-status-aktif{background:#D9F7E4}
 .kpi-status-nonaktif{background:#FFD6D6}
 .promo-box{background:#FFF6D6;border:2px dashed var(--merah);border-radius:8px;padding:8px;margin-top:8px}
-.preview-harga{font-size:.84rem;color:#1E6B35;font-weight:900;margin-top:6px;min-height:1em}
+.preview-harga{font-size:.84rem;color:var(--hijau);font-weight:900;margin-top:6px;min-height:1em}
 
 /* STATUS TOKO */
 .status-toko-box{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:#EAF2FB;border:2px solid #000;border-radius:8px;padding:10px 12px;margin-bottom:10px}
-.switch{display:flex;align-items:center;gap:8px;font-weight:900;cursor:pointer;text-transform:uppercase;font-size:.85rem}
+.switch{display:flex;align-items:center;gap:8px;font-weight:900;cursor:pointer;text-transform:uppercase;font-size:.85rem;margin:0}
 .switch input{width:22px;height:22px}
+
+/* KARTU PESANAN */
+.pesanan-card{background:#fff;border:2px solid #000;border-radius:10px;box-shadow:3px 3px 0 var(--kuning);padding:12px;margin-bottom:12px}
+.pesanan-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap}
+.pesanan-kode{font-weight:900;font-size:1rem;word-break:break-all}
+.pesanan-tgl{font-size:.76rem;color:var(--abu);font-weight:700;margin-top:2px}
+.pesanan-pelanggan{margin-top:8px;font-size:.92rem}
+.pesanan-items{margin-top:8px;border-top:2px dashed var(--navy);padding-top:8px}
+.pesanan-item{display:flex;justify-content:space-between;gap:8px;font-size:.86rem;padding:3px 0}
+.pesanan-item span:last-child{font-weight:900;white-space:nowrap}
+.pesanan-total{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:2px solid #000;font-weight:900}
+.pesanan-total strong{font-size:1.05rem}
+.pesanan-aksi{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px;align-items:center}
+.pesanan-aksi select{margin-top:0}
+.pesanan-aksi .btn-wa{text-decoration:none}
+.pesanan-aksi .btn-wa button{margin-top:0;background:var(--hijau);box-shadow:2px 2px 0 #000;white-space:nowrap}
+.pesanan-kirim{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
+.tag-terkirim{background:#D9F7E4;border:2px solid #000;border-radius:999px;padding:3px 10px;font-size:.78rem;font-weight:900}
+details.detail-pesanan{margin-top:10px;border:2px dashed var(--navy);border-radius:8px;padding:8px 10px;background:#FBFDFF}
+details.detail-pesanan summary{cursor:pointer;font-weight:900;font-size:.84rem;text-transform:uppercase;list-style:none}
+details.detail-pesanan summary::-webkit-details-marker{display:none}
+details.detail-pesanan summary::after{content:" ▼";font-size:.7rem}
+details.detail-pesanan[open] summary::after{content:" ▲"}
+details.detail-pesanan .isi{margin-top:8px}
 
 .notif{padding:9px;border:2px solid #000;border-radius:8px;margin-top:10px;font-size:.88rem;font-weight:700}
 .gagal{background:#FFD6D6}
@@ -104,6 +127,7 @@ details.varian .isi-varian{padding:0 12px 12px;border-top:2px dashed var(--navy)
 .hari{font-size:.7rem;margin-top:5px;font-weight:900}
 .kode{font-weight:900}
 .kartu-login{max-width:420px;margin:40px auto}
+@media(max-width:480px){.brand h1{font-size:.95rem}.pesanan-aksi{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -167,7 +191,7 @@ details.varian .isi-varian{padding:0 12px 12px;border-top:2px dashed var(--navy)
 
     <!-- LAPORAN -->
     <div id="bagian-laporan" class="kartu sembunyi">
-      <strong class="judul-kartu">Laporan Penjualan</strong>
+      <strong class="judul-kartu">Laporan penjualan</strong>
       <p class="muted">Pendapatan hanya dihitung dari pesanan Diproses dan Selesai.</p>
       <div class="baris-tanggal">
         <div><label for="lap-dari">Dari tanggal</label><input id="lap-dari" type="date"></div>
@@ -183,20 +207,22 @@ details.varian .isi-varian{padding:0 12px 12px;border-top:2px dashed var(--navy)
 
     <!-- PESANAN -->
     <div id="bagian-pesanan" class="kartu sembunyi">
-      <div class="baris"><strong class="judul-kartu">Pesanan Masuk</strong><button class="kecil" onclick="muatPesanan()">Refresh</button></div>
-      <label for="cari-pesanan">Cari kode pesanan</label>
-      <input id="cari-pesanan" type="search" placeholder="Contoh: KS-2610" oninput="muatPesanan()">
-      <label for="filter">Filter status</label>
-      <select id="filter" onchange="muatPesanan()">
-        <option value="">Semua</option>
-        <option value="menunggu_pembayaran">Menunggu pembayaran</option>
-        <option value="menunggu_verifikasi">Menunggu verifikasi</option>
-        <option value="diproses">Diproses</option>
-        <option value="selesai">Selesai</option>
-        <option value="dibatalkan">Dibatalkan</option>
-      </select>
+      <div class="baris"><strong class="judul-kartu">Pesanan masuk</strong><button class="kecil" onclick="muatPesanan()">Refresh</button></div>
+      <div class="baris" style="margin-top:6px">
+        <div style="flex:1;min-width:150px"><label for="cari-pesanan">Cari kode pesanan</label><input id="cari-pesanan" type="search" placeholder="Contoh: KS-2610" oninput="muatPesanan()"></div>
+        <div style="flex:1;min-width:150px"><label for="filter">Filter status</label>
+          <select id="filter" onchange="muatPesanan()">
+            <option value="">Semua</option>
+            <option value="menunggu_pembayaran">Menunggu pembayaran</option>
+            <option value="menunggu_verifikasi">Menunggu verifikasi</option>
+            <option value="diproses">Diproses</option>
+            <option value="selesai">Selesai</option>
+            <option value="dibatalkan">Dibatalkan</option>
+          </select>
+        </div>
+      </div>
       <div id="notif-pesanan"></div>
-      <div id="daftar-pesanan"></div>
+      <div id="daftar-pesanan" style="margin-top:12px"></div>
     </div>
 
     <!-- PRODUK -->
@@ -652,7 +678,7 @@ async function unduhLaporan(){
   notif("notif-laporan","sukses","CSV laporan berhasil diunduh.");
 }
 
-/* PESANAN */
+/* PESANAN (tampilan kartu) */
 async function muatPesanan(){
   const f=val("filter"),c=val("cari-pesanan").toUpperCase(),w=document.getElementById("daftar-pesanan");
   notif("notif-pesanan","","");w.innerHTML='<p class="muted">Memuat pesanan...</p>';
@@ -663,21 +689,40 @@ async function muatPesanan(){
   if(error){w.innerHTML="";return notif("notif-pesanan","gagal","Gagal memuat pesanan: "+error.message)}
   if(!data||!data.length){w.innerHTML='<p class="muted">Tidak ada pesanan yang cocok.</p>';return}
   w.innerHTML=data.map(o=>{
-    const items=(o.order_items||[]).map(i=>'<div class="muted">'+esc(i.product_name)+" ("+esc(i.variant_name)+") x"+i.quantity+" = "+rupiah(i.subtotal)+"</div>").join("");
+    const items=(o.order_items||[]).map(i=>`<div class="pesanan-item"><span>${esc(i.product_name)} (${esc(i.variant_name)}) × ${i.quantity}</span><span>${rupiah(i.subtotal)}</span></div>`).join("");
     const opsi=Object.keys(STATUS_LABEL).map(s=>'<option value="'+s+'"'+(s===o.status?" selected":"")+">"+STATUS_LABEL[s]+"</option>").join("");
-    return `<div class="blok">
-      <div class="baris"><span class="kode">${esc(o.order_code)}</span><span class="status">${STATUS_LABEL[o.status]||esc(o.status)}</span></div>
-      <div class="muted">${new Date(o.created_at).toLocaleString("id-ID")}</div>
-      <div><strong>${esc(o.customer_name)}</strong> · ${esc(o.customer_whatsapp)}</div>
-      ${items}
-      <div class="muted">Metode: ${METODE_LABEL[o.payment_method]||esc(o.payment_method||"-")}</div>
-      ${o.notes?'<div class="muted">Catatan pembeli: '+esc(o.notes)+'</div>':""}
-      <div><strong>Total: ${rupiah(o.total_amount)}</strong></div>
-      ${o.tanggal_kirim?'<div class="muted">Terkirim: '+new Date(o.tanggal_kirim).toLocaleString("id-ID")+'</div>':'<button class="kecil" onclick="tandaiTerkirim('+o.id+')">Tandai terkirim</button>'}
-      <div class="baris" style="margin-top:8px"><select style="width:auto;flex:1" onchange="ubahStatus(${o.id},this.value)">${opsi}</select><a href="https://wa.me/${esc(o.customer_whatsapp)}" target="_blank"><button class="kecil" type="button">WhatsApp</button></a></div>
-      <label>Catatan internal (hanya admin)</label>
-      <textarea id="ca-${o.id}" rows="2">${esc(o.catatan_admin||"")}</textarea>
-      <button class="kecil" onclick="simpanCatatan(${o.id})">Simpan catatan</button>
+    const nomorWA=esc(o.customer_whatsapp||"");
+    const kirim=o.tanggal_kirim
+      ?'<span class="tag-terkirim">Terkirim '+esc(new Date(o.tanggal_kirim).toLocaleDateString("id-ID"))+'</span>'
+      :'<button class="kecil" onclick="tandaiTerkirim('+o.id+')">Tandai terkirim</button>';
+    return `<div class="pesanan-card">
+      <div class="pesanan-head">
+        <div>
+          <div class="pesanan-kode">${esc(o.order_code)}</div>
+          <div class="pesanan-tgl">${new Date(o.created_at).toLocaleString("id-ID")}</div>
+        </div>
+        <span class="status">${STATUS_LABEL[o.status]||esc(o.status)}</span>
+      </div>
+      <div class="pesanan-pelanggan"><strong>${esc(o.customer_name)}</strong> · ${nomorWA}</div>
+      <div class="pesanan-items">${items||'<div class="muted">Tidak ada item.</div>'}</div>
+      <div class="pesanan-total"><span>Total</span><strong>${rupiah(o.total_amount)}</strong></div>
+      <div class="pesanan-kirim">
+        <span class="muted">Metode: ${METODE_LABEL[o.payment_method]||esc(o.payment_method||"-")}</span>
+        ${kirim}
+      </div>
+      <div class="pesanan-aksi">
+        <select onchange="ubahStatus(${o.id},this.value)" aria-label="Ubah status">${opsi}</select>
+        <a class="btn-wa" href="https://wa.me/${nomorWA}" target="_blank"><button type="button">WhatsApp</button></a>
+      </div>
+      <details class="detail-pesanan">
+        <summary>Detail & catatan</summary>
+        <div class="isi">
+          ${o.notes?'<div class="muted" style="margin-bottom:6px">Catatan pembeli: '+esc(o.notes)+'</div>':'<div class="muted" style="margin-bottom:6px">Tidak ada catatan dari pembeli.</div>'}
+          <label>Catatan internal (hanya admin)</label>
+          <textarea id="ca-${o.id}" rows="2">${esc(o.catatan_admin||"")}</textarea>
+          <button class="kecil" onclick="simpanCatatan(${o.id})">Simpan catatan</button>
+        </div>
+      </details>
     </div>`}).join("");
 }
 async function tandaiTerkirim(id){const {error}=await supabase.from("orders").update({tanggal_kirim:new Date().toISOString(),status:"selesai"}).eq("id",id);if(error)return notif("notif-pesanan","gagal","Gagal: "+error.message);notif("notif-pesanan","sukses","Pesanan ditandai terkirim dan selesai.");muatPesanan()}
